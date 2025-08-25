@@ -7,12 +7,12 @@ export default function QuantumTheory() {
     {
       title: "Casimir Effect - Original Paper (1948)",
       author: "H.B.G. Casimir",
-      url: "https://doi.org/10.1016/S0031-8914(48)80074-7"
+      url: "https://www.dwc.knaw.nl/DL/publications/PU00018547.pdf"
     },
     {
       title: "Extracting Energy from the Vacuum (1993)",
       author: "Cole & Puthoff",
-      url: "https://doi.org/10.1103/PhysRevA.48.1562"
+      url: "https://doi.org/10.1103/PhysRevE.48.1562"
     },
     {
       title: "Observation of Dynamical Casimir Effect (2011)",

@@ -25,10 +25,10 @@ export default function SourceLibrary() {
       { title: "US9115913B2 - Rossi E-Cat", url: "https://patents.google.com/patent/US9115913B2" },
     ],
     papers: [
-      { title: "Casimir Effect (1948)", url: "https://doi.org/10.1016/S0031-8914(48)80074-7" },
+      { title: "Casimir Effect (1948)", url: "https://www.dwc.knaw.nl/DL/publications/PU00018547.pdf" },
       { title: "Cold Fusion Original (1989)", url: "https://doi.org/10.1016/0022-0728(89)80006-3" },
-      { title: "Zero-Point Energy (1987)", url: "https://doi.org/10.1007/BF00734320" },
-      { title: "Dynamical Casimir (2011)", url: "https://doi.org/10.1103/PhysRevLett.105.233907" },
+      { title: "Zero-Point Energy (1993)", url: "https://doi.org/10.1103/PhysRevE.48.1562" },
+      { title: "Dynamical Casimir (2011)", url: "https://doi.org/10.1038/nature10561" },
       { title: "LENR Review (2015)", url: "https://www.currentscience.ac.in/Volumes/108/04/0574.pdf" },
     ],
     companies: [
