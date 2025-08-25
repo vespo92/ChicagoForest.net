@@ -166,7 +166,7 @@ export default function ModernImplementations() {
                 <div className="p-3 bg-secondary/50 rounded">
                   <div className="font-medium text-sm">Patent Issues</div>
                   <div className="text-xs text-muted-foreground">
-                    "Perpetual motion" rejection challenges
+                    &quot;Perpetual motion&quot; rejection challenges
                   </div>
                 </div>
               </div>

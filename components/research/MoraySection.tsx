@@ -6,7 +6,7 @@ export default function MoraySection() {
   const keyDocuments = [
     {
       title: "The Sea of Energy (1960)",
-      description: "Moray's original manuscript",
+      description: "Moray&apos;s original manuscript",
       url: "https://www.rexresearch.com/moray2/morayrer.htm"
     },
     {
@@ -37,7 +37,7 @@ export default function MoraySection() {
               <Radio className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold">T. Henry Moray's Radiant Energy Device</h2>
+              <h2 className="text-3xl md:text-4xl font-bold">T. Henry Moray&apos;s Radiant Energy Device</h2>
               <p className="text-muted-foreground">Cosmic Ray Energy Harvesting (1920s-1940s)</p>
             </div>
           </div>
@@ -54,7 +54,7 @@ export default function MoraySection() {
                     <div className="flex-1">
                       <div className="font-medium">Physical Dimensions</div>
                       <div className="text-sm text-muted-foreground">
-                        2' × 1.5' × 1' wooden box, ~60 pounds
+                        2&apos; × 1.5&apos; × 1&apos; wooden box, ~60 pounds
                       </div>
                     </div>
                   </div>
@@ -208,7 +208,7 @@ export default function MoraySection() {
           {/* Quote */}
           <div className="mt-8 p-6 rounded-lg bg-primary/5 border border-primary/20">
             <blockquote className="text-lg italic">
-              "The detector is the heart of the machine. Without it, nothing would be possible."
+              &quot;The detector is the heart of the machine. Without it, nothing would be possible.&quot;
             </blockquote>
             <cite className="block mt-2 text-sm text-muted-foreground">— T. Henry Moray</cite>
           </div>

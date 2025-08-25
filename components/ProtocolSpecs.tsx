@@ -50,7 +50,7 @@ export default function ProtocolSpecs() {
         <div className="mb-8 p-6 rounded-lg bg-primary/5 border border-primary/20 text-center max-w-5xl mx-auto">
           <h3 className="text-xl font-semibold mb-3">Free Energy Research Foundation</h3>
           <p className="text-muted-foreground mb-4">
-            Explore the complete archive of Tesla, Mallove, and Moray's revolutionary energy research
+            Explore the complete archive of Tesla, Mallove, and Moray&apos;s revolutionary energy research
           </p>
           <a
             href="/free-energy"

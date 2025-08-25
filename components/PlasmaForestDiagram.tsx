@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { MapPin, Zap, Home, Building2, Trees } from "lucide-react"
+import { Home, Building2, Trees } from "lucide-react"
 
 export default function PlasmaForestDiagram() {
   const [selectedNode, setSelectedNode] = useState<number | null>(null)
@@ -239,7 +239,7 @@ export default function PlasmaForestDiagram() {
                 <div className="font-medium text-primary">Major Hub Locations:</div>
                 <ul className="space-y-1 text-muted-foreground">
                   <li>• Loop Tower (Central Chicago)</li>
-                  <li>• O'Hare International Hub</li>
+                  <li>• O&apos;Hare International Hub</li>
                   <li>• Naperville Technology Center</li>
                   <li>• Schaumburg Business Hub</li>
                   <li>• Joliet Industrial Complex</li>

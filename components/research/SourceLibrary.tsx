@@ -55,14 +55,14 @@ export default function SourceLibrary() {
   }
 
   const filteredSources = () => {
-    let allSources = []
+    let allSources: Array<{title: string, url: string, category?: string}> = []
     
     if (activeCategory === "all") {
       Object.entries(sources).forEach(([category, items]) => {
         allSources = [...allSources, ...items.map(item => ({ ...item, category }))]
       })
     } else {
-      allSources = sources[activeCategory]?.map(item => ({ ...item, category: activeCategory })) || []
+      allSources = sources[activeCategory as keyof typeof sources]?.map(item => ({ ...item, category: activeCategory })) || []
     }
 
     if (searchQuery) {
@@ -211,7 +211,7 @@ export default function SourceLibrary() {
               >
                 <div className="font-semibold mb-1">Tesla Universe</div>
                 <div className="text-sm text-muted-foreground">
-                  Complete archive of Tesla's patents, articles, and books
+                  Complete archive of Tesla&apos;s patents, articles, and books
                 </div>
               </a>
               <a
@@ -222,7 +222,7 @@ export default function SourceLibrary() {
               >
                 <div className="font-semibold mb-1">Infinite Energy Magazine</div>
                 <div className="text-sm text-muted-foreground">
-                  Eugene Mallove's publication on new energy research
+                  Eugene Mallove&apos;s publication on new energy research
                 </div>
               </a>
               <a
@@ -233,7 +233,7 @@ export default function SourceLibrary() {
               >
                 <div className="font-semibold mb-1">FBI Tesla Files</div>
                 <div className="text-sm text-muted-foreground">
-                  Declassified government documents on Tesla's work
+                  Declassified government documents on Tesla&apos;s work
                 </div>
               </a>
             </div>

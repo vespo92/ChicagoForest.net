@@ -1,6 +1,6 @@
 "use client"
 
-import { Zap, BookOpen, FlaskConical, Atom } from "lucide-react"
+import { Zap, FlaskConical, Atom } from "lucide-react"
 import Link from "next/link"
 
 export default function ResearchHero() {

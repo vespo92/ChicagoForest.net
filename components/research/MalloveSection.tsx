@@ -37,7 +37,7 @@ export default function MalloveSection() {
               <Atom className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold">Eugene Mallove's Cold Fusion / LENR</h2>
+              <h2 className="text-3xl md:text-4xl font-bold">Eugene Mallove&apos;s Cold Fusion / LENR</h2>
               <p className="text-muted-foreground">Low Energy Nuclear Reactions Research (1989-Present)</p>
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function MalloveSection() {
               <div>
                 <h4 className="font-medium mb-2">Lattice-Assisted Nuclear Reactions</h4>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Peter Hagelstein's coherent energy transfer model explains how phonon coupling in metal lattices 
+                  Peter Hagelstein&apos;s coherent energy transfer model explains how phonon coupling in metal lattices 
                   can overcome Coulomb barriers, enabling fusion at low temperatures.
                 </p>
                 <div className="p-3 bg-secondary/50 rounded">

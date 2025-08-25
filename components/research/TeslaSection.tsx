@@ -25,7 +25,7 @@ export default function TeslaSection() {
               <Radio className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold">Nikola Tesla's Wardenclyffe Tower</h2>
+              <h2 className="text-3xl md:text-4xl font-bold">Nikola Tesla&apos;s Wardenclyffe Tower</h2>
               <p className="text-muted-foreground">Wireless Power Transmission System (1901-1917)</p>
             </div>
           </div>
@@ -47,7 +47,7 @@ export default function TeslaSection() {
                     <Globe className="h-5 w-5 text-primary mt-0.5 mr-3 flex-shrink-0" />
                     <div>
                       <div className="font-medium">Schumann Resonance Coupling</div>
-                      <div className="text-sm text-muted-foreground">7.83 Hz fundamental frequency matching Earth's natural resonance</div>
+                      <div className="text-sm text-muted-foreground">7.83 Hz fundamental frequency matching Earth&apos;s natural resonance</div>
                     </div>
                   </li>
                   <li className="flex items-start">
