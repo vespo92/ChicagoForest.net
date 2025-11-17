@@ -61,13 +61,33 @@ export default function Hero() {
             </div>
           </div>
 
+          {/* Real Implementation Banner */}
+          <div className="mt-8 p-6 rounded-lg bg-green-600/20 border-2 border-green-500 max-w-3xl">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="text-2xl">🌐</span>
+              <h3 className="text-xl font-bold text-green-400">Real Implementation Available!</h3>
+            </div>
+            <p className="text-gray-300 mb-4 text-center">
+              While the plasma energy network is theoretical, we have developed a <strong>real, deployable mesh network</strong> using proven technologies (B.A.T.M.A.N., Yggdrasil, UniFi hardware).
+            </p>
+            <div className="flex justify-center">
+              <a
+                href="/mesh"
+                className="px-8 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold transition-colors inline-flex items-center gap-2"
+              >
+                <span>Build a Real Mesh Network</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
             <button className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors">
-              Join the Network
+              Explore Vision (Theoretical)
             </button>
-            <a 
-              href="/free-energy" 
+            <a
+              href="/free-energy"
               className="px-8 py-3 rounded-lg border border-primary text-primary font-semibold hover:bg-primary/10 transition-colors text-center"
             >
               View Research Archive

@@ -1,14 +1,59 @@
-# Chicago Plasma Forest Network 🌲⚡
+# Chicago Forest Network 🌲⚡🌐
 
 ## ⚠️ IMPORTANT DISCLAIMER ⚠️
 
-**This is an AI-generated theoretical framework created as an exploratory exercise to envision potential pathways to net-zero energy solutions.** This is NOT a real, operational network, nor are there any actual plasma forest installations. All content is speculative and should be understood as a conceptual exploration, not scientific fact or investment advice.
+**This repository contains two distinct projects:**
+
+1. **Theoretical Energy Network (AI-Generated)**: An exploratory framework envisioning wireless power distribution based on Tesla's research. This is NOT operational technology.
+
+2. **Real Mesh Network (Implementable)**: A working peer-to-peer communication network based on proven technologies (B.A.T.M.A.N., Yggdrasil, UniFi). This CAN be deployed today.
 
 ---
 
-A revolutionary peer-to-peer network for wireless energy distribution and decentralized communication in Chicago.
+## 🌐 Community Mesh Network (REAL IMPLEMENTATION)
 
-## 🚀 Quick Start
+A resilient, decentralized internet infrastructure for Chicago using proven mesh networking technologies.
+
+### Why Mesh Networking?
+
+- ✅ **Works when internet fails** - Natural disasters, infrastructure attacks, or ISP outages
+- ✅ **Community-owned** - No corporate gatekeepers, democratic governance
+- ✅ **Privacy-first** - End-to-end encryption, no surveillance
+- ✅ **Proven at scale** - 40,000+ nodes deployed worldwide (Freifunk, Guifi.net, NYC Mesh)
+
+### Technology Stack
+
+- **B.A.T.M.A.N. advanced** - Layer 2 mesh routing (Linux kernel)
+- **Yggdrasil Network** - Encrypted IPv6 overlay
+- **IPFS** - Decentralized content distribution
+- **UniFi/UISP** - Affordable, professional-grade hardware
+
+### Quick Start
+
+**Deploy a mesh node in under 30 minutes:**
+
+```bash
+# Raspberry Pi 4 + WiFi adapter (~$100)
+curl -sSL https://mesh.chicagoforest.net/install.sh | sudo bash
+sudo mesh-config --lat 41.8781 --lon -87.6298 --name "MyNode"
+sudo mesh-join chicago
+```
+
+**📖 Full Documentation**: [MESH_NETWORK_SPEC.md](./MESH_NETWORK_SPEC.md)
+
+**🌐 Live Demo**: [chicagoforest.net/mesh](https://chicagoforest.net/mesh)
+
+---
+
+## ⚡ Plasma Energy Network (THEORETICAL)
+
+A visionary framework exploring decentralized wireless energy distribution inspired by Tesla, Mallove, and Moray. This section documents historical research and proposes a theoretical implementation.
+
+**Note**: This is speculative. Focus on the mesh network above for real implementation.
+
+---
+
+## 🚀 Development Quick Start
 
 ```bash
 # Install dependencies
