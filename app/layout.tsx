@@ -48,13 +48,19 @@ export default function RootLayout({
                 >
                   Research
                 </Link>
-                <Link 
-                  href="/whitepaper" 
+                <Link
+                  href="/whitepaper"
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   Whitepaper
                 </Link>
-                <a 
+                <Link
+                  href="/tools"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Tools
+                </Link>
+                <a
                   href="https://github.com/chicago-forest" 
                   target="_blank"
                   rel="noopener noreferrer"
