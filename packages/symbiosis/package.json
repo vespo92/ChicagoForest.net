@@ -1,0 +1,55 @@
+{
+  "name": "@chicago-forest/symbiosis",
+  "version": "0.1.0",
+  "description": "Inter-network federation - connecting different forests and mesh networks into a unified ecosystem",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./gateway": {
+      "import": "./dist/gateway/index.mjs",
+      "require": "./dist/gateway/index.js",
+      "types": "./dist/gateway/index.d.ts"
+    },
+    "./federation": {
+      "import": "./dist/federation/index.mjs",
+      "require": "./dist/federation/index.js",
+      "types": "./dist/federation/index.d.ts"
+    },
+    "./bridge": {
+      "import": "./dist/bridge/index.mjs",
+      "require": "./dist/bridge/index.js",
+      "types": "./dist/bridge/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/p2p-core": "workspace:*",
+    "@chicago-forest/mycelium-core": "workspace:*",
+    "@chicago-forest/forest-registry": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "files": [
+    "dist"
+  ]
+}

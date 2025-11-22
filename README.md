@@ -21,7 +21,19 @@ chicago-forest-network/
 ├── apps/
 │   └── web/                          # Next.js documentation website
 ├── packages/
+│   │
+│   │ === MYCELIUM ECOSYSTEM (NEW) ===
+│   ├── mycelium-core/                # 🍄 Neural network substrate - hyphal pathways, signal propagation
+│   ├── spore-propagation/            # 🌱 Network growth - bootstrap, distribution, germination
+│   ├── nutrient-exchange/            # 🔄 Resource sharing - bandwidth, storage, compute credits
+│   ├── symbiosis/                    # 🤝 Inter-forest federation - gateways, bridges
+│   ├── hive-mind/                    # 🧠 Collective governance - consensus, proposals, voting
+│   ├── forest-registry/              # 📖 Global discovery - decentralized DNS for forests
+│   ├── canopy-api/                   # 🌿 Public API - REST, WebSocket, SDK
+│   │
+│   │ === FOUNDATION LAYER ===
 │   ├── p2p-core/                     # Core P2P networking primitives
+│   ├── routing/                      # Unified routing layer
 │   ├── wireless-mesh/                # WiFi Direct, ad-hoc, mesh routing
 │   ├── sdwan-bridge/                 # SD-WAN virtual bridge & tunneling
 │   ├── firewall/                     # Chicago Forest Firewall (CFW)
@@ -34,6 +46,35 @@ chicago-forest-network/
 ├── turbo.json                        # Turborepo configuration
 └── pnpm-workspace.yaml               # Workspace configuration
 ```
+
+---
+
+## 🍄 The Mycelium Ecosystem
+
+The Chicago Forest Network is evolving from a branch architecture to a **mycelium network** - a self-organizing, resilient global ecosystem like the fungal networks that connect trees underground.
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                         MYCELIUM ECOSYSTEM                                 ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║  CANOPY LAYER         @chicago-forest/canopy-api                          ║
+║  External API, SDKs, Documentation                                         ║
+║───────────────────────────────────────────────────────────────────────────║
+║  GOVERNANCE LAYER                                                          ║
+║  hive-mind (Consensus) | forest-registry (DNS) | symbiosis (Federation)  ║
+║───────────────────────────────────────────────────────────────────────────║
+║  RESOURCE LAYER                                                            ║
+║  nutrient-exchange (Credits) | spore-propagation (Growth)                 ║
+║───────────────────────────────────────────────────────────────────────────║
+║  MYCELIUM CORE         @chicago-forest/mycelium-core                       ║
+║  Hyphal Networks | Signal Propagation | Emergent Topology                  ║
+║───────────────────────────────────────────────────────────────────────────║
+║  FOUNDATION LAYER                                                          ║
+║  p2p-core | routing | mesh | firewall | sdwan | anon-routing | hardware   ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+See [MYCELIUM_ECOSYSTEM.md](./MYCELIUM_ECOSYSTEM.md) for the complete vision.
 
 ---
 
@@ -301,6 +342,7 @@ Supports:
 
 ## 📚 Documentation
 
+- [Mycelium Ecosystem](./MYCELIUM_ECOSYSTEM.md) - **NEW** The global network vision
 - [Implementation Plan](./IMPLEMENTATION_PLAN.md) - Full architecture and task breakdown
 - [Mesh Network Spec](./MESH_NETWORK_SPEC.md) - Technical mesh networking details
 - [Protocol Whitepaper](./PROTOCOL_WHITEPAPER.md) - Theoretical protocol specification
