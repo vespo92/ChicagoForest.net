@@ -320,3 +320,40 @@ export interface VotingStats {
 }
 
 export { ConsensusResult, VoteChoice };
+
+// Advanced consensus systems
+export {
+  ProposalSystem,
+  ProposalStage,
+  type ManagedProposal,
+  type ProposalAmendment,
+  type ProposalSystemConfig,
+  type ProposalSystemEvents,
+  type ExecutionResult
+} from './proposal-system';
+
+export {
+  VotingMechanism,
+  createVotingStrategy,
+  SimpleMajorityVoting,
+  QuadraticVoting,
+  ConvictionVoting,
+  RankedChoiceVoting,
+  LazyConsensus,
+  ConsentVoting,
+  type VotingStrategy,
+  type ExtendedVote,
+  type VotingConfig,
+  type VotingResult
+} from './voting-mechanisms';
+
+export {
+  QuorumCalculator,
+  QuorumStrategy,
+  isQuorumMet,
+  isThresholdMet,
+  isProposalPassing,
+  type ParticipationMetrics,
+  type QuorumRequirement,
+  type QuorumConfig
+} from './quorum-calculation';
