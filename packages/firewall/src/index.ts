@@ -492,7 +492,13 @@ export class ChicagoForestFirewall {
     }
 
     // Default action based on direction
-    const defaultAction = this.config.defaults[packet.direction] || 'drop';
+    // Map direction to defaults keys (in -> inbound, out -> outbound)
+    const directionMap: Record<FirewallDirection, keyof typeof this.config.defaults> = {
+      'in': 'inbound',
+      'out': 'outbound',
+      'forward': 'forward',
+    };
+    const defaultAction = this.config.defaults[directionMap[packet.direction]] || 'drop';
     return {
       action: defaultAction,
       reason: 'Default policy',
@@ -890,19 +896,5 @@ function generateIptablesRule(rule: FirewallRule): string {
 // EXPORTS
 // =============================================================================
 
-export {
-  createForestZoneConfig,
-  createDefaultForestRules,
-  RuleBuilder,
-  ChicagoForestFirewall,
-  generateOPNsenseConfig,
-  generateNftablesConfig,
-  generateIptablesConfig,
-};
-
-export type {
-  ZoneConfig,
-  ZoneSetup,
-  PacketInfo,
-  FirewallDecision,
-};
+// All functions, classes, constants, and types are already exported inline above.
+// No additional re-exports needed.

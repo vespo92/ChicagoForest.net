@@ -863,25 +863,5 @@ export async function recommendChannel(
 // EXPORTS
 // =============================================================================
 
-export {
-  DEFAULT_MESH_CONFIG,
-  StubInterfaceController,
-  BatmanAdvRouter,
-  OlsrRouter,
-  BabelRouter,
-  WiFiDirectManager,
-  WirelessMeshManager,
-};
-
-export type {
-  WirelessMeshConfig,
-  DiscoveredInterface,
-  InterfaceController,
-  MeshNeighbor,
-  MeshRouter,
-  MeshRoute,
-  MeshOriginator,
-  WiFiDirectGroup,
-  WiFiDirectPeer,
-  MeshStats,
-};
+// All functions, classes, constants, and types are already exported inline above.
+// No additional re-exports needed.

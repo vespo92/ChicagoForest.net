@@ -891,19 +891,5 @@ export function createSplitTunnelRule(
 // EXPORTS
 // =============================================================================
 
-export {
-  DEFAULT_SDWAN_CONFIG,
-  ForestTunnel,
-  PathSelector,
-  TrafficClassifier,
-  VirtualBridge,
-  SDWANBridge,
-};
-
-export type {
-  SDWANBridgeConfig,
-  PathMetrics,
-  PacketInfo,
-  VirtualBridgeConfig,
-  SDWANStats,
-};
+// All functions, classes, constants, and types are already exported inline above.
+// No additional re-exports needed.

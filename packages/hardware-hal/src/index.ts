@@ -608,23 +608,5 @@ export function toUISPFormat(device: BaseDevice): UISPDeviceInfo {
 // EXPORTS
 // =============================================================================
 
-export {
-  WiFiDevice,
-  LoRaRadio,
-  BackhaulRadio,
-  Antenna,
-  HardwareManager,
-  toUISPFormat,
-};
-
-export type {
-  BaseDevice,
-  RadioDevice,
-  ScanResult,
-  WiFiConfig,
-  LoRaConfig,
-  AntennaType,
-  AntennaConfig,
-  HardwareSummary,
-  UISPDeviceInfo,
-};
+// All classes, interfaces, and types are already exported inline above.
+// No additional re-exports needed.

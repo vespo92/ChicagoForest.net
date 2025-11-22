@@ -18,6 +18,7 @@
     "@chicago-forest/wireless-mesh": "workspace:*",
     "@chicago-forest/sdwan-bridge": "workspace:*",
     "@chicago-forest/firewall": "workspace:*",
+    "@chicago-forest/node-deploy": "workspace:*",
     "@chicago-forest/shared-types": "workspace:*",
     "commander": "^12.0.0"
   },

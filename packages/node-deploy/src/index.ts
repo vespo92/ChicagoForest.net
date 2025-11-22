@@ -800,15 +800,5 @@ export function createDeploymentConfig(
 // EXPORTS
 // =============================================================================
 
-export {
-  DEFAULT_DEPLOYMENT_OPTIONS,
-  generateDockerCompose,
-  generateDockerfile,
-  generateKubernetesManifest,
-  generateHelmValues,
-  generateCloudInit,
-  generateOPNsenseVMConfig,
-  createDeploymentConfig,
-};
-
-export type { ForestNodeDeploymentOptions };
+// All functions, constants, and types are already exported inline above.
+// No additional re-exports needed.

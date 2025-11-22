@@ -552,16 +552,5 @@ export class AnonymousRouter {
 // EXPORTS
 // =============================================================================
 
-export {
-  DEFAULT_ANON_CONFIG,
-  generateSharedSecret,
-  encryptLayer,
-  decryptLayer,
-  buildOnionPacket,
-  peelOnionLayer,
-  Circuit,
-  HiddenService,
-  AnonymousRouter,
-};
-
-export type { AnonymousRouterConfig, OnionPacket };
+// All functions, classes, constants, and types are already exported inline above.
+// No additional re-exports needed.

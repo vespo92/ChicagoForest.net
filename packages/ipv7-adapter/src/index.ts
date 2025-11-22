@@ -369,16 +369,5 @@ export class IPv7Adapter {
 // EXPORTS
 // =============================================================================
 
-export {
-  createIPv7Address,
-  parseIPv7Address,
-  ipv7ToIPv6,
-  ipv6ToIPv7,
-  ipv7ToNodeId,
-  createIPv7Header,
-  serializeIPv7Header,
-  deserializeIPv7Header,
-  IPv7Adapter,
-};
-
-export type { IPv7AddressComponents, IPv7Packet };
+// All functions, classes, constants, and types are already exported inline above.
+// No additional re-exports needed.
