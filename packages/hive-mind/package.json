@@ -1,0 +1,54 @@
+{
+  "name": "@chicago-forest/hive-mind",
+  "version": "0.1.0",
+  "description": "Collective intelligence and decentralized governance - consensus, voting, and emergent decision-making",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./consensus": {
+      "import": "./dist/consensus/index.mjs",
+      "require": "./dist/consensus/index.js",
+      "types": "./dist/consensus/index.d.ts"
+    },
+    "./governance": {
+      "import": "./dist/governance/index.mjs",
+      "require": "./dist/governance/index.js",
+      "types": "./dist/governance/index.d.ts"
+    },
+    "./proposals": {
+      "import": "./dist/proposals/index.mjs",
+      "require": "./dist/proposals/index.js",
+      "types": "./dist/proposals/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/p2p-core": "workspace:*",
+    "@chicago-forest/mycelium-core": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "files": [
+    "dist"
+  ]
+}
