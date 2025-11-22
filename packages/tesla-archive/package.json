@@ -1,0 +1,36 @@
+{
+  "name": "@chicago-forest/tesla-archive",
+  "version": "1.0.0",
+  "description": "Historical Tesla research documentation and patent analysis - REAL historical sources with verified links",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/**/*.ts",
+    "test": "vitest"
+  },
+  "keywords": [
+    "tesla",
+    "wireless-power",
+    "historical-research",
+    "patents",
+    "wardenclyffe",
+    "colorado-springs",
+    "radiant-energy"
+  ],
+  "author": "Chicago Plasma Forest Network",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vespo92/chicago-forest"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
