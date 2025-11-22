@@ -1,7 +1,7 @@
 {
-  "name": "@chicago-forest/ipv7-adapter",
+  "name": "@chicago-forest/routing",
   "version": "0.1.0",
-  "description": "IPV7 protocol integration adapter for Chicago Forest Network",
+  "description": "Unified routing layer for Chicago Forest Network - integrates P2P, mesh, SD-WAN, and anonymous routing",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -15,17 +15,27 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "clean": "rm -rf dist"
   },
   "dependencies": {
     "@chicago-forest/shared-types": "workspace:*",
-    "@chicago-forest/p2p-core": "workspace:*"
+    "@chicago-forest/p2p-core": "workspace:*",
+    "@chicago-forest/wireless-mesh": "workspace:*",
+    "@chicago-forest/sdwan-bridge": "workspace:*",
+    "@chicago-forest/anon-routing": "workspace:*",
+    "eventemitter3": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ]
 }
