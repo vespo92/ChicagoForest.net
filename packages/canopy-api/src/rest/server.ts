@@ -19,6 +19,8 @@ import type {
 import { nodeRoutes, type RouteDefinition } from './routes/nodes';
 import { routingRoutes } from './routes/routing';
 import { researchRoutes } from './routes/research';
+import { governanceRoutes } from './routes/governance';
+import { storageRoutes } from './routes/storage';
 import {
   createAuthMiddleware,
   createDefaultAuthConfig,
@@ -354,6 +356,12 @@ export class CanopyRestServer extends EventEmitter<CanopyEvents> {
     // Register research routes
     this.registerRouteDefinitions(researchRoutes);
 
+    // Register governance routes
+    this.registerRouteDefinitions(governanceRoutes);
+
+    // Register storage routes
+    this.registerRouteDefinitions(storageRoutes);
+
     // API documentation route
     this.registerRoute('GET', '/docs', async () => ({
       message: 'API Documentation',
@@ -520,4 +528,4 @@ export function createRestServer(
 // Exports
 // =============================================================================
 
-export { nodeRoutes, routingRoutes, researchRoutes };
+export { nodeRoutes, routingRoutes, researchRoutes, governanceRoutes, storageRoutes };

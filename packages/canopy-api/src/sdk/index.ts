@@ -1,5 +1,8 @@
 /**
  * Forest SDK - Client library for interacting with the network
+ *
+ * DISCLAIMER: This is an AI-generated theoretical framework for educational
+ * and research purposes.
  */
 
 import type { NodeId } from '@chicago-forest/shared-types';
@@ -11,6 +14,13 @@ import type {
   StorageInfo,
   StoredObject,
 } from '../types';
+
+// Re-export all SDK modules
+export * from './client';
+export * from './node-manager';
+export * from './research-api';
+export * from './governance-client';
+export * from './storage-client';
 
 /**
  * SDK Configuration
