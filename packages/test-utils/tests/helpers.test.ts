@@ -15,7 +15,7 @@ import {
   waitFor,
   createDeferredPromise,
   createTestNodeIds,
-  createTestNetwork,
+  createTestPeerMap,
   measureTime,
   runTimes,
   createSpy,
@@ -123,30 +123,15 @@ describe('delay', () => {
 
 describe('waitFor', () => {
   it('should resolve when condition becomes true', async () => {
-    vi.useFakeTimers();
-
     let value = false;
-    setTimeout(() => { value = true; }, 50);
+    setTimeout(() => { value = true; }, 20);
 
-    const waitPromise = waitFor(() => value, { timeout: 1000, interval: 10 });
-    vi.advanceTimersByTime(100);
-
-    await expect(waitPromise).resolves.toBeUndefined();
-
-    vi.useRealTimers();
+    await expect(waitFor(() => value, { timeout: 1000, interval: 10 })).resolves.toBeUndefined();
   });
 
   it('should reject on timeout', async () => {
-    vi.useFakeTimers();
-
-    const waitPromise = waitFor(() => false, { timeout: 100, interval: 10 });
-
-    // Run all timers
-    vi.runAllTimers();
-
-    await expect(waitPromise).rejects.toThrow('Condition not met within 100ms');
-
-    vi.useRealTimers();
+    await expect(waitFor(() => false, { timeout: 50, interval: 10 }))
+      .rejects.toThrow('Condition not met within 50ms');
   });
 });
 
@@ -179,15 +164,15 @@ describe('createTestNodeIds', () => {
   });
 });
 
-describe('createTestNetwork', () => {
+describe('createTestPeerMap', () => {
   it('should create network with specified size', () => {
-    const network = createTestNetwork(10);
+    const network = createTestPeerMap(10);
 
     expect(network.size).toBe(10);
   });
 
   it('should have consistent node IDs as keys', () => {
-    const network = createTestNetwork(5);
+    const network = createTestPeerMap(5);
 
     for (let i = 0; i < 5; i++) {
       const nodeId = createTestNodeId(i);

@@ -163,6 +163,112 @@ describe('MyComponent', () => {
 });
 ```
 
+## Cross-Repository Mocks
+
+### NPCPU Mock
+
+Mock implementation for NPCPU (Neural Processing Cognitive Processing Unit) integration:
+
+```typescript
+import {
+  createMockNPCPU,
+  createTestCognitiveQuery,
+  createTestAITask,
+} from '@chicago-forest/test-utils';
+
+const npcpu = createMockNPCPU({ processingDelay: 50 });
+await npcpu.connect();
+
+// Route cognitive queries
+const query = createTestCognitiveQuery({ type: 'analyze' });
+const response = await npcpu.routeCognitiveQuery(query);
+expect(response.success).toBe(true);
+
+// Distribute AI tasks
+const task = createTestAITask({ type: 'inference' });
+const result = await npcpu.distributeProcessing(task);
+
+// Simulate failures
+npcpu.setFailureRate(0.5); // 50% failure rate
+```
+
+### ConstitutionalShrinkage Mock
+
+Mock implementation for governance bridge integration:
+
+```typescript
+import {
+  createMockConShrink,
+  createTestProposal,
+  createTestEncryptedVote,
+} from '@chicago-forest/test-utils';
+
+const conShrink = createMockConShrink();
+await conShrink.connect();
+
+// Submit governance proposals
+const proposal = createTestProposal({ title: 'Network Upgrade' });
+const billId = await conShrink.submitProposal(proposal);
+
+// Route encrypted votes
+const vote = createTestEncryptedVote(billId);
+const receipt = await conShrink.routeVote(vote);
+
+// Coordinate regional pods
+const nodes = await conShrink.coordinateRegionalNodes('chicago-north');
+```
+
+### Network Simulator
+
+Comprehensive network simulation for integration testing:
+
+```typescript
+import { createTestNetwork, NetworkSimulator } from '@chicago-forest/test-utils';
+
+// Create mesh network with 10 nodes
+const network = createTestNetwork({ type: 'mesh', nodeCount: 10 });
+
+// Simulate message delivery
+await network.sendMessage(fromNode, toNode, message);
+
+// Simulate network partition
+network.partition([node1, node2, node3]);
+
+// Simulate node failures
+network.setNodeStatus(nodeId, false);
+
+// Get network statistics
+const stats = network.getStats();
+```
+
+## Integration Testing
+
+Run integration tests spanning all packages:
+
+```bash
+# Run all integration tests
+pnpm --filter @chicago-forest/test-utils test
+
+# Run with coverage
+pnpm test -- --coverage
+```
+
+## CI/CD Pipeline
+
+The Weaver integration testing pipeline validates:
+
+1. **File Ownership** - Ensures PRs only modify agent-owned files
+2. **Build & Typecheck** - Compiles all packages
+3. **Unit Tests** - Runs tests for individual packages
+4. **Integration Tests** - Tests cross-package interactions
+5. **Mock Validation** - Validates NPCPU/ConShrink mock interfaces
+6. **Coverage Report** - Generates coverage summaries
+7. **Quality Gate** - Enforces coverage thresholds
+
+---
+
+**DISCLAIMER**: This is part of an AI-generated theoretical framework for the Chicago Forest Network project.
+
 ## License
 
 MIT

@@ -2,9 +2,17 @@
  * Mock implementations for testing
  *
  * Provides mock classes and factories for Chicago Forest Network components.
+ * Includes cross-repository mocks for NPCPU and ConstitutionalShrinkage integration.
+ *
+ * DISCLAIMER: This is part of an AI-generated theoretical framework.
  */
 
 import { EventEmitter } from 'eventemitter3';
+
+// Re-export cross-repository mocks
+export * from './npcpu-mock';
+export * from './conshrink-mock';
+export * from './network-simulator';
 import type {
   NodeId,
   NodeIdentity,
@@ -103,19 +111,23 @@ export class MockTransport {
 // Mock Event Emitter
 // ============================================================================
 
-export class MockEventEmitter<T extends Record<string, (...args: unknown[]) => void>> extends EventEmitter<T> {
-  private emittedEvents: Array<{ event: string; args: unknown[] }> = [];
+/**
+ * Wrapper around EventEmitter that tracks all emitted events for test assertions.
+ * Uses composition instead of inheritance to avoid TypeScript generic complexities.
+ */
+export class MockEventEmitter extends EventEmitter {
+  protected emittedEvents: Array<{ event: string; args: any[] }> = [];
 
-  emit<E extends keyof T>(event: E, ...args: Parameters<T[E]>): boolean {
-    this.emittedEvents.push({ event: event as string, args });
+  emit(event: string | symbol, ...args: any[]): boolean {
+    this.emittedEvents.push({ event: String(event), args });
     return super.emit(event, ...args);
   }
 
-  getEmittedEvents(): Array<{ event: string; args: unknown[] }> {
+  getEmittedEvents(): Array<{ event: string; args: any[] }> {
     return [...this.emittedEvents];
   }
 
-  getEventsByName(name: string): Array<{ event: string; args: unknown[] }> {
+  getEventsByName(name: string): Array<{ event: string; args: any[] }> {
     return this.emittedEvents.filter((e) => e.event === name);
   }
 
@@ -254,10 +266,7 @@ export interface MockSignal {
   timestamp: number;
 }
 
-export class MockSignalPropagator extends MockEventEmitter<{
-  'signal:received': (signal: MockSignal) => void;
-  'signal:propagated': (signal: MockSignal, hops: number) => void;
-}> {
+export class MockSignalPropagator extends MockEventEmitter {
   private signals: MockSignal[] = [];
   private handlers: Map<string, Set<(signal: MockSignal) => void>> = new Map();
 
@@ -323,12 +332,7 @@ export interface MockHyphalPath {
   };
 }
 
-export class MockHyphalNetwork extends MockEventEmitter<{
-  'path:established': (path: MockHyphalPath) => void;
-  'path:degraded': (path: MockHyphalPath) => void;
-  'path:healed': (path: MockHyphalPath) => void;
-  'path:died': (pathId: string) => void;
-}> {
+export class MockHyphalNetwork extends MockEventEmitter {
   private paths: Map<string, MockHyphalPath> = new Map();
   private localNodeId: NodeId;
 
@@ -360,7 +364,7 @@ export class MockHyphalNetwork extends MockEventEmitter<{
 
   getBestPath(destination: NodeId): MockHyphalPath | undefined {
     for (const path of this.paths.values()) {
-      if (path.destination === destination && path.state === 'active') {
+      if (path.destination === destination && path.state !== 'dead') {
         return path;
       }
     }

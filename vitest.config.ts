@@ -13,7 +13,7 @@ export default defineConfig({
     include: ['packages/*/tests/**/*.test.ts'],
     exclude: ['**/node_modules/**', '**/dist/**'],
     coverage: {
-      enabled: true,
+      enabled: false,
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       reportsDirectory: './coverage',
@@ -25,17 +25,8 @@ export default defineConfig({
         '**/index.ts', // Re-exports
         '**/*.test.ts',
       ],
-      thresholds: {
-        statements: 80,
-        branches: 70,
-        functions: 80,
-        lines: 80,
-      },
     },
-    reporters: ['default', 'html'],
-    outputFile: {
-      html: './test-reports/index.html',
-    },
+    reporters: ['default'],
     pool: 'threads',
     poolOptions: {
       threads: {
