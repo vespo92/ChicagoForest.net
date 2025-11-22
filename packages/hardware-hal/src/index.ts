@@ -622,3 +622,16 @@ export * from './power';
 
 // RF Calculators
 export * from './calculators';
+
+// BOM Generator
+export {
+  BOM_GENERATOR,
+  generatePiBOM,
+  generateESP32BOM,
+  formatBOMAsMarkdown,
+  formatBOMAsCSV,
+  COMMON_COMPONENTS,
+  type BillOfMaterials,
+  type BOMLineItem,
+  type BOMCategory,
+} from './bom-generator';
