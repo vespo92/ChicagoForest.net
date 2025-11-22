@@ -2,11 +2,17 @@
   "name": "chicago-forest",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "turbo run build",
+    "build:web": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -28,6 +34,7 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "turbo": "^2.0.0",
     "typescript": "^5"
   }
 }
