@@ -15,6 +15,8 @@
  *   forest tunnel        - Manage SD-WAN tunnels
  *   forest firewall      - Manage firewall rules
  *   forest config        - Show/edit configuration
+ *   forest federation    - Manage cross-network federation
+ *   forest symbiont      - Control Symbiont orchestrator
  *
  * DISCLAIMER: This is part of an AI-generated theoretical framework
  * for educational and research purposes. Not operational infrastructure.
@@ -33,6 +35,8 @@ import {
   configCommand,
   joinCommand,
   deployCommand,
+  federationCommand,
+  symbiontCommand,
 } from './commands';
 
 export const VERSION = '0.1.0';
@@ -171,6 +175,35 @@ program
   .option('-o, --output <path>', 'Output path')
   .option('--name <name>', 'Node name')
   .action(deployCommand);
+
+// Federation command (Cross-Network Federation)
+program
+  .command('federation')
+  .alias('fed')
+  .description('Manage cross-network federation (Symbiont)')
+  .option('-s, --status', 'Show federation status')
+  .option('-l, --list', 'List all federations')
+  .option('--propose <forest>', 'Propose federation with a forest')
+  .option('--accept <id>', 'Accept federation proposal')
+  .option('--reject <id>', 'Reject federation proposal')
+  .option('--terminate <id>', 'Terminate existing federation')
+  .option('--discover', 'Discover available forests')
+  .option('-t, --type <type>', 'Federation type (mutual, one-way, limited)')
+  .option('-j, --json', 'Output as JSON')
+  .action(federationCommand);
+
+// Symbiont command (Orchestrator Control)
+program
+  .command('symbiont')
+  .description('Control the Symbiont federation orchestrator')
+  .option('--start', 'Start Symbiont orchestrator')
+  .option('--stop', 'Stop Symbiont orchestrator')
+  .option('--restart', 'Restart Symbiont orchestrator')
+  .option('-s, --status', 'Show Symbiont status')
+  .option('--auto-federate <on|off>', 'Enable/disable auto-federation')
+  .option('--discovery <on|off>', 'Enable/disable auto-discovery')
+  .option('--health-check', 'Run health check')
+  .action(symbiontCommand);
 
 // Parse and execute
 program.parse();
