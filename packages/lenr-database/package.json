@@ -1,0 +1,35 @@
+{
+  "name": "@chicago-forest/lenr-database",
+  "version": "0.1.0",
+  "description": "Low Energy Nuclear Reactions (LENR) scientific database with verified research papers, company profiles, and government programs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/**/*.ts",
+    "test": "jest"
+  },
+  "keywords": [
+    "LENR",
+    "cold-fusion",
+    "research",
+    "scientific-papers",
+    "DOI",
+    "energy-research"
+  ],
+  "author": "Chicago Plasma Forest Network",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vespo92/chicago-forest.git",
+    "directory": "packages/lenr-database"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
