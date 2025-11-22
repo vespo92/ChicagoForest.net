@@ -1,0 +1,75 @@
+{
+  "name": "@chicago-forest/ipv7",
+  "version": "0.1.0",
+  "description": "IPV7 Protocol - Next-generation P2P addressing and routing for mesh networks (theoretical framework)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./address": {
+      "import": "./dist/address/index.js",
+      "types": "./dist/address/index.d.ts"
+    },
+    "./packet": {
+      "import": "./dist/packet/index.js",
+      "types": "./dist/packet/index.d.ts"
+    },
+    "./routing": {
+      "import": "./dist/routing/index.js",
+      "types": "./dist/routing/index.d.ts"
+    },
+    "./transport": {
+      "import": "./dist/transport/index.js",
+      "types": "./dist/transport/index.d.ts"
+    },
+    "./node": {
+      "import": "./dist/node/index.js",
+      "types": "./dist/node/index.d.ts"
+    }
+  },
+  "bin": {
+    "ipv7": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "node --test ./dist/**/*.test.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "ipv7",
+    "p2p",
+    "mesh-network",
+    "peer-to-peer",
+    "decentralized",
+    "chicago-forest",
+    "theoretical"
+  ],
+  "author": "Chicago Forest Network",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chicagoforest/ipv7"
+  },
+  "dependencies": {
+    "events": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
