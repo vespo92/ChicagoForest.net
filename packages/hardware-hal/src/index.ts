@@ -622,3 +622,6 @@ export * from './power';
 
 // RF Calculators
 export * from './calculators';
+
+// Platform Detection and Configuration
+export * from './platforms';
