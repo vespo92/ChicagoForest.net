@@ -1,0 +1,336 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "project": "ChicagoForest.net",
+  "description": "10 AI Agents for parallel development of the Chicago Forest Network ecosystem",
+  "integrations": [
+    {
+      "name": "NPCPU",
+      "repository": "github.com/vespo92/NPCPU",
+      "purpose": "Cognitive processing and distributed AI agent framework"
+    },
+    {
+      "name": "ConstitutionalShrinkage",
+      "repository": "github.com/vespo92/ConstititutionalShrinkage",
+      "purpose": "Decentralized governance and democratic decision-making"
+    }
+  ],
+  "agents": [
+    {
+      "id": 1,
+      "codename": "Mycelia",
+      "domain": "Neural Network Core",
+      "description": "Develop the mycelium-core neural fabric for distributed signal propagation and emergent network topology",
+      "exclusiveOwnership": [
+        "packages/mycelium-core/src/hyphal/",
+        "packages/mycelium-core/src/signals/",
+        "packages/mycelium-core/src/topology/",
+        "packages/mycelium-core/src/growth/",
+        "packages/mycelium-core/tests/"
+      ],
+      "dependencies": [],
+      "integrationPoints": {
+        "NPCPU": ["consciousness-layer", "cognitive-routing", "neural-patterns"],
+        "ConstitutionalShrinkage": []
+      },
+      "deliverables": [
+        "HyphalNetwork class with multi-path routing",
+        "SignalPropagation using gossip protocols",
+        "TopologyManager for dynamic optimization",
+        "GrowthEngine for organic network expansion",
+        "NPCPU consciousness integration hooks"
+      ],
+      "priority": "high",
+      "estimatedFiles": 15
+    },
+    {
+      "id": 2,
+      "codename": "Rhizome",
+      "domain": "Network Propagation",
+      "description": "Design protocols for organic network growth, node bootstrapping, and self-healing resilience",
+      "exclusiveOwnership": [
+        "packages/spore-propagation/src/bootstrap/",
+        "packages/spore-propagation/src/distribution/",
+        "packages/spore-propagation/src/germination/",
+        "packages/spore-propagation/src/resilience/",
+        "packages/spore-propagation/tests/"
+      ],
+      "dependencies": ["mycelium-core"],
+      "integrationPoints": {
+        "NPCPU": ["distributed-growth"],
+        "ConstitutionalShrinkage": []
+      },
+      "deliverables": [
+        "SeedNode bootstrap protocol",
+        "Multiple distribution methods (torrent, IPFS, QR, USB)",
+        "Germination sequence with identity creation",
+        "Self-healing network recovery",
+        "Growth analytics and metrics"
+      ],
+      "priority": "high",
+      "estimatedFiles": 12
+    },
+    {
+      "id": 3,
+      "codename": "Symbiont",
+      "domain": "Cross-Network Federation",
+      "description": "Enable communication and resource sharing between different networks and external systems",
+      "exclusiveOwnership": [
+        "packages/symbiosis/src/gateway/",
+        "packages/symbiosis/src/protocols/",
+        "packages/symbiosis/src/translation/",
+        "packages/symbiosis/src/monitoring/",
+        "packages/symbiosis/tests/"
+      ],
+      "dependencies": ["mycelium-core", "p2p-core", "hive-mind"],
+      "integrationPoints": {
+        "NPCPU": ["npcpu-bridge", "cognitive-query-routing", "consciousness-sync"],
+        "ConstitutionalShrinkage": ["conshrink-bridge", "proposal-routing", "regional-pods"]
+      },
+      "deliverables": [
+        "Universal Forest Protocol specification",
+        "NPCPU cognitive bridge implementation",
+        "ConstitutionalShrinkage governance bridge",
+        "Trust federation across networks",
+        "Protocol translation layer"
+      ],
+      "priority": "medium",
+      "estimatedFiles": 14
+    },
+    {
+      "id": 4,
+      "codename": "Sentinel",
+      "domain": "Security & Privacy",
+      "description": "Implement anonymous routing, firewall rules, and privacy-preserving communication",
+      "exclusiveOwnership": [
+        "packages/anon-routing/src/circuits/",
+        "packages/anon-routing/src/encryption/",
+        "packages/anon-routing/src/hidden-services/",
+        "packages/anon-routing/src/traffic/",
+        "packages/anon-routing/tests/",
+        "packages/firewall/src/rules/",
+        "packages/firewall/tests/"
+      ],
+      "dependencies": ["p2p-core", "routing"],
+      "integrationPoints": {
+        "NPCPU": [],
+        "ConstitutionalShrinkage": ["anonymous-voting", "privacy-proposals"]
+      },
+      "deliverables": [
+        "Circuit-based onion routing",
+        "Hidden service protocol",
+        "Traffic padding and obfuscation",
+        "Guard node selection algorithm",
+        "Privacy-preserving voting bridge"
+      ],
+      "priority": "high",
+      "estimatedFiles": 16
+    },
+    {
+      "id": 5,
+      "codename": "Archivist",
+      "domain": "Historical Research",
+      "description": "Document and index historical free energy research with verified sources",
+      "exclusiveOwnership": [
+        "packages/tesla-archive/src/",
+        "packages/tesla-archive/tests/",
+        "packages/lenr-database/src/",
+        "packages/lenr-database/tests/"
+      ],
+      "dependencies": [],
+      "integrationPoints": {
+        "NPCPU": [],
+        "ConstitutionalShrinkage": []
+      },
+      "deliverables": [
+        "Tesla patent catalog (20+ patents with links)",
+        "LENR paper database (100+ verified DOIs)",
+        "Company profiles with real URLs",
+        "Citation generator for proper attribution",
+        "Source verification report"
+      ],
+      "priority": "medium",
+      "estimatedFiles": 20
+    },
+    {
+      "id": 6,
+      "codename": "Beacon",
+      "domain": "Hardware & Deployment",
+      "description": "Define hardware specifications and create deployment configurations for mesh nodes",
+      "exclusiveOwnership": [
+        "packages/hardware-hal/src/radios/",
+        "packages/hardware-hal/src/platforms/",
+        "packages/hardware-hal/src/power/",
+        "packages/hardware-hal/src/calculators/",
+        "packages/hardware-hal/tests/",
+        "packages/node-deploy/docker/",
+        "packages/node-deploy/kubernetes/",
+        "packages/node-deploy/ansible/",
+        "packages/node-deploy/terraform/"
+      ],
+      "dependencies": [],
+      "integrationPoints": {
+        "NPCPU": ["agent-deployment"],
+        "ConstitutionalShrinkage": ["regional-infrastructure"]
+      },
+      "deliverables": [
+        "Hardware specification library",
+        "Link budget calculator",
+        "Docker containerization suite",
+        "Kubernetes mesh deployment",
+        "Ansible automation playbooks",
+        "Terraform cloud templates"
+      ],
+      "priority": "medium",
+      "estimatedFiles": 25
+    },
+    {
+      "id": 7,
+      "codename": "Nexus",
+      "domain": "API & SDK Development",
+      "description": "Build the public API layer and developer SDKs for interacting with the forest network",
+      "exclusiveOwnership": [
+        "packages/canopy-api/src/rest/",
+        "packages/canopy-api/src/websocket/",
+        "packages/canopy-api/src/graphql/",
+        "packages/canopy-api/src/sdk/",
+        "packages/canopy-api/docs/",
+        "packages/canopy-api/tests/"
+      ],
+      "dependencies": ["p2p-core", "routing", "hive-mind", "mycelium-core"],
+      "integrationPoints": {
+        "NPCPU": ["cognitive-api", "ai-enhanced-discovery"],
+        "ConstitutionalShrinkage": ["governance-api"]
+      },
+      "deliverables": [
+        "REST API with OpenAPI spec",
+        "WebSocket real-time events",
+        "GraphQL schema and resolvers",
+        "TypeScript SDK with full types",
+        "NPCPU cognitive integration",
+        "API documentation"
+      ],
+      "priority": "high",
+      "estimatedFiles": 18
+    },
+    {
+      "id": 8,
+      "codename": "Delegate",
+      "domain": "Governance Systems",
+      "description": "Implement decentralized governance, voting mechanisms, and proposal systems",
+      "exclusiveOwnership": [
+        "packages/hive-mind/src/consensus/",
+        "packages/hive-mind/src/reputation/",
+        "packages/hive-mind/src/treasury/",
+        "packages/hive-mind/src/bridges/",
+        "packages/hive-mind/tests/",
+        "packages/forest-registry/src/",
+        "packages/forest-registry/tests/"
+      ],
+      "dependencies": ["p2p-core", "mycelium-core"],
+      "integrationPoints": {
+        "NPCPU": ["ai-governance", "proposal-analysis"],
+        "ConstitutionalShrinkage": ["conshrink-adapter", "legislative-bridge", "regional-coordination"]
+      },
+      "deliverables": [
+        "Proposal lifecycle management",
+        "Multiple voting mechanisms",
+        "Reputation and stake systems",
+        "ConstitutionalShrinkage bridge",
+        "Forest registry with distributed ledger",
+        "Service discovery protocol"
+      ],
+      "priority": "high",
+      "estimatedFiles": 20
+    },
+    {
+      "id": 9,
+      "codename": "Weaver",
+      "domain": "Integration Testing",
+      "description": "Build comprehensive test suites that verify integration across all packages",
+      "exclusiveOwnership": [
+        "packages/test-utils/src/",
+        "packages/test-utils/tests/",
+        "vitest.workspace.ts",
+        "vitest.config.ts"
+      ],
+      "sharedOwnership": [
+        "packages/*/tests/*.test.ts"
+      ],
+      "dependencies": [],
+      "integrationPoints": {
+        "NPCPU": ["mock-npcpu"],
+        "ConstitutionalShrinkage": ["mock-conshrink"]
+      },
+      "deliverables": [
+        "Test utilities package with mocks",
+        "Unit tests for all core packages",
+        "Integration tests for package interactions",
+        "E2E tests for critical workflows",
+        "CI/CD pipeline configuration",
+        "Coverage reporting"
+      ],
+      "priority": "high",
+      "estimatedFiles": 30
+    },
+    {
+      "id": 10,
+      "codename": "Oracle",
+      "domain": "Documentation & UX",
+      "description": "Create comprehensive documentation, user guides, and frontend interfaces",
+      "exclusiveOwnership": [
+        "apps/web/app/research/",
+        "apps/web/app/network/",
+        "apps/web/app/governance/",
+        "apps/web/components/research/",
+        "apps/web/components/network/",
+        "apps/web/components/governance/",
+        "apps/web/lib/hooks/",
+        "apps/web/lib/api/"
+      ],
+      "dependencies": ["canopy-api", "hive-mind", "tesla-archive", "lenr-database"],
+      "integrationPoints": {
+        "NPCPU": ["ai-visualization"],
+        "ConstitutionalShrinkage": ["governance-dashboard"]
+      },
+      "deliverables": [
+        "Research portal with Tesla/LENR pages",
+        "Interactive network topology visualization",
+        "Governance dashboard with voting UI",
+        "API documentation site",
+        "User guides and tutorials",
+        "CLI documentation"
+      ],
+      "priority": "medium",
+      "estimatedFiles": 25
+    }
+  ],
+  "mergeOrder": [
+    { "phase": 1, "agents": [9], "reason": "Test utilities required by all other agents" },
+    { "phase": 2, "agents": [5, 6], "reason": "Independent packages with no deps" },
+    { "phase": 3, "agents": [1], "reason": "Core network foundation" },
+    { "phase": 4, "agents": [2], "reason": "Depends on mycelium-core" },
+    { "phase": 5, "agents": [4], "reason": "Security layer" },
+    { "phase": 6, "agents": [8], "reason": "Governance systems" },
+    { "phase": 7, "agents": [3], "reason": "Cross-repo bridges (needs hive-mind)" },
+    { "phase": 8, "agents": [7], "reason": "API layer (references all packages)" },
+    { "phase": 9, "agents": [10], "reason": "Frontend (last, uses all APIs)" }
+  ],
+  "branchNaming": {
+    "pattern": "claude/agent-{id}-{codename}-{session_id}",
+    "examples": [
+      "claude/agent-1-mycelia-abc123",
+      "claude/agent-5-archivist-def456"
+    ]
+  },
+  "commitConvention": {
+    "pattern": "feat(agent-{id}): {description}",
+    "types": ["feat", "fix", "docs", "test", "refactor"]
+  },
+  "qualityGates": {
+    "typescript": "strict",
+    "testCoverage": 80,
+    "linting": "eslint",
+    "formatting": "prettier"
+  }
+}

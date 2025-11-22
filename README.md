@@ -78,6 +78,31 @@ See [MYCELIUM_ECOSYSTEM.md](./MYCELIUM_ECOSYSTEM.md) for the complete vision.
 
 ---
 
+## 🤖 AI Agent Development
+
+This project supports parallel development through **10 specialized AI agents**, each with exclusive file ownership to enable conflict-free collaboration.
+
+| Agent | Codename | Domain | Focus Area |
+|-------|----------|--------|------------|
+| 1 | Mycelia | Neural Network Core | Hyphal pathways, signal propagation |
+| 2 | Rhizome | Network Propagation | Bootstrap, growth, self-healing |
+| 3 | Symbiont | Federation | Cross-network bridges |
+| 4 | Sentinel | Security | Anonymous routing, privacy |
+| 5 | Archivist | Research | Historical documentation |
+| 6 | Beacon | Hardware | Deployment, infrastructure |
+| 7 | Nexus | API/SDK | Developer tools |
+| 8 | Delegate | Governance | Voting, proposals |
+| 9 | Weaver | Testing | Quality assurance |
+| 10 | Oracle | Documentation | UX, web portal |
+
+**Integration with companion repositories:**
+- [NPCPU](https://github.com/vespo92/NPCPU) - Cognitive AI agent framework
+- [ConstitutionalShrinkage](https://github.com/vespo92/ConstititutionalShrinkage) - Decentralized governance
+
+See [AGENTS_DEPLOYMENT.md](./AGENTS_DEPLOYMENT.md) for detailed agent specifications and [ECOSYSTEM_ANALYSIS.md](./ECOSYSTEM_ANALYSIS.md) for integration architecture.
+
+---
+
 ## 🚀 Quick Start
 
 ```bash
