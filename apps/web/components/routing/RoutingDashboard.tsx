@@ -55,6 +55,7 @@ export function RoutingDashboard() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProtocol]);
 
   async function fetchData() {
@@ -80,7 +81,7 @@ export function RoutingDashboard() {
       if (routesData.success) {
         setRoutes(routesData.data.routes);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to fetch routing data');
     } finally {
       setLoading(false);
@@ -100,7 +101,7 @@ export function RoutingDashboard() {
         // Refresh data after discovery
         fetchData();
       }
-    } catch (err) {
+    } catch {
       setError('Failed to discover routes');
     }
   }

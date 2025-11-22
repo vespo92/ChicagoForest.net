@@ -27,7 +27,19 @@ export default function RootLayout({
                   href="/"
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
-                  Network
+                  Home
+                </Link>
+                <Link
+                  href="/get-started"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Get Started
+                </Link>
+                <Link
+                  href="/packages"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Packages
                 </Link>
                 <Link
                   href="/routing"
@@ -36,31 +48,19 @@ export default function RootLayout({
                   Routing
                 </Link>
                 <Link
+                  href="/privacy"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Privacy
+                </Link>
+                <Link
                   href="/free-energy"
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   Research
                 </Link>
-                <Link
-                  href="/whitepaper"
-                  className="text-sm font-medium hover:text-primary transition-colors"
-                >
-                  Whitepaper
-                </Link>
-                <Link
-                  href="/mesh"
-                  className="text-sm font-medium hover:text-primary transition-colors"
-                >
-                  Mesh
-                </Link>
-                <Link
-                  href="/tools"
-                  className="text-sm font-medium hover:text-primary transition-colors"
-                >
-                  Tools
-                </Link>
                 <a
-                  href="https://github.com/chicago-forest" 
+                  href="https://github.com/vespo92/ChicagoForest.net"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-medium hover:text-primary transition-colors"
