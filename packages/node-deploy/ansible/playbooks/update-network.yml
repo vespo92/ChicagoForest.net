@@ -1,0 +1,427 @@
+---
+# Chicago Forest Network - Network Update Playbook
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. The Chicago Forest Network
+# is a conceptual project exploring decentralized energy networks.
+#
+# Usage:
+#   ansible-playbook -i inventory.yml update-network.yml
+#   ansible-playbook -i inventory.yml update-network.yml --tags upgrade
+#   ansible-playbook -i inventory.yml update-network.yml -e "rolling_update=true"
+#
+# This playbook handles:
+# - Rolling updates across the mesh network
+# - Docker image updates
+# - Configuration updates
+# - Peer list synchronization
+# - Security patches
+
+- name: Update Chicago Forest Network
+  hosts: forest_nodes
+  become: true
+  gather_facts: true
+  serial: "{{ '1' if rolling_update | default(true) else '100%' }}"
+
+  vars:
+    # Update settings
+    rolling_update: true
+    backup_before_update: true
+    verify_after_update: true
+
+    # Docker settings
+    docker_image: "ghcr.io/chicago-forest/forest-node"
+    docker_tag: "{{ target_version | default('latest') }}"
+
+    # Paths
+    forest_data_dir: /var/lib/forest
+    forest_config_dir: /etc/forest
+    forest_log_dir: /var/log/forest
+    backup_dir: /var/backups/forest
+
+    # Timeouts
+    drain_timeout: 300
+    health_check_timeout: 120
+
+  handlers:
+    - name: restart forest-node
+      service:
+        name: forest-node
+        state: restarted
+
+    - name: reload nftables
+      command: nft -f /etc/nftables.conf
+
+  tasks:
+    # =========================================================================
+    # Pre-Update Checks
+    # =========================================================================
+    - name: Display update information
+      debug:
+        msg: |
+          Chicago Forest Network Update
+          ===============================
+          Host: {{ inventory_hostname }}
+          Target Version: {{ docker_tag }}
+          Rolling Update: {{ rolling_update }}
+          Backup: {{ backup_before_update }}
+      tags: always
+
+    - name: Check current node status
+      uri:
+        url: http://localhost:8080/health
+        return_content: true
+        timeout: 10
+      register: pre_health
+      ignore_errors: true
+      tags: preflight
+
+    - name: Get current version
+      shell: docker inspect --format='{{ '{{' }}.Config.Labels.version{{ '}}' }}' forest-node 2>/dev/null || echo "unknown"
+      register: current_version
+      tags: preflight
+
+    - name: Display current state
+      debug:
+        msg: |
+          Current Status: {{ 'Healthy' if pre_health is succeeded else 'Unhealthy or stopped' }}
+          Current Version: {{ current_version.stdout }}
+          Target Version: {{ docker_tag }}
+      tags: preflight
+
+    # =========================================================================
+    # Backup
+    # =========================================================================
+    - name: Create backup directory
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+        mode: '0750'
+      when: backup_before_update
+      tags: backup
+
+    - name: Backup node identity and configuration
+      archive:
+        path:
+          - "{{ forest_data_dir }}/keys"
+          - "{{ forest_config_dir }}"
+          - /etc/wireguard
+        dest: "{{ backup_dir }}/forest-backup-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+        format: gz
+      when: backup_before_update
+      tags: backup
+
+    - name: Cleanup old backups (keep last 5)
+      shell: |
+        ls -t {{ backup_dir }}/forest-backup-*.tar.gz 2>/dev/null | tail -n +6 | xargs -r rm
+      when: backup_before_update
+      tags: backup
+
+    # =========================================================================
+    # Graceful Drain (Rolling Update)
+    # =========================================================================
+    - name: Announce maintenance mode
+      uri:
+        url: http://localhost:8080/api/maintenance
+        method: POST
+        body_format: json
+        body:
+          enabled: true
+          message: "Node updating to {{ docker_tag }}"
+        timeout: 10
+      ignore_errors: true
+      when: rolling_update
+      tags: drain
+
+    - name: Wait for active connections to drain
+      shell: |
+        # Get connection count from metrics
+        CONNECTIONS=$(curl -s http://localhost:9090/metrics | grep 'forest_active_connections' | awk '{print $2}' || echo 0)
+        echo "Active connections: $CONNECTIONS"
+        [ "${CONNECTIONS:-0}" -le 1 ]
+      register: drain_result
+      retries: 30
+      delay: 10
+      until: drain_result.rc == 0
+      ignore_errors: true
+      when: rolling_update
+      tags: drain
+
+    # =========================================================================
+    # System Updates
+    # =========================================================================
+    - name: Update system packages
+      apt:
+        update_cache: true
+        upgrade: safe
+      tags: system
+
+    - name: Update networking tools
+      apt:
+        name:
+          - wireguard-tools
+          - batctl
+          - iproute2
+          - nftables
+        state: latest
+      tags: system
+
+    # =========================================================================
+    # Docker Update
+    # =========================================================================
+    - name: Stop forest-node service
+      service:
+        name: forest-node
+        state: stopped
+      tags: upgrade
+
+    - name: Pull new Docker image
+      docker_image:
+        name: "{{ docker_image }}:{{ docker_tag }}"
+        source: pull
+        force_source: true
+      register: image_pull
+      tags: upgrade
+
+    - name: Display pull result
+      debug:
+        msg: "Image updated: {{ image_pull.changed }}"
+      tags: upgrade
+
+    - name: Remove old containers
+      docker_container:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - forest-node
+        - forest-gateway
+        - forest-node-firewall
+      ignore_errors: true
+      tags: upgrade
+
+    # =========================================================================
+    # Configuration Updates
+    # =========================================================================
+    - name: Update forest node configuration
+      template:
+        src: templates/forest-config.yaml.j2
+        dest: "{{ forest_config_dir }}/config.yaml"
+        backup: true
+      ignore_errors: true
+      tags: config
+
+    - name: Update environment file
+      lineinfile:
+        path: "{{ forest_config_dir }}/forest.env"
+        regexp: "^{{ item.key }}="
+        line: "{{ item.key }}={{ item.value }}"
+      loop:
+        - { key: 'DOCKER_TAG', value: '{{ docker_tag }}' }
+        - { key: 'UPDATED_AT', value: '{{ ansible_date_time.iso8601 }}' }
+      tags: config
+
+    # =========================================================================
+    # Peer List Synchronization
+    # =========================================================================
+    - name: Fetch current peer list from registry
+      uri:
+        url: "{{ peer_registry_url | default('http://localhost:8080') }}/api/peers"
+        return_content: true
+        timeout: 30
+      register: peer_list
+      ignore_errors: true
+      tags: peers
+
+    - name: Update WireGuard peers
+      shell: |
+        # Clear existing peers (except persistent ones)
+        CURRENT_PEERS=$(wg show wg-forest peers)
+        for PEER in $CURRENT_PEERS; do
+          wg set wg-forest peer $PEER remove
+        done
+
+        # Add peers from registry
+        {% if peer_list is succeeded and peer_list.json is defined %}
+        {% for peer in peer_list.json | default([]) %}
+        wg set wg-forest peer {{ peer.publicKey }} \
+          allowed-ips {{ forest_subnet | default('10.42.0.0/16') }} \
+          endpoint {{ peer.endpoint }} \
+          persistent-keepalive 25
+        {% endfor %}
+        {% endif %}
+      ignore_errors: true
+      when: peer_list is succeeded
+      tags: peers
+
+    # =========================================================================
+    # Security Updates
+    # =========================================================================
+    - name: Update firewall rules
+      copy:
+        src: files/nftables.conf
+        dest: /etc/nftables.conf
+        backup: true
+      notify: reload nftables
+      ignore_errors: true
+      tags: security
+
+    - name: Rotate WireGuard keys (if requested)
+      block:
+        - name: Generate new WireGuard keypair
+          shell: |
+            wg genkey | tee {{ forest_data_dir }}/keys/wireguard.key.new | wg pubkey > {{ forest_data_dir }}/keys/wireguard.pub.new
+
+        - name: Backup old keys
+          copy:
+            src: "{{ item.src }}"
+            dest: "{{ item.dest }}"
+            remote_src: true
+          loop:
+            - { src: "{{ forest_data_dir }}/keys/wireguard.key", dest: "{{ forest_data_dir }}/keys/wireguard.key.bak" }
+            - { src: "{{ forest_data_dir }}/keys/wireguard.pub", dest: "{{ forest_data_dir }}/keys/wireguard.pub.bak" }
+
+        - name: Install new keys
+          copy:
+            src: "{{ item.src }}"
+            dest: "{{ item.dest }}"
+            remote_src: true
+            mode: '0600'
+          loop:
+            - { src: "{{ forest_data_dir }}/keys/wireguard.key.new", dest: "{{ forest_data_dir }}/keys/wireguard.key" }
+            - { src: "{{ forest_data_dir }}/keys/wireguard.pub.new", dest: "{{ forest_data_dir }}/keys/wireguard.pub" }
+
+        - name: Update node identity with new keys
+          shell: |
+            NEW_PUBKEY=$(cat {{ forest_data_dir }}/keys/wireguard.pub)
+            NEW_PRIVKEY=$(cat {{ forest_data_dir }}/keys/wireguard.key)
+            jq ".wireguard.publicKey = \"$NEW_PUBKEY\" | .wireguard.privateKey = \"$NEW_PRIVKEY\"" \
+              {{ forest_data_dir }}/keys/node_identity.json > {{ forest_data_dir }}/keys/node_identity.json.tmp
+            mv {{ forest_data_dir }}/keys/node_identity.json.tmp {{ forest_data_dir }}/keys/node_identity.json
+      when: rotate_keys | default(false)
+      tags: security
+
+    # =========================================================================
+    # Restart Services
+    # =========================================================================
+    - name: Start forest-node service
+      service:
+        name: forest-node
+        state: started
+      tags: upgrade
+
+    - name: Restart WireGuard
+      service:
+        name: "wg-quick@wg-forest"
+        state: restarted
+      ignore_errors: true
+      tags: upgrade
+
+    # =========================================================================
+    # Post-Update Verification
+    # =========================================================================
+    - name: Wait for node to become healthy
+      uri:
+        url: http://localhost:8080/health
+        return_content: true
+        timeout: 10
+      register: post_health
+      retries: 12
+      delay: 10
+      until: post_health is succeeded
+      when: verify_after_update
+      tags: verify
+
+    - name: Verify mesh connectivity
+      command: batctl meshif bat0 neighbors
+      register: mesh_status
+      ignore_errors: true
+      when: verify_after_update
+      tags: verify
+
+    - name: Verify WireGuard status
+      command: wg show wg-forest
+      register: wg_status
+      ignore_errors: true
+      when: verify_after_update
+      tags: verify
+
+    - name: Get new version
+      shell: docker inspect --format='{{ '{{' }}.Config.Labels.version{{ '}}' }}' forest-node 2>/dev/null || echo "unknown"
+      register: new_version
+      tags: verify
+
+    - name: Disable maintenance mode
+      uri:
+        url: http://localhost:8080/api/maintenance
+        method: POST
+        body_format: json
+        body:
+          enabled: false
+        timeout: 10
+      ignore_errors: true
+      when: rolling_update
+      tags: verify
+
+    - name: Display update result
+      debug:
+        msg: |
+          Chicago Forest Network Update Complete!
+          =========================================
+          Host: {{ inventory_hostname }}
+          Previous Version: {{ current_version.stdout }}
+          New Version: {{ new_version.stdout }}
+          Health: {{ 'Healthy' if post_health is succeeded else 'Check required' }}
+          Mesh Neighbors: {{ (mesh_status.stdout_lines | length) - 1 if mesh_status is succeeded else 0 }}
+          WireGuard: {{ 'Active' if wg_status is succeeded else 'Check required' }}
+
+          Next host will update in 30 seconds...
+      tags: verify
+
+    # =========================================================================
+    # Rollback Handler (if update failed)
+    # =========================================================================
+    - name: Rollback on failure
+      block:
+        - name: Stop failed service
+          service:
+            name: forest-node
+            state: stopped
+          ignore_errors: true
+
+        - name: Restore from backup
+          unarchive:
+            src: "{{ backup_dir }}/forest-backup-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+            dest: /
+            remote_src: true
+          ignore_errors: true
+
+        - name: Pull previous image
+          docker_image:
+            name: "{{ docker_image }}:{{ current_version.stdout }}"
+            source: pull
+          ignore_errors: true
+
+        - name: Restart with previous version
+          service:
+            name: forest-node
+            state: started
+          ignore_errors: true
+
+        - name: Report rollback
+          debug:
+            msg: "ROLLBACK: Node {{ inventory_hostname }} rolled back to {{ current_version.stdout }}"
+      when:
+        - verify_after_update
+        - post_health is failed
+      tags: rollback
+
+    # =========================================================================
+    # Delay Between Hosts (Rolling Update)
+    # =========================================================================
+    - name: Wait before updating next host
+      pause:
+        seconds: 30
+      when:
+        - rolling_update
+        - post_health is succeeded
+      tags: always

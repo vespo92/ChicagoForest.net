@@ -1,0 +1,158 @@
+# Chicago Forest Network Gateway Dockerfile
+# Gateway node that bridges the Forest network to the internet
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. The Chicago Forest Network
+# is a conceptual project exploring decentralized energy networks.
+#
+# Build: docker build -t chicago-forest/forest-gateway -f Dockerfile.gateway .
+# Run: docker run --privileged --network host chicago-forest/forest-gateway
+
+# =============================================================================
+# Build Stage
+# =============================================================================
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+RUN apk add --no-cache python3 make g++ linux-headers git
+
+COPY package.json package-lock.json* pnpm-lock.yaml* ./
+COPY packages/*/package.json ./packages/
+
+RUN npm ci --ignore-scripts || npm install --ignore-scripts
+
+COPY . .
+RUN npm run build --workspaces --if-present
+
+# =============================================================================
+# Runtime Stage
+# =============================================================================
+FROM alpine:3.19 AS runtime
+
+LABEL maintainer="Chicago Forest Network <contact@chicago-forest.network>"
+LABEL description="Chicago Forest Network Gateway - Internet Bridge Node"
+LABEL version="0.1.0"
+
+WORKDIR /app
+
+# Install comprehensive networking stack
+RUN apk add --no-cache \
+    # Node.js runtime
+    nodejs \
+    npm \
+    # Core networking
+    iproute2 \
+    iptables \
+    ip6tables \
+    nftables \
+    ebtables \
+    bridge-utils \
+    # Firewall & NAT
+    conntrack-tools \
+    # WireGuard
+    wireguard-tools \
+    # Mesh networking
+    batctl \
+    # Wireless
+    iw \
+    wireless-tools \
+    hostapd \
+    wpa_supplicant \
+    # VPN alternatives
+    openvpn \
+    # DNS
+    dnsmasq \
+    # DHCP
+    dhcp-server-vanilla \
+    # Traffic shaping
+    tc-iproute2 \
+    # Monitoring
+    curl \
+    jq \
+    tcpdump \
+    iftop \
+    # Process management
+    tini \
+    supervisor \
+    # Utilities
+    openssl \
+    ca-certificates \
+    bash \
+    && rm -rf /var/cache/apk/*
+
+# Create forest user and groups
+RUN addgroup -g 1000 forest && \
+    adduser -u 1000 -G forest -s /bin/bash -D forest && \
+    addgroup forest netdev || true
+
+# Create directories
+RUN mkdir -p \
+    /var/lib/forest/data \
+    /var/lib/forest/keys \
+    /var/lib/forest/peers \
+    /var/lib/forest/gateway \
+    /var/log/forest \
+    /var/log/supervisor \
+    /etc/forest \
+    /etc/wireguard \
+    /etc/dnsmasq.d \
+    /run/forest && \
+    chown -R forest:forest /var/lib/forest /var/log/forest /etc/forest /run/forest
+
+# Copy built application
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages/*/dist ./packages/
+
+# Copy gateway configuration files
+COPY packages/node-deploy/docker/gateway/supervisord.conf /etc/supervisord.conf
+COPY packages/node-deploy/docker/gateway/dnsmasq.conf /etc/dnsmasq.d/forest.conf
+COPY packages/node-deploy/docker/gateway/iptables-rules.sh /etc/forest/iptables-rules.sh
+COPY packages/node-deploy/docker/entrypoint-gateway.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh /etc/forest/iptables-rules.sh
+
+# Environment variables
+ENV NODE_ENV=production
+ENV FOREST_DATA_DIR=/var/lib/forest
+ENV FOREST_CONFIG_DIR=/etc/forest
+ENV FOREST_LOG_DIR=/var/log/forest
+ENV GATEWAY_MODE=true
+ENV WAN_INTERFACE=eth0
+ENV FOREST_INTERFACE=eth1
+ENV LAN_INTERFACE=eth2
+ENV ENABLE_NAT=true
+ENV ENABLE_DHCP=true
+ENV ENABLE_DNS=true
+ENV DHCP_RANGE_START=10.42.1.100
+ENV DHCP_RANGE_END=10.42.1.200
+ENV FOREST_SUBNET=10.42.0.0/16
+ENV LOG_LEVEL=info
+
+# Expose ports
+# P2P communication
+EXPOSE 42000/udp
+# WireGuard
+EXPOSE 51820/udp
+# HTTP API
+EXPOSE 8080/tcp
+# Metrics
+EXPOSE 9090/tcp
+# DNS
+EXPOSE 53/tcp
+EXPOSE 53/udp
+# DHCP
+EXPOSE 67/udp
+EXPOSE 68/udp
+# Web dashboard (theoretical)
+EXPOSE 443/tcp
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=3 \
+    CMD curl -sf http://localhost:8080/health && pgrep -x supervisord > /dev/null || exit 1
+
+# Volumes
+VOLUME ["/var/lib/forest", "/etc/forest", "/var/log/forest", "/etc/wireguard"]
+
+ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

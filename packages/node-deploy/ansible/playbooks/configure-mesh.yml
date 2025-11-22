@@ -1,0 +1,447 @@
+---
+# Chicago Forest Network - Mesh Configuration Playbook
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. The Chicago Forest Network
+# is a conceptual project exploring decentralized energy networks.
+#
+# Usage:
+#   ansible-playbook -i inventory.yml configure-mesh.yml
+#   ansible-playbook -i inventory.yml configure-mesh.yml --tags wireguard
+#   ansible-playbook -i inventory.yml configure-mesh.yml -e "mesh_role=gateway"
+#
+# This playbook configures:
+# - BATMAN-adv mesh networking
+# - WireGuard tunnels between nodes
+# - Bridge interfaces for LAN connectivity
+# - Firewall rules for mesh traffic
+
+- name: Configure Chicago Forest Mesh Network
+  hosts: forest_nodes
+  become: true
+  gather_facts: true
+
+  vars:
+    # Mesh configuration
+    mesh_interface: "bat0"
+    mesh_mtu: 1500
+    mesh_protocol: "BATMAN_V"
+
+    # BATMAN-adv settings
+    batman_ogm_interval: 1000
+    batman_hop_penalty: 30
+    batman_gw_mode: "off"
+    batman_gw_sel_class: 20
+    batman_bridge_loop_avoidance: true
+    batman_distributed_arp_table: true
+
+    # WireGuard settings
+    wireguard_interface: "wg-forest"
+    wireguard_port: 51820
+    wireguard_mtu: 1420
+
+    # Network settings
+    forest_interface: "{{ interface | default('eth1') }}"
+    forest_subnet: "10.42.0.0/16"
+    forest_ip: "{{ hostvars[inventory_hostname]['forest_ip'] | default('10.42.1.1') }}"
+
+    # Role: node, gateway, or relay
+    mesh_role: "{{ role | default('node') }}"
+
+  handlers:
+    - name: restart wireguard
+      service:
+        name: "wg-quick@{{ wireguard_interface }}"
+        state: restarted
+
+    - name: restart batman
+      shell: |
+        batctl meshif {{ mesh_interface }} throughput_override 0
+        ip link set {{ mesh_interface }} up
+
+    - name: reload firewall
+      command: nft -f /etc/nftables.conf
+
+  tasks:
+    # =========================================================================
+    # Pre-flight
+    # =========================================================================
+    - name: Display mesh configuration
+      debug:
+        msg: |
+          Chicago Forest Mesh Configuration
+          ==================================
+          Host: {{ inventory_hostname }}
+          Role: {{ mesh_role }}
+          Forest IP: {{ forest_ip }}
+          Mesh Interface: {{ mesh_interface }}
+          WireGuard Port: {{ wireguard_port }}
+      tags: always
+
+    - name: Gather node information
+      set_fact:
+        node_id: "{{ lookup('file', '/var/lib/forest/keys/node_identity.json') | from_json | json_query('nodeId') }}"
+        wg_pubkey: "{{ lookup('file', '/var/lib/forest/keys/wireguard.pub') | trim }}"
+      tags: always
+
+    # =========================================================================
+    # BATMAN-adv Configuration
+    # =========================================================================
+    - name: Ensure batman-adv module is loaded
+      modprobe:
+        name: batman_adv
+        state: present
+      tags: batman
+
+    - name: Create BATMAN-adv interface
+      command: ip link add {{ mesh_interface }} type batadv
+      args:
+        creates: /sys/class/net/{{ mesh_interface }}
+      ignore_errors: true
+      tags: batman
+
+    - name: Configure BATMAN-adv settings
+      shell: |
+        batctl meshif {{ mesh_interface }} routing_algo {{ mesh_protocol }}
+        batctl meshif {{ mesh_interface }} orig_interval {{ batman_ogm_interval }}
+        batctl meshif {{ mesh_interface }} hop_penalty {{ batman_hop_penalty }}
+        batctl meshif {{ mesh_interface }} bridge_loop_avoidance {{ '1' if batman_bridge_loop_avoidance else '0' }}
+        batctl meshif {{ mesh_interface }} distributed_arp_table {{ '1' if batman_distributed_arp_table else '0' }}
+      ignore_errors: true
+      tags: batman
+
+    - name: Configure gateway mode (for gateway role)
+      shell: |
+        batctl meshif {{ mesh_interface }} gw_mode server
+        batctl meshif {{ mesh_interface }} gw_sel_class {{ batman_gw_sel_class }}
+      when: mesh_role == 'gateway'
+      ignore_errors: true
+      tags: batman
+
+    - name: Configure gateway mode (for client role)
+      shell: |
+        batctl meshif {{ mesh_interface }} gw_mode client
+        batctl meshif {{ mesh_interface }} gw_sel_class {{ batman_gw_sel_class }}
+      when: mesh_role == 'node'
+      ignore_errors: true
+      tags: batman
+
+    - name: Set MTU on mesh interface
+      command: ip link set {{ mesh_interface }} mtu {{ mesh_mtu }}
+      ignore_errors: true
+      tags: batman
+
+    - name: Bring up mesh interface
+      command: ip link set {{ mesh_interface }} up
+      tags: batman
+
+    - name: Assign IP to mesh interface
+      command: ip addr add {{ forest_ip }}/16 dev {{ mesh_interface }}
+      ignore_errors: true
+      tags: batman
+
+    # =========================================================================
+    # WireGuard Configuration
+    # =========================================================================
+    - name: Create WireGuard configuration directory
+      file:
+        path: /etc/wireguard
+        state: directory
+        mode: '0700'
+      tags: wireguard
+
+    - name: Read WireGuard private key
+      slurp:
+        src: /var/lib/forest/keys/wireguard.key
+      register: wg_private_key
+      tags: wireguard
+
+    - name: Generate WireGuard configuration
+      template:
+        src: templates/wireguard.conf.j2
+        dest: /etc/wireguard/{{ wireguard_interface }}.conf
+        mode: '0600'
+      notify: restart wireguard
+      tags: wireguard
+
+    - name: Create static WireGuard config (fallback)
+      copy:
+        dest: /etc/wireguard/{{ wireguard_interface }}.conf
+        content: |
+          # Chicago Forest Network - WireGuard Configuration
+          # Auto-generated by Ansible
+
+          [Interface]
+          PrivateKey = {{ wg_private_key.content | b64decode | trim }}
+          ListenPort = {{ wireguard_port }}
+          MTU = {{ wireguard_mtu }}
+
+          # Post-up: Add to BATMAN-adv mesh
+          PostUp = ip link set %i master {{ mesh_interface }}
+          PostDown = ip link set %i nomaster
+
+          # Peers added dynamically or via Ansible
+          # Example peer entry:
+          # [Peer]
+          # PublicKey = <peer-public-key>
+          # AllowedIPs = {{ forest_subnet }}
+          # Endpoint = <peer-ip>:{{ wireguard_port }}
+          # PersistentKeepalive = 25
+        mode: '0600'
+      when: "'templates/wireguard.conf.j2' is not file"
+      tags: wireguard
+
+    - name: Enable and start WireGuard
+      service:
+        name: "wg-quick@{{ wireguard_interface }}"
+        state: started
+        enabled: true
+      tags: wireguard
+
+    # =========================================================================
+    # Add Peer Connections
+    # =========================================================================
+    - name: Configure peer connections
+      shell: |
+        wg set {{ wireguard_interface }} peer {{ hostvars[item]['wg_pubkey'] | default('') }} \
+          allowed-ips {{ forest_subnet }} \
+          endpoint {{ hostvars[item]['ansible_host'] }}:{{ wireguard_port }} \
+          persistent-keepalive 25
+      loop: "{{ groups['forest_nodes'] | difference([inventory_hostname]) }}"
+      when:
+        - hostvars[item]['wg_pubkey'] is defined
+        - hostvars[item]['ansible_host'] is defined
+      ignore_errors: true
+      tags: peers
+
+    # =========================================================================
+    # Bridge Configuration (for Gateway)
+    # =========================================================================
+    - name: Create bridge interface for LAN
+      shell: |
+        ip link add br-forest type bridge
+        ip link set br-forest up
+      args:
+        creates: /sys/class/net/br-forest
+      when: mesh_role == 'gateway'
+      tags: bridge
+
+    - name: Add mesh interface to bridge
+      command: ip link set {{ mesh_interface }} master br-forest
+      when: mesh_role == 'gateway'
+      ignore_errors: true
+      tags: bridge
+
+    # =========================================================================
+    # Firewall Configuration
+    # =========================================================================
+    - name: Configure nftables firewall
+      copy:
+        dest: /etc/nftables.conf
+        content: |
+          #!/usr/sbin/nft -f
+          # Chicago Forest Network - Firewall Rules
+          # DISCLAIMER: Theoretical configuration for educational purposes
+
+          flush ruleset
+
+          table inet forest_filter {
+              chain input {
+                  type filter hook input priority 0; policy drop;
+
+                  # Allow established connections
+                  ct state established,related accept
+
+                  # Allow loopback
+                  iif lo accept
+
+                  # Allow ICMP
+                  ip protocol icmp accept
+                  ip6 nexthdr icmpv6 accept
+
+                  # Allow mesh interface
+                  iifname "{{ mesh_interface }}" accept
+                  iifname "{{ wireguard_interface }}" accept
+
+                  # Allow WireGuard
+                  udp dport {{ wireguard_port }} accept
+
+                  # Allow P2P
+                  udp dport 42000 accept
+
+                  # Allow API (internal only)
+                  iifname "{{ mesh_interface }}" tcp dport 8080 accept
+
+                  # Allow BATMAN-adv
+                  ether type 0x4305 accept
+
+                  # Log dropped
+                  log prefix "FOREST-DROP: " limit rate 10/minute
+              }
+
+              chain forward {
+                  type filter hook forward priority 0; policy drop;
+
+                  ct state established,related accept
+
+                  # Allow mesh forwarding
+                  iifname "{{ mesh_interface }}" accept
+                  oifname "{{ mesh_interface }}" accept
+                  iifname "{{ wireguard_interface }}" accept
+                  oifname "{{ wireguard_interface }}" accept
+
+                  {% if mesh_role == 'gateway' %}
+                  # Gateway: forward to WAN
+                  iifname "{{ mesh_interface }}" oifname "{{ forest_interface }}" accept
+                  {% endif %}
+              }
+
+              chain output {
+                  type filter hook output priority 0; policy accept;
+              }
+          }
+
+          {% if mesh_role == 'gateway' %}
+          table ip forest_nat {
+              chain postrouting {
+                  type nat hook postrouting priority 100;
+                  oifname "{{ forest_interface }}" masquerade
+              }
+          }
+          {% endif %}
+        mode: '0644'
+      notify: reload firewall
+      tags: firewall
+
+    - name: Enable nftables
+      service:
+        name: nftables
+        state: started
+        enabled: true
+      tags: firewall
+
+    # =========================================================================
+    # Network Persistence
+    # =========================================================================
+    - name: Create network interface configuration
+      copy:
+        dest: /etc/network/interfaces.d/forest
+        content: |
+          # Chicago Forest Network - Interface Configuration
+
+          auto {{ mesh_interface }}
+          iface {{ mesh_interface }} inet manual
+              pre-up modprobe batman_adv
+              pre-up ip link add {{ mesh_interface }} type batadv || true
+              up ip link set {{ mesh_interface }} up
+              up ip addr add {{ forest_ip }}/16 dev {{ mesh_interface }} || true
+              down ip link set {{ mesh_interface }} down
+        mode: '0644'
+      tags: network
+
+    - name: Create systemd network service
+      copy:
+        dest: /etc/systemd/system/forest-mesh.service
+        content: |
+          [Unit]
+          Description=Chicago Forest Mesh Network
+          After=network-online.target wg-quick@{{ wireguard_interface }}.service
+          Wants=network-online.target
+
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          ExecStart=/usr/local/bin/forest-mesh-setup.sh
+          ExecStop=/usr/local/bin/forest-mesh-teardown.sh
+
+          [Install]
+          WantedBy=multi-user.target
+        mode: '0644'
+      tags: network
+
+    - name: Create mesh setup script
+      copy:
+        dest: /usr/local/bin/forest-mesh-setup.sh
+        content: |
+          #!/bin/bash
+          # Chicago Forest Mesh Setup Script
+
+          set -e
+
+          # Load modules
+          modprobe batman_adv
+          modprobe wireguard
+
+          # Create BATMAN interface
+          ip link add {{ mesh_interface }} type batadv 2>/dev/null || true
+
+          # Configure BATMAN
+          batctl meshif {{ mesh_interface }} routing_algo {{ mesh_protocol }}
+          batctl meshif {{ mesh_interface }} orig_interval {{ batman_ogm_interval }}
+          batctl meshif {{ mesh_interface }} hop_penalty {{ batman_hop_penalty }}
+
+          # Bring up interface
+          ip link set {{ mesh_interface }} mtu {{ mesh_mtu }}
+          ip link set {{ mesh_interface }} up
+          ip addr add {{ forest_ip }}/16 dev {{ mesh_interface }} 2>/dev/null || true
+
+          # Add WireGuard to mesh
+          ip link set {{ wireguard_interface }} master {{ mesh_interface }} 2>/dev/null || true
+
+          echo "Forest mesh network started"
+        mode: '0755'
+      tags: network
+
+    - name: Create mesh teardown script
+      copy:
+        dest: /usr/local/bin/forest-mesh-teardown.sh
+        content: |
+          #!/bin/bash
+          # Chicago Forest Mesh Teardown Script
+
+          ip link set {{ mesh_interface }} down 2>/dev/null || true
+          ip link delete {{ mesh_interface }} 2>/dev/null || true
+
+          echo "Forest mesh network stopped"
+        mode: '0755'
+      tags: network
+
+    # =========================================================================
+    # Verification
+    # =========================================================================
+    - name: Verify mesh interface
+      command: ip link show {{ mesh_interface }}
+      register: mesh_check
+      ignore_errors: true
+      tags: verify
+
+    - name: Verify WireGuard
+      command: wg show {{ wireguard_interface }}
+      register: wg_check
+      ignore_errors: true
+      tags: verify
+
+    - name: Show BATMAN-adv neighbors
+      command: batctl meshif {{ mesh_interface }} neighbors
+      register: batman_neighbors
+      ignore_errors: true
+      tags: verify
+
+    - name: Display mesh status
+      debug:
+        msg: |
+          Chicago Forest Mesh Configuration Complete!
+          =============================================
+          Mesh Interface: {{ 'UP' if mesh_check.rc == 0 else 'DOWN' }}
+          WireGuard: {{ 'ACTIVE' if wg_check.rc == 0 else 'INACTIVE' }}
+          Node ID: {{ node_id }}
+          Public Key: {{ wg_pubkey }}
+
+          BATMAN-adv Neighbors:
+          {{ batman_neighbors.stdout | default('No neighbors yet') }}
+
+          Commands:
+            Mesh status: batctl meshif {{ mesh_interface }} o
+            WireGuard: wg show {{ wireguard_interface }}
+            Neighbors: batctl meshif {{ mesh_interface }} neighbors
+      tags: verify

@@ -1,0 +1,480 @@
+# Chicago Forest Network Node - Kubernetes Deployment
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. The Chicago Forest Network
+# is a conceptual project exploring decentralized energy networks.
+#
+# Deploy: kubectl apply -f node-deployment.yaml
+# Scale: kubectl scale deployment forest-node --replicas=3 -n chicago-forest
+#
+# Requirements:
+# - Kubernetes 1.25+
+# - Multus CNI (for NIC passthrough)
+# - SR-IOV device plugin (optional, for high-performance)
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chicago-forest
+  labels:
+    name: chicago-forest
+    app.kubernetes.io/name: chicago-forest
+    app.kubernetes.io/component: mesh-network
+
+---
+# =============================================================================
+# Service Account
+# =============================================================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: forest-node
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: service-account
+
+---
+# =============================================================================
+# RBAC - Role for network operations
+# =============================================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: forest-node-role
+  namespace: chicago-forest
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: forest-node-rolebinding
+  namespace: chicago-forest
+subjects:
+  - kind: ServiceAccount
+    name: forest-node
+    namespace: chicago-forest
+roleRef:
+  kind: Role
+  name: forest-node-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# =============================================================================
+# ConfigMap - Node Configuration
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forest-node-config
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: config
+data:
+  # Core settings
+  FOREST_INTERFACE: "net1"
+  ENABLE_FIREWALL: "true"
+  ENABLE_RELAY: "false"
+  ENABLE_STORAGE: "false"
+  ENABLE_ANONYMOUS_ROUTING: "false"
+  LOG_LEVEL: "info"
+  NODE_ENV: "production"
+
+  # Network settings
+  FOREST_SUBNET: "10.42.0.0/16"
+  P2P_PORT: "42000"
+  WIREGUARD_PORT: "51820"
+  API_PORT: "8080"
+  METRICS_PORT: "9090"
+
+  # Mesh settings (theoretical)
+  MESH_PROTOCOL: "batman-adv"
+  MESH_OGM_INTERVAL: "1000"
+  MESH_HOP_PENALTY: "30"
+
+---
+# =============================================================================
+# Secret - Node Keys (create separately)
+# =============================================================================
+apiVersion: v1
+kind: Secret
+metadata:
+  name: forest-node-keys
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: secrets
+type: Opaque
+data:
+  # Base64 encoded keys - replace with actual values
+  # echo -n "your-private-key" | base64
+  wireguard-private-key: ""
+
+---
+# =============================================================================
+# PersistentVolumeClaim - Node Data
+# =============================================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: forest-node-data
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+
+---
+# =============================================================================
+# Network Attachment Definition - Multus CNI (optional)
+# =============================================================================
+# Uncomment if using Multus for NIC passthrough
+# apiVersion: k8s.cni.cncf.io/v1
+# kind: NetworkAttachmentDefinition
+# metadata:
+#   name: forest-network
+#   namespace: chicago-forest
+#   annotations:
+#     k8s.v1.cni.cncf.io/resourceName: intel.com/sriov_netdevice
+# spec:
+#   config: |
+#     {
+#       "cniVersion": "0.3.1",
+#       "type": "macvlan",
+#       "master": "eth1",
+#       "mode": "bridge",
+#       "ipam": {
+#         "type": "whereabouts",
+#         "range": "10.42.0.0/16",
+#         "exclude": ["10.42.0.1/32", "10.42.255.255/32"]
+#       }
+#     }
+
+---
+# =============================================================================
+# Deployment - Forest Node
+# =============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forest-node
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: node
+    app.kubernetes.io/version: "0.1.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: forest-node
+      app.kubernetes.io/component: node
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: forest-node
+        app.kubernetes.io/component: node
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+        # Uncomment for Multus
+        # k8s.v1.cni.cncf.io/networks: forest-network
+    spec:
+      serviceAccountName: forest-node
+      terminationGracePeriodSeconds: 30
+
+      # Node selector for specific hardware (optional)
+      # nodeSelector:
+      #   node-role.kubernetes.io/forest-node: "true"
+
+      # Tolerations for dedicated nodes (optional)
+      # tolerations:
+      #   - key: "dedicated"
+      #     operator: "Equal"
+      #     value: "forest-node"
+      #     effect: "NoSchedule"
+
+      # Security context
+      securityContext:
+        runAsNonRoot: false
+        fsGroup: 1000
+
+      # Init container - setup network
+      initContainers:
+        - name: init-network
+          image: alpine:3.19
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Initializing network configuration..."
+              # Load kernel modules if available
+              modprobe wireguard 2>/dev/null || true
+              modprobe batman-adv 2>/dev/null || true
+              modprobe tun 2>/dev/null || true
+              echo "Network initialization complete"
+          securityContext:
+            privileged: true
+
+      containers:
+        - name: forest-node
+          image: ghcr.io/chicago-forest/forest-node:latest
+          imagePullPolicy: Always
+
+          # Environment from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: forest-node-config
+
+          # Additional environment variables
+          env:
+            - name: FOREST_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: FOREST_NODE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+            - name: FOREST_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: WIREGUARD_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: forest-node-keys
+                  key: wireguard-private-key
+                  optional: true
+
+          # Security context - network operations need elevated privileges
+          securityContext:
+            privileged: false
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+                - SYS_MODULE
+              drop:
+                - ALL
+
+          # Resource limits
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+              # Uncomment for SR-IOV
+              # intel.com/sriov_netdevice: "1"
+
+          # Ports
+          ports:
+            - name: p2p
+              containerPort: 42000
+              protocol: UDP
+            - name: wireguard
+              containerPort: 51820
+              protocol: UDP
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+
+          # Volume mounts
+          volumeMounts:
+            - name: forest-data
+              mountPath: /var/lib/forest
+            - name: forest-config
+              mountPath: /etc/forest
+            - name: tun-device
+              mountPath: /dev/net/tun
+            - name: forest-logs
+              mountPath: /var/log/forest
+
+          # Health checks
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 30
+
+      # Volumes
+      volumes:
+        - name: forest-data
+          persistentVolumeClaim:
+            claimName: forest-node-data
+        - name: forest-config
+          emptyDir: {}
+        - name: forest-logs
+          emptyDir: {}
+        - name: tun-device
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+
+---
+# =============================================================================
+# Service - Node Service
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: forest-node
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: service
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: node
+  ports:
+    - name: p2p
+      port: 42000
+      targetPort: p2p
+      protocol: UDP
+    - name: wireguard
+      port: 51820
+      targetPort: wireguard
+      protocol: UDP
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+      protocol: TCP
+
+---
+# =============================================================================
+# Service - External Load Balancer (optional)
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: forest-node-external
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: external-service
+  annotations:
+    # Cloud provider specific annotations
+    # AWS: service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    # GCP: cloud.google.com/l4-rbs: enabled
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: node
+  ports:
+    - name: p2p
+      port: 42000
+      targetPort: p2p
+      protocol: UDP
+    - name: wireguard
+      port: 51820
+      targetPort: wireguard
+      protocol: UDP
+
+---
+# =============================================================================
+# HorizontalPodAutoscaler (optional)
+# =============================================================================
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: forest-node-hpa
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: forest-node
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+---
+# =============================================================================
+# PodDisruptionBudget
+# =============================================================================
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: forest-node-pdb
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: forest-node
+    app.kubernetes.io/component: pdb
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: forest-node
+      app.kubernetes.io/component: node

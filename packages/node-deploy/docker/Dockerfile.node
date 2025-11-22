@@ -1,0 +1,146 @@
+# Chicago Forest Network Node Dockerfile
+# Multi-stage build for minimal production image
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. The Chicago Forest Network
+# is a conceptual project exploring decentralized energy networks.
+#
+# Build: docker build -t chicago-forest/forest-node -f Dockerfile.node .
+# Run: docker run --cap-add=NET_ADMIN --cap-add=NET_RAW chicago-forest/forest-node
+
+# =============================================================================
+# Build Stage
+# =============================================================================
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install build dependencies for native modules
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    linux-headers \
+    git
+
+# Copy workspace package files for better layer caching
+COPY package.json package-lock.json* pnpm-lock.yaml* ./
+COPY packages/node-deploy/package.json ./packages/node-deploy/
+COPY packages/shared-types/package.json ./packages/shared-types/
+COPY packages/p2p-core/package.json ./packages/p2p-core/
+COPY packages/wireless-mesh/package.json ./packages/wireless-mesh/
+COPY packages/firewall/package.json ./packages/firewall/
+COPY packages/cli/package.json ./packages/cli/
+
+# Install dependencies
+RUN npm ci --ignore-scripts || npm install --ignore-scripts
+
+# Copy source code
+COPY . .
+
+# Build all packages
+RUN npm run build --workspaces --if-present
+
+# =============================================================================
+# Runtime Stage
+# =============================================================================
+FROM node:20-alpine AS runtime
+
+LABEL maintainer="Chicago Forest Network <contact@chicago-forest.network>"
+LABEL description="Chicago Forest Network Node - Decentralized Mesh Network Node"
+LABEL version="0.1.0"
+LABEL org.opencontainers.image.source="https://github.com/chicago-forest/chicago-forest"
+
+WORKDIR /app
+
+# Install runtime dependencies for networking
+RUN apk add --no-cache \
+    # Network tools
+    iproute2 \
+    iptables \
+    ip6tables \
+    nftables \
+    # WireGuard
+    wireguard-tools \
+    # Mesh networking
+    batctl \
+    # Wireless tools
+    iw \
+    wireless-tools \
+    # Utilities
+    curl \
+    jq \
+    openssl \
+    ca-certificates \
+    # Process management
+    tini \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user for security
+RUN addgroup -g 1000 forest && \
+    adduser -u 1000 -G forest -s /bin/sh -D forest && \
+    # Add forest user to netdev group for network operations
+    addgroup forest netdev || true
+
+# Create required directories
+RUN mkdir -p \
+    /var/lib/forest/data \
+    /var/lib/forest/keys \
+    /var/lib/forest/peers \
+    /var/log/forest \
+    /etc/forest \
+    /run/forest && \
+    chown -R forest:forest /var/lib/forest /var/log/forest /etc/forest /run/forest
+
+# Copy built application from builder
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages/node-deploy/dist ./packages/node-deploy/dist
+COPY --from=builder /app/packages/shared-types/dist ./packages/shared-types/dist
+COPY --from=builder /app/packages/p2p-core/dist ./packages/p2p-core/dist
+COPY --from=builder /app/packages/wireless-mesh/dist ./packages/wireless-mesh/dist
+COPY --from=builder /app/packages/firewall/dist ./packages/firewall/dist
+COPY --from=builder /app/packages/cli/dist ./packages/cli/dist
+
+# Copy entrypoint script
+COPY packages/node-deploy/docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Create CLI symlink
+RUN ln -sf /app/packages/cli/dist/forest-cli.js /usr/local/bin/forest-cli && \
+    chmod +x /app/packages/cli/dist/forest-cli.js 2>/dev/null || true
+
+# Environment variables
+ENV NODE_ENV=production
+ENV FOREST_DATA_DIR=/var/lib/forest
+ENV FOREST_CONFIG_DIR=/etc/forest
+ENV FOREST_LOG_DIR=/var/log/forest
+ENV FOREST_INTERFACE=eth1
+ENV ENABLE_FIREWALL=true
+ENV ENABLE_RELAY=false
+ENV ENABLE_STORAGE=false
+ENV LOG_LEVEL=info
+
+# Expose ports
+# P2P communication
+EXPOSE 42000/udp
+# WireGuard tunnel
+EXPOSE 51820/udp
+# HTTP API
+EXPOSE 8080/tcp
+# Metrics
+EXPOSE 9090/tcp
+# BATMAN-adv mesh (theoretical)
+EXPOSE 4305/udp
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -sf http://localhost:8080/health || exit 1
+
+# Volumes for persistence
+VOLUME ["/var/lib/forest", "/etc/forest", "/var/log/forest"]
+
+# Use tini as init system for proper signal handling
+ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
+
+# Default command
+CMD ["node", "/app/packages/node-deploy/dist/index.js", "--start"]
