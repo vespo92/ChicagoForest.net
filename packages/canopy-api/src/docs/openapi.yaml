@@ -1,0 +1,940 @@
+openapi: 3.1.0
+info:
+  title: Chicago Forest Network API
+  description: |
+    # Chicago Plasma Forest Network - REST API
+
+    **DISCLAIMER**: This is an AI-generated theoretical framework for educational
+    and research purposes. The API represents a conceptual design for a
+    decentralized energy network inspired by Tesla's wireless transmission
+    research and modern mesh networking.
+
+    ## Overview
+
+    The Canopy API provides a public interface to the Chicago Forest Network,
+    enabling applications to:
+    - Manage network nodes
+    - Query routing and topology
+    - Access historical research documentation
+    - Subscribe to real-time network events
+
+    ## Authentication
+
+    Most read operations are public. Write operations require authentication:
+    - **API Key**: `X-API-Key: cfn_your_key`
+    - **Bearer Token**: `Authorization: Bearer <token>`
+    - **Node Signature**: `Authorization: NodeSig <nodeId>:<timestamp>:<signature>`
+
+    ## Rate Limiting
+
+    - Anonymous: 60 requests/minute
+    - Authenticated: 300 requests/minute
+    - Node: 600 requests/minute
+
+    ## Sources & Documentation
+
+    All research endpoints provide REAL, verifiable sources:
+    - Tesla patents: https://patents.google.com
+    - LENR papers: https://lenr-canr.org
+    - FBI Tesla files: https://vault.fbi.gov/nikola-tesla
+
+  version: 0.1.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  contact:
+    name: Chicago Forest Network Project
+    url: https://github.com/vespo92/chicago-forest
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local development server
+  - url: https://api.chicago-forest.network/v1
+    description: Production server (theoretical)
+
+tags:
+  - name: Nodes
+    description: Node management and discovery
+  - name: Routing
+    description: Network routing and topology
+  - name: Research
+    description: Historical research documentation
+  - name: Health
+    description: API health and status
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Check API health status
+      tags: [Health]
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  version:
+                    type: string
+                    example: 0.1.0
+                  timestamp:
+                    type: integer
+                    example: 1700000000000
+                  disclaimer:
+                    type: string
+                    example: AI-generated theoretical framework
+
+  /version:
+    get:
+      summary: API version
+      tags: [Health]
+      responses:
+        '200':
+          description: Version information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                  name:
+                    type: string
+
+  /nodes:
+    get:
+      summary: List nodes
+      description: List all nodes in the network with optional filtering
+      tags: [Nodes]
+      parameters:
+        - name: capabilities
+          in: query
+          schema:
+            type: string
+          description: Comma-separated list of capabilities to filter by
+        - name: minReputation
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+          description: Minimum reputation score
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of nodes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeListResponse'
+
+  /nodes/register:
+    post:
+      summary: Register node
+      description: |
+        [THEORETICAL] Register a new node in the Chicago Forest Network.
+        Would add the node to the distributed registry.
+      tags: [Nodes]
+      security:
+        - apiKey: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterNodeRequest'
+      responses:
+        '200':
+          description: Node registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterNodeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /nodes/{nodeId}:
+    get:
+      summary: Get node
+      description: Get detailed information about a specific node
+      tags: [Nodes]
+      parameters:
+        - $ref: '#/components/parameters/nodeId'
+      responses:
+        '200':
+          description: Node information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeInfo'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /nodes/{nodeId}/metrics:
+    get:
+      summary: Get node metrics
+      tags: [Nodes]
+      parameters:
+        - $ref: '#/components/parameters/nodeId'
+      responses:
+        '200':
+          description: Node metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeMetrics'
+
+  /nodes/{nodeId}/peers:
+    get:
+      summary: Get node peers
+      tags: [Nodes]
+      parameters:
+        - $ref: '#/components/parameters/nodeId'
+      responses:
+        '200':
+          description: Connected peers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeerInfo'
+
+  /routing/table:
+    get:
+      summary: Get routing table
+      description: Get the current mesh routing table
+      tags: [Routing]
+      parameters:
+        - name: protocol
+          in: query
+          schema:
+            type: string
+            enum: [batman-adv, olsr, babel, bmx7, cjdns]
+      responses:
+        '200':
+          description: Routing table
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingTable'
+
+  /routing/discover:
+    post:
+      summary: Discover paths
+      description: |
+        [THEORETICAL] Discover available paths to a destination.
+        Would perform multi-path discovery using DHT and mesh routing.
+      tags: [Routing]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PathDiscoveryRequest'
+      responses:
+        '200':
+          description: Discovered paths
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiscoveredPath'
+
+  /routing/neighbors:
+    get:
+      summary: Get mesh neighbors
+      tags: [Routing]
+      responses:
+        '200':
+          description: Direct mesh neighbors with link quality
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LinkQuality'
+
+  /routing/tunnels:
+    get:
+      summary: Get active tunnels
+      tags: [Routing]
+      responses:
+        '200':
+          description: Active SD-WAN tunnels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TunnelState'
+
+  /routing/traffic:
+    get:
+      summary: Get traffic statistics
+      tags: [Routing]
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: integer
+            default: 3600
+          description: Time period in seconds
+      responses:
+        '200':
+          description: Traffic statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficStats'
+
+  /routing/rules:
+    get:
+      summary: Get traffic rules
+      tags: [Routing]
+      responses:
+        '200':
+          description: Traffic rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrafficRule'
+    post:
+      summary: Create traffic rule
+      tags: [Routing]
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficRuleInput'
+      responses:
+        '200':
+          description: Rule created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  success:
+                    type: boolean
+
+  /research/documents:
+    get:
+      summary: Search research documents
+      description: |
+        Search historical research documents. Returns REAL sources with
+        verifiable URLs. Theoretical content is clearly marked.
+      tags: [Research]
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: Free text search
+        - name: type
+          in: query
+          schema:
+            $ref: '#/components/schemas/DocumentType'
+        - name: category
+          in: query
+          schema:
+            $ref: '#/components/schemas/ResearchCategory'
+        - name: author
+          in: query
+          schema:
+            type: string
+        - name: historicalOnly
+          in: query
+          schema:
+            type: boolean
+          description: Exclude theoretical/AI-generated content
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResearchSearchResult'
+
+  /research/documents/{documentId}:
+    get:
+      summary: Get research document
+      tags: [Research]
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Research document
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResearchDocument'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /research/pioneers:
+    get:
+      summary: Get research pioneers
+      description: Historical research pioneers like Tesla, Mallove, Moray
+      tags: [Research]
+      responses:
+        '200':
+          description: Research pioneers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pioneer'
+
+  /research/organizations:
+    get:
+      summary: Get research organizations
+      description: Active research organizations and companies
+      tags: [Research]
+      responses:
+        '200':
+          description: Research organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+
+  /research/categories:
+    get:
+      summary: Get research categories
+      tags: [Research]
+      responses:
+        '200':
+          description: Research categories with statistics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    category:
+                      $ref: '#/components/schemas/ResearchCategory'
+                    count:
+                      type: integer
+                    description:
+                      type: string
+
+  /research/bibliography:
+    get:
+      summary: Get bibliography
+      description: Full bibliography with verified source URLs
+      tags: [Research]
+      responses:
+        '200':
+          description: Bibliography
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bibliography'
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  parameters:
+    nodeId:
+      name: nodeId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Node identifier
+
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+
+    NodeCapability:
+      type: string
+      enum: [relay, storage, exit, bootstrap, bridge, antenna, tower, firewall, anonymous]
+
+    DocumentType:
+      type: string
+      enum: [patent, paper, article, archive, government, theoretical]
+
+    ResearchCategory:
+      type: string
+      enum:
+        - tesla-wireless
+        - lenr-cold-fusion
+        - zero-point
+        - radiant-energy
+        - atmospheric-electricity
+        - mesh-networking
+        - theoretical-framework
+
+    NodeInfo:
+      type: object
+      properties:
+        nodeId:
+          type: string
+        publicKey:
+          type: string
+        name:
+          type: string
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeCapability'
+        reputation:
+          type: number
+        status:
+          type: string
+          enum: [online, offline, unknown]
+        lastSeen:
+          type: integer
+        uptime:
+          type: integer
+        connections:
+          type: integer
+
+    NodeListResponse:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeInfo'
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+
+    RegisterNodeRequest:
+      type: object
+      required: [publicKey, capabilities]
+      properties:
+        publicKey:
+          type: string
+        name:
+          type: string
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeCapability'
+
+    RegisterNodeResponse:
+      type: object
+      properties:
+        nodeId:
+          type: string
+        registeredAt:
+          type: integer
+        bootstrapPeers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PeerInfo'
+        segment:
+          type: string
+
+    NodeMetrics:
+      type: object
+      properties:
+        bandwidthIn:
+          type: number
+        bandwidthOut:
+          type: number
+        tunnelCount:
+          type: integer
+        anonymousCircuits:
+          type: integer
+
+    PeerInfo:
+      type: object
+      properties:
+        nodeId:
+          type: string
+        publicKey:
+          type: string
+        addresses:
+          type: array
+          items:
+            type: object
+            properties:
+              protocol:
+                type: string
+              host:
+                type: string
+              port:
+                type: integer
+        lastSeen:
+          type: integer
+        reputation:
+          type: number
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeCapability'
+
+    RoutingTable:
+      type: object
+      properties:
+        protocol:
+          type: string
+        routeCount:
+          type: integer
+        routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
+        lastUpdate:
+          type: integer
+        neighborCount:
+          type: integer
+
+    Route:
+      type: object
+      properties:
+        id:
+          type: string
+        destination:
+          type: string
+        nextHop:
+          type: string
+        metric:
+          type: integer
+        hopCount:
+          type: integer
+        latency:
+          type: number
+        bandwidth:
+          type: number
+        protocol:
+          type: string
+        active:
+          type: boolean
+
+    PathDiscoveryRequest:
+      type: object
+      required: [destination]
+      properties:
+        destination:
+          type: string
+        preferences:
+          type: object
+          properties:
+            lowLatency:
+              type: boolean
+            highBandwidth:
+              type: boolean
+            anonymous:
+              type: boolean
+            maxHops:
+              type: integer
+
+    DiscoveredPath:
+      type: object
+      properties:
+        pathId:
+          type: string
+        hops:
+          type: array
+          items:
+            type: object
+            properties:
+              nodeId:
+                type: string
+              address:
+                type: string
+              latency:
+                type: number
+        totalLatency:
+          type: number
+        minBandwidth:
+          type: number
+        reliability:
+          type: number
+        anonymous:
+          type: boolean
+        expiresAt:
+          type: integer
+
+    LinkQuality:
+      type: object
+      properties:
+        peerId:
+          type: string
+        rssi:
+          type: number
+        noise:
+          type: number
+        snr:
+          type: number
+        txRate:
+          type: number
+        rxRate:
+          type: number
+        quality:
+          type: integer
+        lastUpdate:
+          type: integer
+
+    TunnelState:
+      type: object
+      properties:
+        config:
+          type: object
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+        status:
+          type: string
+          enum: [up, down, error]
+        bytesIn:
+          type: integer
+        bytesOut:
+          type: integer
+
+    TrafficStats:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+        period:
+          type: integer
+        bytesIn:
+          type: integer
+        bytesOut:
+          type: integer
+        packetsIn:
+          type: integer
+        packetsOut:
+          type: integer
+        packetsDropped:
+          type: integer
+
+    TrafficRule:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        priority:
+          type: integer
+        match:
+          type: object
+        action:
+          type: object
+
+    TrafficRuleInput:
+      type: object
+      required: [name, priority]
+      properties:
+        name:
+          type: string
+        priority:
+          type: integer
+        match:
+          type: object
+        action:
+          type: object
+
+    ResearchDocument:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/DocumentType'
+        title:
+          type: string
+        authors:
+          type: array
+          items:
+            type: string
+        date:
+          type: string
+        category:
+          $ref: '#/components/schemas/ResearchCategory'
+        abstract:
+          type: string
+        sourceUrl:
+          type: string
+          description: REAL, verifiable URL
+        doi:
+          type: string
+        patentNumber:
+          type: string
+        isTheoretical:
+          type: boolean
+          description: True if AI-generated theoretical content
+        tags:
+          type: array
+          items:
+            type: string
+        citations:
+          type: integer
+
+    ResearchSearchResult:
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResearchDocument'
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+
+    Pioneer:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        dates:
+          type: string
+        nationality:
+          type: string
+        fields:
+          type: array
+          items:
+            type: string
+        biography:
+          type: string
+        keyContributions:
+          type: array
+          items:
+            type: string
+        patents:
+          type: array
+          items:
+            type: string
+        sourceUrls:
+          type: array
+          items:
+            type: string
+        isHistorical:
+          type: boolean
+
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        country:
+          type: string
+        type:
+          type: string
+          enum: [company, university, government, nonprofit]
+        researchAreas:
+          type: array
+          items:
+            type: string
+        website:
+          type: string
+        isActive:
+          type: boolean
+
+    Bibliography:
+      type: object
+      properties:
+        totalSources:
+          type: integer
+        verifiedUrls:
+          type: integer
+        categories:
+          type: object
+          additionalProperties:
+            type: integer
+        sources:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              title:
+                type: string
+              verified:
+                type: boolean
