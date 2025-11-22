@@ -320,3 +320,8 @@ export interface VotingStats {
 }
 
 export { ConsensusResult, VoteChoice };
+
+// Extended consensus modules
+export * from './proposal-system';
+export * from './voting-mechanisms';
+export * from './quorum-calculation';

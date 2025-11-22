@@ -325,3 +325,8 @@ export class GovernanceManager extends EventEmitter<GovernanceEvents> {
 }
 
 export { GovernanceConfig, Delegation };
+
+// Extended governance modules
+export * from './node-reputation';
+export * from './stake-weighted-voting';
+export * from './delegation';
