@@ -184,12 +184,92 @@ export type {
 } from './metrics/health-monitoring';
 
 // ============================================================================
+// RHIZOME MODULE - Network Propagation
+// ============================================================================
+export {
+  // Main coordinator
+  RhizomePropagationCoordinator,
+  RhizomePhase,
+  PropagationEvent,
+  createRhizomePropagation,
+  createChicagoRhizomeNode,
+  createLightweightRhizome,
+  RHIZOME_PROPAGATION_INFO,
+
+  // Gossip protocol
+  RhizomeGossipProtocol,
+  GossipMessageType,
+  DisseminationStrategy,
+  createGossipProtocol,
+  createHighThroughputGossip,
+  createReliableGossip,
+
+  // State synchronization
+  RhizomeStateSync,
+  SyncStateType,
+  ConflictResolution,
+  createStateSync,
+  createHighConsistencySync,
+  GCounter,
+  PNCounter,
+  LWWRegister,
+  GSet,
+
+  // Lateral growth
+  RhizomeLateralGrowth,
+  GrowthDirection,
+  SegmentType,
+  createLateralGrowth,
+  createAggressiveGrowth,
+  createConservativeGrowth
+} from './rhizome';
+
+export type {
+  // Rhizome types
+  RhizomeIdentity,
+  TopologyView,
+  PropagationStats,
+  RhizomePropagationConfig,
+
+  // Gossip types
+  GossipMessage,
+  GossipConfig,
+  PeerSelectionConfig,
+  GossipRoundStats,
+
+  // State sync types
+  StateEntry,
+  StateDelta,
+  VersionVector,
+  SyncSession,
+  StateSyncConfig,
+  MerkleNode,
+
+  // Lateral growth types
+  RhizomeNode,
+  GrowthSegment,
+  GrowthWave,
+  EnvironmentalCondition,
+  LateralGrowthConfig
+} from './rhizome';
+
+// ============================================================================
 // PACKAGE METADATA
 // ============================================================================
 export const SPORE_PROPAGATION_INFO = {
   name: '@chicago-forest/spore-propagation',
   version: '0.1.0-theoretical',
-  description: 'Bio-inspired network growth, bootstrap, and organic expansion',
+  description: 'Bio-inspired network growth, bootstrap, organic expansion, and rhizome propagation',
+
+  modules: [
+    'bootstrap - Seed node initialization and trust establishment',
+    'distribution - Spore distribution across multiple channels',
+    'germination - Growing spores into network nodes',
+    'growth - Organic expansion and node recruitment',
+    'resilience - Redundancy, failover, and self-healing',
+    'metrics - Analytics and health monitoring',
+    'rhizome - Network propagation with gossip, state sync, and lateral growth'
+  ],
 
   references: [
     {
@@ -198,6 +278,18 @@ export const SPORE_PROPAGATION_INFO = {
       journal: 'Science',
       year: 2010,
       doi: '10.1126/science.1177894'
+    },
+    {
+      title: 'Epidemic Algorithms for Replicated Database Maintenance',
+      authors: 'Demers et al.',
+      venue: 'PODC 1987',
+      doi: '10.1145/41840.41841'
+    },
+    {
+      title: 'Conflict-free Replicated Data Types',
+      authors: 'Shapiro et al.',
+      venue: 'SSS 2011',
+      doi: '10.1007/978-3-642-24550-3_29'
     }
   ],
 

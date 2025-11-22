@@ -25,6 +25,31 @@
       "import": "./dist/germination/index.mjs",
       "require": "./dist/germination/index.js",
       "types": "./dist/germination/index.d.ts"
+    },
+    "./rhizome": {
+      "import": "./dist/rhizome/index.mjs",
+      "require": "./dist/rhizome/index.js",
+      "types": "./dist/rhizome/index.d.ts"
+    },
+    "./bootstrap": {
+      "import": "./dist/bootstrap/index.mjs",
+      "require": "./dist/bootstrap/index.js",
+      "types": "./dist/bootstrap/index.d.ts"
+    },
+    "./growth": {
+      "import": "./dist/growth/index.mjs",
+      "require": "./dist/growth/index.js",
+      "types": "./dist/growth/index.d.ts"
+    },
+    "./resilience": {
+      "import": "./dist/resilience/index.mjs",
+      "require": "./dist/resilience/index.js",
+      "types": "./dist/resilience/index.d.ts"
+    },
+    "./metrics": {
+      "import": "./dist/metrics/index.mjs",
+      "require": "./dist/metrics/index.js",
+      "types": "./dist/metrics/index.d.ts"
     }
   },
   "scripts": {
