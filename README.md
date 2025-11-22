@@ -2,257 +2,340 @@
 
 ## ⚠️ IMPORTANT DISCLAIMER ⚠️
 
-**This repository contains two distinct projects:**
+**This is an AI-generated theoretical framework for educational and research purposes.**
 
-1. **Theoretical Energy Network (AI-Generated)**: An exploratory framework envisioning wireless power distribution based on Tesla's research. This is NOT operational technology.
+This repository contains:
+1. **P2P Wireless Mesh Packages** - TypeScript packages for building decentralized wireless networks
+2. **Theoretical Energy Framework** - Conceptual documentation inspired by Tesla's research
 
-2. **Real Mesh Network (Implementable)**: A working peer-to-peer communication network based on proven technologies (B.A.T.M.A.N., Yggdrasil, UniFi). This CAN be deployed today.
+**None of this is operational infrastructure.** It's a vision of what community-owned networks could look like.
 
 ---
 
-## 🌐 Community Mesh Network (REAL IMPLEMENTATION)
+## 📦 Monorepo Structure
 
-A resilient, decentralized internet infrastructure for Chicago using proven mesh networking technologies.
+This is a **Turborepo** monorepo containing multiple packages for building the Chicago Forest P2P network.
 
-### Why Mesh Networking?
-
-- ✅ **Works when internet fails** - Natural disasters, infrastructure attacks, or ISP outages
-- ✅ **Community-owned** - No corporate gatekeepers, democratic governance
-- ✅ **Privacy-first** - End-to-end encryption, no surveillance
-- ✅ **Proven at scale** - 40,000+ nodes deployed worldwide (Freifunk, Guifi.net, NYC Mesh)
-
-### Technology Stack
-
-- **B.A.T.M.A.N. advanced** - Layer 2 mesh routing (Linux kernel)
-- **Yggdrasil Network** - Encrypted IPv6 overlay
-- **IPFS** - Decentralized content distribution
-- **UniFi/UISP** - Affordable, professional-grade hardware
-
-### Quick Start
-
-**Deploy a mesh node in under 30 minutes:**
-
-```bash
-# Raspberry Pi 4 + WiFi adapter (~$100)
-curl -sSL https://mesh.chicagoforest.net/install.sh | sudo bash
-sudo mesh-config --lat 41.8781 --lon -87.6298 --name "MyNode"
-sudo mesh-join chicago
+```
+chicago-forest-network/
+├── apps/
+│   └── web/                          # Next.js documentation website
+├── packages/
+│   ├── p2p-core/                     # Core P2P networking primitives
+│   ├── wireless-mesh/                # WiFi Direct, ad-hoc, mesh routing
+│   ├── sdwan-bridge/                 # SD-WAN virtual bridge & tunneling
+│   ├── firewall/                     # Chicago Forest Firewall (CFW)
+│   ├── node-deploy/                  # Docker/K8s/VM deployment configs
+│   ├── ipv7-adapter/                 # IPV7 protocol integration
+│   ├── anon-routing/                 # Anonymous onion routing
+│   ├── hardware-hal/                 # Hardware abstraction (radios, antennas)
+│   ├── cli/                          # Command-line interface
+│   └── shared-types/                 # Shared TypeScript types
+├── turbo.json                        # Turborepo configuration
+└── pnpm-workspace.yaml               # Workspace configuration
 ```
 
-**📖 Full Documentation**: [MESH_NETWORK_SPEC.md](./MESH_NETWORK_SPEC.md)
-
-**🌐 Live Demo**: [chicagoforest.net/mesh](https://chicagoforest.net/mesh)
-
 ---
 
-## ⚡ Plasma Energy Network (THEORETICAL)
-
-A visionary framework exploring decentralized wireless energy distribution inspired by Tesla, Mallove, and Moray. This section documents historical research and proposes a theoretical implementation.
-
-**Note**: This is speculative. Focus on the mesh network above for real implementation.
-
----
-
-## 🚀 Development Quick Start
+## 🚀 Quick Start
 
 ```bash
 # Install dependencies
-bun install
+pnpm install
 
-# Run development server
-bun run dev
+# Build all packages
+pnpm build
 
-# Build for production
-bun run build
+# Run development mode
+pnpm dev
 
-# Start production server
-bun run start
+# Run the CLI
+pnpm --filter @chicago-forest/cli build
+npx forest --help
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to see the website.
+---
 
-## 🏗️ Tech Stack
+## 📦 Package Overview
 
-- **Framework**: Next.js 15 with App Router
-- **Styling**: Tailwind CSS v3 + shadcn/ui
-- **Runtime**: Bun
-- **Language**: TypeScript
-- **Deployment**: Optimized for chicagoforest.net
+### `@chicago-forest/p2p-core`
+Core P2P networking primitives including:
+- **Node Identity**: Ed25519 keypairs, peer ID derivation
+- **Peer Discovery**: Kademlia DHT for decentralized discovery
+- **Connection Manager**: Peer connection lifecycle and messaging
+- **Event System**: Type-safe network event handling
 
-## 📁 Project Structure
+```typescript
+import { createNodeIdentity, KademliaDHT, ConnectionManager } from '@chicago-forest/p2p-core';
 
-```
-chicago-forest/
-├── app/                  # Next.js app directory
-│   ├── page.tsx         # Homepage
-│   ├── layout.tsx       # Root layout
-│   └── globals.css      # Global styles
-├── components/          # React components
-│   ├── Hero.tsx         # Landing hero section
-│   ├── NetworkArchitecture.tsx  # Protocol stack visualization
-│   ├── PlasmaForestDiagram.tsx  # Network topology map
-│   ├── ProtocolSpecs.tsx        # Technical documentation
-│   └── CommunityOnboarding.tsx  # Join the network
-├── lib/                 # Utility functions
-│   └── utils.ts         # Helper functions
-├── public/              # Static assets
-├── PROTOCOL_WHITEPAPER.md  # Complete protocol specification
-└── README.md            # This file
+const identity = await createNodeIdentity();
+const dht = new KademliaDHT(identity.nodeId);
 ```
 
-## 🌐 Network Protocol Overview
+### `@chicago-forest/wireless-mesh`
+Wireless mesh networking layer:
+- **WiFi Direct**: P2P connections without infrastructure
+- **Ad-hoc Mode**: Decentralized wireless networks
+- **Mesh Routing**: BATMAN-adv, OLSR, Babel protocol support
+- **Link Quality**: Signal monitoring and neighbor discovery
 
-The Chicago Plasma Forest uses a revolutionary multi-layer protocol stack:
+```typescript
+import { WirelessMeshManager } from '@chicago-forest/wireless-mesh';
 
-### Layer 1: Electromagnetic Network Protocol (ENP)
-- Wireless power transmission using Tesla coil principles
-- 150-200 kHz carrier frequency
-- Combined energy and data transmission
+const mesh = new WirelessMeshManager({
+  protocol: 'batman-adv',
+  interface: 'wlan0',
+  channel: 6,
+});
+await mesh.start();
+```
 
-### Layer 2: LoRaWAN Mesh
-- Long-range coordination network
-- 915 MHz ISM band
-- Self-healing mesh topology
+### `@chicago-forest/sdwan-bridge`
+SD-WAN virtual bridge for the UNAbridged network:
+- **WireGuard Tunnels**: Encrypted point-to-point connections
+- **VXLAN Overlay**: Virtual network segments
+- **Traffic Classification**: Application-aware routing
+- **Path Selection**: Latency, bandwidth, cost-based policies
 
-### Layer 3: Quantum Coherence
-- Experimental quantum entanglement layer
-- Instantaneous state synchronization
-- Zero-latency communication
+```typescript
+import { SDWANBridge } from '@chicago-forest/sdwan-bridge';
 
-### Layer 4: IPFS Distribution
-- Decentralized content storage
-- Content-addressed data
-- Peer-to-peer file sharing
+const bridge = new SDWANBridge({
+  nodeIdentity: myIdentity,
+  forestInterface: 'eth1',
+  pathSelection: 'lowest-latency',
+});
+```
+
+### `@chicago-forest/firewall`
+Chicago Forest Firewall (CFW):
+- **Two-Port Configuration**: WAN + FOREST interfaces
+- **Rule DSL**: Fluent API for firewall rules
+- **OPNsense Export**: Generate OPNsense-compatible configs
+- **nftables/iptables**: Native Linux firewall support
+
+```typescript
+import { ChicagoForestFirewall, RuleBuilder, generateOPNsenseConfig } from '@chicago-forest/firewall';
+
+const firewall = new ChicagoForestFirewall();
+firewall.addRule(
+  RuleBuilder.create('allow-forest')
+    .name('Allow Forest Traffic')
+    .fromZone('forest')
+    .allow()
+    .build()
+);
+```
+
+### `@chicago-forest/node-deploy`
+Deployment configurations:
+- **Docker**: docker-compose for containerized nodes
+- **Kubernetes**: Deployments with NIC passthrough, SR-IOV
+- **VMs**: cloud-init for OPNsense/custom VMs
+- **Helm Charts**: Kubernetes package manager support
+
+```typescript
+import { generateDockerCompose, generateKubernetesManifest } from '@chicago-forest/node-deploy';
+
+const compose = generateDockerCompose({
+  nodeName: 'forest-node-1',
+  forestInterface: 'eth1',
+  enableFirewall: true,
+});
+```
+
+### `@chicago-forest/anon-routing`
+Anonymous routing layer:
+- **Onion Routing**: Multi-hop encrypted circuits
+- **Hidden Services**: Anonymous hosting (like .onion)
+- **Traffic Padding**: Timing attack resistance
+- **Circuit Building**: Tor-inspired path selection
+
+### `@chicago-forest/hardware-hal`
+Hardware Abstraction Layer:
+- **WiFi Adapters**: 2.4GHz, 5GHz, 6GHz support
+- **LoRa Radios**: Long-range mesh (SX1262/SX1276)
+- **60GHz Backhaul**: High-speed point-to-point
+- **DIY Equipment**: Support for custom radios
+
+### `@chicago-forest/cli`
+Command-line interface:
+```bash
+forest init               # Initialize a new node
+forest start              # Start the node
+forest status             # Show node status
+forest peers              # List connected peers
+forest mesh --neighbors   # Show mesh neighbors
+forest tunnel --create    # Create SD-WAN tunnel
+forest firewall --rules   # List firewall rules
+forest deploy --docker    # Generate Docker config
+```
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CHICAGO FOREST NETWORK STACK                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│  USER DEPLOYMENT (Docker / Kubernetes / VM / Bare Metal)                │
+│                                                                         │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                       @chicago-forest/cli                        │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                                    │                                    │
+│  ┌─────────────────────────────────┼───────────────────────────────┐   │
+│  │               @chicago-forest/node-deploy                        │   │
+│  └─────────────────────────────────┼───────────────────────────────┘   │
+├────────────────────────────────────┼────────────────────────────────────┤
+│  SECURITY LAYER                    │                                    │
+│  ┌─────────────────────┐    ┌──────┴──────────────────────────────┐   │
+│  │ @chicago-forest/    │    │    @chicago-forest/anon-routing     │   │
+│  │     firewall        │◄───│      Onion/Anonymous Routing        │   │
+│  └─────────────────────┘    └─────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────────────────┤
+│  NETWORK LAYER                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                  @chicago-forest/sdwan-bridge                    │   │
+│  │     SD-WAN Overlay | Virtual Tunnels | Traffic Engineering      │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────┐    ┌─────────────────────────────────────┐   │
+│  │ @chicago-forest/    │    │    @chicago-forest/p2p-core         │   │
+│  │   ipv7-adapter      │◄───│  Node Identity | Peer Discovery     │   │
+│  └─────────────────────┘    └─────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────────────────┤
+│  TRANSPORT LAYER                                                        │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                 @chicago-forest/wireless-mesh                    │   │
+│  │      WiFi Direct | Ad-hoc | Mesh Routing (BATMAN/OLSR)          │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────────────────┤
+│  PHYSICAL LAYER                                                         │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                  @chicago-forest/hardware-hal                    │   │
+│  │   Custom Radios | UISP Equipment | LoRa | DIY Antennas          │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
 
 ## 🔧 Development
 
 ### Prerequisites
-- Bun 1.0+ (install from [bun.sh](https://bun.sh))
-- Node.js 18+ (for compatibility)
-- Git
+- Node.js 18+
+- pnpm 9.0+
+- TypeScript 5+
 
-### Environment Variables
-Create a `.env.local` file:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
-NEXT_PUBLIC_NETWORK_ID=chicago-mainnet
-```
+### Building
 
-### Available Scripts
 ```bash
-bun run dev       # Start development server
-bun run build     # Build for production
-bun run start     # Start production server
-bun run lint      # Run ESLint
-bun run format    # Format with Prettier
+# Install dependencies
+pnpm install
+
+# Build all packages
+pnpm build
+
+# Build specific package
+pnpm --filter @chicago-forest/p2p-core build
+
+# Run tests
+pnpm test
+
+# Type checking
+pnpm typecheck
 ```
 
-## 🌍 Deployment
+### Package Development
 
-### Deploy to Vercel
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/chicago-forest/website)
-
-### Self-Hosting
-1. Build the application:
-   ```bash
-   bun run build
-   ```
-
-2. Start the production server:
-   ```bash
-   bun run start
-   ```
-
-3. Configure your web server (nginx/Apache) to proxy to port 3000
-
-### Domain Configuration
-Point `chicagoforest.net` to your server and configure SSL certificates.
-
-## 📚 Documentation
-
-- [Protocol Whitepaper](./PROTOCOL_WHITEPAPER.md) - Complete technical specification
-- [Free Energy Research](../research/) - Background research on Tesla, Mallove, and Moray
-- [API Documentation](./docs/api.md) - REST and WebSocket APIs
-- [Hardware Guide](./docs/hardware.md) - Building plasma nodes
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
-
-### Development Workflow
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## 🏛️ Governance
-
-The Chicago Plasma Forest is governed by a Decentralized Autonomous Organization (DAO):
-- Node Operators: 40% voting weight
-- Token Holders: 30% voting weight
-- Technical Committee: 20% voting weight
-- Community Members: 10% voting weight
-
-## 📡 Network Status
-
-| Metric | Status |
-|--------|--------|
-| Active Nodes | 0 |
-| Power Capacity | 0 kW |
-| Network Coverage | 0 km² |
-| Data Throughput | 0 Mbps |
-
-## 🔒 Security
-
-- Quantum-resistant cryptography
-- End-to-end encryption
-- Byzantine fault tolerance
-- Regular security audits
-
-## 📄 License
-
-This project is open source under the MIT License. See [LICENSE](./LICENSE) for details.
-
-## 🌟 Community
-
-- **Discord**: [discord.gg/chicagoforest](https://discord.gg/chicagoforest)
-- **Telegram**: [t.me/chicagoforest](https://t.me/chicagoforest)
-- **GitHub**: [github.com/chicago-forest](https://github.com/chicago-forest)
-- **Email**: hello@chicagoforest.net
-
-## 🗺️ Theoretical Roadmap (Conceptual Only)
-
-**Note: This is a hypothetical timeline for a theoretical system**
-
-### Q1 2026
-- [ ] Protocol specification finalization (theoretical)
-- [ ] Reference implementation (simulation)
-- [ ] Security audit (conceptual)
-
-### Q2 2026
-- [ ] 10-node pilot in Lincoln Park (theoretical)
-- [ ] Mobile app development (mockup)
-- [ ] Community workshops (educational)
-
-### Q3 2026
-- [ ] 100-node expansion (conceptual)
-- [ ] Hardware kit distribution (theoretical designs)
-- [ ] Cross-neighborhood connectivity (simulation)
-
-### Q4 2026
-- [ ] City-wide deployment (vision)
-- [ ] Grid integration (theoretical model)
-- [ ] Commercial partnerships (conceptual)
-
-## 🙏 Acknowledgments
-
-Built on the pioneering work of:
-- Nikola Tesla - Wireless power transmission
-- Eugene Mallove - Cold fusion research
-- T. Henry Moray - Radiant energy devices
+Each package follows the same structure:
+```
+packages/[name]/
+├── src/
+│   └── index.ts      # Main entry point
+├── package.json      # Package configuration
+├── tsconfig.json     # TypeScript config
+└── tsup.config.ts    # Build configuration (optional)
+```
 
 ---
 
-**Together, we're building the future of energy and communication.**
+## 🐳 Deployment
 
-*Chicago Forest Network - Energy Democracy for All*
+### Docker
+
+```bash
+# Generate docker-compose
+forest deploy --target docker --output docker-compose.yml
+
+# Run
+docker-compose up -d
+```
+
+### Kubernetes
+
+```bash
+# Generate K8s manifests
+forest deploy --target kubernetes --output forest-node.yaml
+
+# Apply
+kubectl apply -f forest-node.yaml
+```
+
+### Two-Port Firewall Setup
+
+Users connect with:
+- **Port 1 (WAN)**: Traditional internet (optional)
+- **Port 2 (FOREST)**: Chicago Forest Network
+
+Supports:
+- OPNsense
+- pfSense
+- Custom Chicago Forest Firewall
+- VMs with NIC passthrough
+- Docker with host networking
+- Kubernetes with Multus CNI
+
+---
+
+## 📚 Documentation
+
+- [Implementation Plan](./IMPLEMENTATION_PLAN.md) - Full architecture and task breakdown
+- [Mesh Network Spec](./MESH_NETWORK_SPEC.md) - Technical mesh networking details
+- [Protocol Whitepaper](./PROTOCOL_WHITEPAPER.md) - Theoretical protocol specification
+- [Project Guidelines](./CLAUDE.md) - Development principles
+
+---
+
+## 🌍 Community Mesh Networks (Real-World Inspiration)
+
+This project is inspired by real community mesh networks:
+
+| Network | Location | Nodes | Status |
+|---------|----------|-------|--------|
+| [NYC Mesh](https://nycmesh.net) | New York | 1,000+ | Active |
+| [Freifunk](https://freifunk.net) | Germany | 40,000+ | Active |
+| [Guifi.net](https://guifi.net) | Spain | 37,000+ | Active |
+| [Toronto Mesh](https://tomesh.net) | Canada | 50+ | Active |
+
+---
+
+## 📄 License
+
+MIT License - See [LICENSE](./LICENSE)
+
+---
+
+## ⚠️ Final Disclaimer
+
+**This is a theoretical framework and educational project.**
+
+- No working free energy devices exist in this codebase
+- No operational P2P network is deployed
+- All code is for research and educational purposes
+- Sources are documented in [BIBLIOGRAPHY.md](./public/research/BIBLIOGRAPHY.md)
+
+**Together, we preserve historical research and envision what could be possible.**
+
+*Chicago Forest Network - Energy Democracy for All* 🌲

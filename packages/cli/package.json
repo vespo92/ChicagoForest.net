@@ -1,0 +1,30 @@
+{
+  "name": "@chicago-forest/cli",
+  "version": "0.1.0",
+  "description": "Command Line Interface for Chicago Forest Network",
+  "main": "./dist/index.js",
+  "bin": {
+    "forest": "./dist/cli.js",
+    "forest-cli": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsup src/cli.ts src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/cli.ts src/index.ts --format cjs,esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@chicago-forest/p2p-core": "workspace:*",
+    "@chicago-forest/wireless-mesh": "workspace:*",
+    "@chicago-forest/sdwan-bridge": "workspace:*",
+    "@chicago-forest/firewall": "workspace:*",
+    "@chicago-forest/shared-types": "workspace:*",
+    "commander": "^12.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  },
+  "files": ["dist"]
+}
