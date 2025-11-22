@@ -1,7 +1,7 @@
 {
   "name": "@chicago-forest/nutrient-exchange",
-  "version": "0.1.0",
-  "description": "Resource sharing economy - bandwidth, storage, compute, and trust exchange between nodes",
+  "version": "0.2.0",
+  "description": "Resource sharing economy - bandwidth, storage, compute, and trust exchange between nodes. THEORETICAL framework inspired by BitTorrent, Filecoin, and decentralized economies.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -25,6 +25,26 @@
       "import": "./dist/exchange/index.mjs",
       "require": "./dist/exchange/index.js",
       "types": "./dist/exchange/index.d.ts"
+    },
+    "./economy": {
+      "import": "./dist/economy/index.mjs",
+      "require": "./dist/economy/index.js",
+      "types": "./dist/economy/index.d.ts"
+    },
+    "./protocols": {
+      "import": "./dist/protocols/index.mjs",
+      "require": "./dist/protocols/index.js",
+      "types": "./dist/protocols/index.d.ts"
+    },
+    "./models": {
+      "import": "./dist/models/index.mjs",
+      "require": "./dist/models/index.js",
+      "types": "./dist/models/index.d.ts"
+    },
+    "./simulation": {
+      "import": "./dist/simulation/index.mjs",
+      "require": "./dist/simulation/index.js",
+      "types": "./dist/simulation/index.d.ts"
     }
   },
   "scripts": {

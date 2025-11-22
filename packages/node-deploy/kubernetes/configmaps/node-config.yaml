@@ -1,0 +1,277 @@
+# Chicago Forest Network - Kubernetes ConfigMaps
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes.
+#
+# These ConfigMaps provide centralized configuration for Forest nodes.
+# Apply with: kubectl apply -f configmaps/
+
+---
+# =============================================================================
+# Base Node Configuration
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forest-base-config
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: chicago-forest
+    app.kubernetes.io/component: base-config
+data:
+  # -------------------------------------------------------------------------
+  # Network Configuration
+  # -------------------------------------------------------------------------
+  # Primary interface for Forest mesh
+  FOREST_INTERFACE: "net1"
+
+  # Forest network subnet (theoretical CIDR)
+  FOREST_SUBNET: "10.42.0.0/16"
+
+  # P2P communication port
+  P2P_PORT: "42000"
+
+  # WireGuard tunnel port
+  WIREGUARD_PORT: "51820"
+
+  # HTTP API port
+  API_PORT: "8080"
+
+  # Prometheus metrics port
+  METRICS_PORT: "9090"
+
+  # -------------------------------------------------------------------------
+  # Mesh Protocol Settings (BATMAN-adv - Theoretical)
+  # -------------------------------------------------------------------------
+  MESH_PROTOCOL: "batman-adv"
+
+  # Originator message interval (ms)
+  MESH_OGM_INTERVAL: "1000"
+
+  # Hop penalty for multi-hop paths
+  MESH_HOP_PENALTY: "30"
+
+  # Gateway selection class
+  MESH_GW_SEL_CLASS: "20"
+
+  # Bridge loop avoidance
+  MESH_BLA_ENABLED: "true"
+
+  # Distributed ARP table
+  MESH_DAT_ENABLED: "true"
+
+  # Multicast mode
+  MESH_MULTICAST_MODE: "enabled"
+
+  # -------------------------------------------------------------------------
+  # Application Settings
+  # -------------------------------------------------------------------------
+  NODE_ENV: "production"
+  LOG_LEVEL: "info"
+  LOG_FORMAT: "json"
+
+  # Health check settings
+  HEALTH_CHECK_INTERVAL: "30"
+  HEALTH_CHECK_TIMEOUT: "10"
+
+  # Peer discovery
+  PEER_DISCOVERY_ENABLED: "true"
+  PEER_DISCOVERY_INTERVAL: "60"
+
+  # Maximum peer connections
+  MAX_PEERS: "50"
+
+---
+# =============================================================================
+# Feature Flags
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forest-feature-flags
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: chicago-forest
+    app.kubernetes.io/component: feature-flags
+data:
+  # Core features
+  ENABLE_FIREWALL: "true"
+  ENABLE_RELAY: "false"
+  ENABLE_STORAGE: "false"
+  ENABLE_ANONYMOUS_ROUTING: "false"
+
+  # Network features
+  ENABLE_IPV6: "true"
+  ENABLE_MULTICAST: "true"
+  ENABLE_VXLAN_OVERLAY: "false"
+
+  # Security features
+  ENABLE_ENCRYPTION: "true"
+  ENABLE_PEER_VERIFICATION: "true"
+  ENABLE_TRAFFIC_ENCRYPTION: "true"
+
+  # Experimental features (theoretical)
+  ENABLE_QUANTUM_RESISTANT: "false"
+  ENABLE_PLASMA_PROTOCOL: "false"
+  ENABLE_ENERGY_TRADING: "false"
+
+---
+# =============================================================================
+# Bootstrap Peers (Theoretical)
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forest-bootstrap-peers
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: chicago-forest
+    app.kubernetes.io/component: bootstrap
+data:
+  # Bootstrap peer list (theoretical addresses)
+  # Format: publickey@address:port
+  bootstrap-peers.txt: |
+    # Chicago Forest Network Bootstrap Peers
+    # DISCLAIMER: These are theoretical addresses for educational purposes
+
+    # Chicago Region (Theoretical)
+    # forest-chicago-1@chicago-1.forest.network:42000
+    # forest-chicago-2@chicago-2.forest.network:42000
+
+    # Midwest Region (Theoretical)
+    # forest-midwest-1@midwest-1.forest.network:42000
+
+    # For local testing, use:
+    # forest-local-1@10.42.0.1:42000
+
+  # DNS seeds for peer discovery
+  dns-seeds.txt: |
+    # DNS seeds for peer discovery (theoretical)
+    # seeds.forest.network
+    # chicago.seeds.forest.network
+
+---
+# =============================================================================
+# TLS Certificates (for HTTPS API)
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forest-tls-config
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: chicago-forest
+    app.kubernetes.io/component: tls-config
+data:
+  # TLS settings
+  TLS_ENABLED: "true"
+  TLS_MIN_VERSION: "1.3"
+  TLS_CIPHER_SUITES: "TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256"
+
+  # Certificate paths (mounted from secrets)
+  TLS_CERT_PATH: "/etc/forest/tls/tls.crt"
+  TLS_KEY_PATH: "/etc/forest/tls/tls.key"
+  TLS_CA_PATH: "/etc/forest/tls/ca.crt"
+
+---
+# =============================================================================
+# Prometheus Monitoring Config
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forest-prometheus-config
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: chicago-forest
+    app.kubernetes.io/component: monitoring
+data:
+  prometheus.yml: |
+    # Prometheus configuration for Chicago Forest Network
+
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+      external_labels:
+        cluster: chicago-forest
+        environment: production
+
+    scrape_configs:
+      # Forest nodes
+      - job_name: 'forest-nodes'
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - chicago-forest
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+            action: keep
+            regex: forest-node
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            target_label: __address__
+            regex: (.+)
+            replacement: ${1}:$1
+
+      # Forest gateways
+      - job_name: 'forest-gateways'
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - chicago-forest
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+            action: keep
+            regex: forest-gateway
+
+---
+# =============================================================================
+# Logging Configuration
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forest-logging-config
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/name: chicago-forest
+    app.kubernetes.io/component: logging
+data:
+  # Fluentd/Fluent Bit config for log aggregation
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         5
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+
+    [INPUT]
+        Name              tail
+        Tag               forest.*
+        Path              /var/log/forest/*.log
+        Parser            json
+        Refresh_Interval  10
+        Mem_Buf_Limit     50MB
+
+    [FILTER]
+        Name          record_modifier
+        Match         *
+        Record        cluster chicago-forest
+        Record        namespace chicago-forest
+
+    [OUTPUT]
+        Name          stdout
+        Match         *
+        Format        json_lines
+
+  parsers.conf: |
+    [PARSER]
+        Name        json
+        Format      json
+        Time_Key    timestamp
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z

@@ -1,0 +1,246 @@
+# Chicago Forest Network - Docker Compose Configuration
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. The Chicago Forest Network
+# is a conceptual project exploring decentralized energy networks.
+#
+# Usage:
+#   docker-compose up -d                    # Start all services
+#   docker-compose up -d forest-node        # Start node only
+#   docker-compose logs -f                  # View logs
+#   docker-compose exec forest-node forest-cli status
+#
+# Environment Variables (set in .env file or export):
+#   FOREST_NODE_NAME - Name of this node (default: forest-node-1)
+#   FOREST_INTERFACE - Network interface for Forest mesh (default: eth1)
+#   WAN_INTERFACE - Internet-facing interface (default: eth0)
+#   ENABLE_GATEWAY - Enable gateway mode (default: false)
+
+version: '3.8'
+
+# =============================================================================
+# Common Configuration
+# =============================================================================
+x-common-config: &common-config
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options:
+      max-size: "50m"
+      max-file: "5"
+
+x-network-caps: &network-caps
+  cap_add:
+    - NET_ADMIN
+    - NET_RAW
+    - SYS_MODULE
+  sysctls:
+    - net.ipv4.ip_forward=1
+    - net.ipv4.conf.all.forwarding=1
+    - net.ipv6.conf.all.forwarding=1
+    - net.ipv4.conf.all.rp_filter=0
+
+# =============================================================================
+# Services
+# =============================================================================
+services:
+  # ---------------------------------------------------------------------------
+  # Forest Node - Core mesh network participant
+  # ---------------------------------------------------------------------------
+  forest-node:
+    <<: *common-config
+    build:
+      context: ../..
+      dockerfile: packages/node-deploy/docker/Dockerfile.node
+    image: ghcr.io/chicago-forest/forest-node:${IMAGE_TAG:-latest}
+    container_name: ${FOREST_NODE_NAME:-forest-node-1}
+    hostname: ${FOREST_NODE_NAME:-forest-node-1}
+
+    # Network mode: host for direct interface access
+    # Change to bridge mode if using virtual interfaces
+    network_mode: ${NETWORK_MODE:-host}
+
+    <<: *network-caps
+
+    environment:
+      - FOREST_NODE_NAME=${FOREST_NODE_NAME:-forest-node-1}
+      - FOREST_INTERFACE=${FOREST_INTERFACE:-eth1}
+      - ENABLE_FIREWALL=${ENABLE_FIREWALL:-true}
+      - ENABLE_RELAY=${ENABLE_RELAY:-false}
+      - ENABLE_STORAGE=${ENABLE_STORAGE:-false}
+      - ENABLE_ANONYMOUS_ROUTING=${ENABLE_ANONYMOUS_ROUTING:-false}
+      - BOOTSTRAP_PEERS=${BOOTSTRAP_PEERS:-}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - NODE_ENV=production
+
+    volumes:
+      - forest-data:/var/lib/forest
+      - forest-config:/etc/forest
+      - forest-logs:/var/log/forest
+      - /dev/net/tun:/dev/net/tun
+
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_LIMIT:-2}'
+          memory: ${MEMORY_LIMIT:-2G}
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+    ports:
+      - "${P2P_PORT:-42000}:42000/udp"
+      - "${WG_PORT:-51820}:51820/udp"
+      - "${API_PORT:-8080}:8080/tcp"
+      - "${METRICS_PORT:-9090}:9090/tcp"
+
+  # ---------------------------------------------------------------------------
+  # Forest Gateway - Internet bridge (optional)
+  # ---------------------------------------------------------------------------
+  forest-gateway:
+    <<: *common-config
+    build:
+      context: ../..
+      dockerfile: packages/node-deploy/docker/Dockerfile.gateway
+    image: ghcr.io/chicago-forest/forest-gateway:${IMAGE_TAG:-latest}
+    container_name: ${FOREST_NODE_NAME:-forest-node-1}-gateway
+    hostname: ${FOREST_NODE_NAME:-forest-node-1}-gateway
+
+    # Gateway requires host networking for routing
+    network_mode: host
+    privileged: true
+
+    <<: *network-caps
+
+    environment:
+      - GATEWAY_MODE=true
+      - FOREST_NODE_NAME=${FOREST_NODE_NAME:-forest-node-1}
+      - WAN_INTERFACE=${WAN_INTERFACE:-eth0}
+      - FOREST_INTERFACE=${FOREST_INTERFACE:-eth1}
+      - LAN_INTERFACE=${LAN_INTERFACE:-eth2}
+      - ENABLE_NAT=${ENABLE_NAT:-true}
+      - ENABLE_DHCP=${ENABLE_DHCP:-true}
+      - ENABLE_DNS=${ENABLE_DNS:-true}
+      - FOREST_SUBNET=${FOREST_SUBNET:-10.42.0.0/16}
+      - DHCP_RANGE_START=${DHCP_RANGE_START:-10.42.1.100}
+      - DHCP_RANGE_END=${DHCP_RANGE_END:-10.42.1.200}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+
+    volumes:
+      - forest-data:/var/lib/forest
+      - forest-config:/etc/forest
+      - forest-logs:/var/log/forest
+      - wireguard-keys:/etc/wireguard
+      - /dev/net/tun:/dev/net/tun
+
+    deploy:
+      resources:
+        limits:
+          cpus: '${GATEWAY_CPU_LIMIT:-4}'
+          memory: ${GATEWAY_MEMORY_LIMIT:-4G}
+        reservations:
+          cpus: '1'
+          memory: 1G
+
+    depends_on:
+      forest-node:
+        condition: service_healthy
+
+    profiles:
+      - gateway
+
+  # ---------------------------------------------------------------------------
+  # Prometheus - Metrics collection (optional)
+  # ---------------------------------------------------------------------------
+  prometheus:
+    <<: *common-config
+    image: prom/prometheus:v2.48.0
+    container_name: ${FOREST_NODE_NAME:-forest-node-1}-prometheus
+
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=7d'
+      - '--web.enable-lifecycle'
+
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+
+    ports:
+      - "${PROMETHEUS_PORT:-9091}:9090"
+
+    profiles:
+      - monitoring
+
+  # ---------------------------------------------------------------------------
+  # Grafana - Metrics visualization (optional)
+  # ---------------------------------------------------------------------------
+  grafana:
+    <<: *common-config
+    image: grafana/grafana:10.2.0
+    container_name: ${FOREST_NODE_NAME:-forest-node-1}-grafana
+
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=${GRAFANA_ROOT_URL:-http://localhost:3000}
+
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+
+    depends_on:
+      - prometheus
+
+    profiles:
+      - monitoring
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  # Only used if not in host network mode
+  forest-internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.42.0.0/24
+          gateway: 10.42.0.1
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  forest-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${FOREST_DATA_PATH:-/var/lib/forest}
+
+  forest-config:
+    driver: local
+
+  forest-logs:
+    driver: local
+
+  wireguard-keys:
+    driver: local
+
+  prometheus-data:
+    driver: local
+
+  grafana-data:
+    driver: local
