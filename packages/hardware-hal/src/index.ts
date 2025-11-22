@@ -605,8 +605,20 @@ export function toUISPFormat(device: BaseDevice): UISPDeviceInfo {
 }
 
 // =============================================================================
-// EXPORTS
+// NEW MODULE EXPORTS
 // =============================================================================
 
-// All classes, interfaces, and types are already exported inline above.
-// No additional re-exports needed.
+// Radio Hardware Specifications
+export * from './radios';
+
+// Antenna Hardware Specifications
+export * from './antennas';
+
+// Node Hardware Specifications
+export * from './nodes';
+
+// Power System Specifications
+export * from './power';
+
+// RF Calculators
+export * from './calculators';
