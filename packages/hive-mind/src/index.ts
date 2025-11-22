@@ -28,6 +28,9 @@
 export * from './consensus';
 export * from './governance';
 export * from './proposals';
+export * from './disputes';
+export * from './treasury';
+export * from './models';
 
 // Extended modules
 export * from './disputes';
