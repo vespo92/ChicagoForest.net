@@ -1,17 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Chicago Plasma Forest Network",
@@ -25,9 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased font-sans">
         {/* Navigation Header */}
         <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b">
           <nav className="container mx-auto px-4 py-4">
@@ -36,14 +23,20 @@ export default function RootLayout({
                 Chicago Forest 🌲⚡
               </Link>
               <div className="flex items-center space-x-6">
-                <Link 
-                  href="/" 
+                <Link
+                  href="/"
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   Network
                 </Link>
-                <Link 
-                  href="/free-energy" 
+                <Link
+                  href="/routing"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Routing
+                </Link>
+                <Link
+                  href="/free-energy"
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   Research
@@ -53,6 +46,12 @@ export default function RootLayout({
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   Whitepaper
+                </Link>
+                <Link
+                  href="/mesh"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Mesh
                 </Link>
                 <Link
                   href="/tools"
