@@ -325,3 +325,40 @@ export class GovernanceManager extends EventEmitter<GovernanceEvents> {
 }
 
 export { GovernanceConfig, Delegation };
+
+// Advanced governance systems
+export {
+  ReputationSystem,
+  ReputationTier,
+  getTierPrivileges,
+  type ReputationFactors,
+  type ReputationRecord,
+  type ReputationSnapshot,
+  type Endorsement,
+  type EndorsementCategory,
+  type CooldownStatus,
+  type ReputationEvents,
+  type ReputationConfig,
+  type TierPrivileges
+} from './node-reputation';
+
+export {
+  StakeWeightedVoting,
+  StakeType,
+  type StakeRecord,
+  type StakePosition,
+  type VestingSchedule,
+  type LockStatus,
+  type VotingPowerParams,
+  type StakeVotingEvents,
+  type VotingPowerDistribution
+} from './stake-weighted-voting';
+
+export {
+  DelegationManager,
+  type DelegationRecord,
+  type DelegationChain,
+  type DelegationConfig,
+  type DelegationEvents,
+  type DelegationStats
+} from './delegation';
