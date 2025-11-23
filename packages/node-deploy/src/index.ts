@@ -797,6 +797,534 @@ export function createDeploymentConfig(
 }
 
 // =============================================================================
+// SYMBIONT DEPLOYMENT (Cross-Network Federation)
+// =============================================================================
+
+/**
+ * Symbiont gateway deployment options
+ */
+export interface SymbiontDeploymentOptions extends ForestNodeDeploymentOptions {
+  /** Enable auto-discovery of other forests */
+  autoDiscovery: boolean;
+  /** Enable automatic federation with trusted forests */
+  autoFederate: boolean;
+  /** Minimum trust score for auto-federation */
+  minAutoFederateTrust: number;
+  /** Maximum concurrent federations */
+  maxFederations: number;
+  /** Discovery interval (seconds) */
+  discoveryInterval: number;
+  /** Health check interval (seconds) */
+  healthCheckInterval: number;
+  /** Federation terms preset */
+  federationTermsPreset: 'conservative' | 'balanced' | 'permissive';
+  /** Initial federated forests */
+  initialFederations?: string[];
+}
+
+/**
+ * Default Symbiont deployment options
+ */
+export const DEFAULT_SYMBIONT_OPTIONS: Partial<SymbiontDeploymentOptions> = {
+  ...DEFAULT_DEPLOYMENT_OPTIONS,
+  autoDiscovery: true,
+  autoFederate: false,
+  minAutoFederateTrust: 0.7,
+  maxFederations: 10,
+  discoveryInterval: 60,
+  healthCheckInterval: 30,
+  federationTermsPreset: 'balanced',
+};
+
+/**
+ * Generate Docker Compose for Symbiont gateway
+ */
+export function generateSymbiontDockerCompose(
+  options: SymbiontDeploymentOptions
+): string {
+  const opts = { ...DEFAULT_SYMBIONT_OPTIONS, ...options } as SymbiontDeploymentOptions;
+
+  return `# Chicago Forest Network - Symbiont Gateway
+# Cross-Network Federation Orchestrator
+# Auto-generated deployment configuration
+# DISCLAIMER: Theoretical framework - not operational
+
+version: '3.8'
+
+services:
+  ${opts.nodeName}-symbiont:
+    image: ghcr.io/chicago-forest/symbiont-gateway:latest
+    container_name: ${opts.nodeName}-symbiont
+    hostname: ${opts.nodeName}-symbiont
+    restart: unless-stopped
+
+    # Network configuration
+    network_mode: host
+
+    # Capabilities for network operations
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_MODULE
+
+    # Environment
+    environment:
+      # Core configuration
+      - FOREST_NODE_NAME=${opts.nodeName}
+      - FOREST_INTERFACE=${opts.forestInterface}
+      ${opts.wanInterface ? `- WAN_INTERFACE=${opts.wanInterface}` : ''}
+
+      # Symbiont configuration
+      - SYMBIONT_AUTO_DISCOVERY=${opts.autoDiscovery}
+      - SYMBIONT_AUTO_FEDERATE=${opts.autoFederate}
+      - SYMBIONT_MIN_TRUST=${opts.minAutoFederateTrust}
+      - SYMBIONT_MAX_FEDERATIONS=${opts.maxFederations}
+      - SYMBIONT_DISCOVERY_INTERVAL=${opts.discoveryInterval}
+      - SYMBIONT_HEALTH_INTERVAL=${opts.healthCheckInterval}
+      - SYMBIONT_TERMS_PRESET=${opts.federationTermsPreset}
+
+      # Initial federations
+      ${opts.initialFederations?.length ? `- SYMBIONT_INITIAL_FEDERATIONS=${opts.initialFederations.join(',')}` : ''}
+
+      # Feature flags
+      - ENABLE_FIREWALL=${opts.enableFirewall}
+      - ENABLE_ANONYMOUS_ROUTING=${opts.enableAnonymousRouting}
+
+      # Bootstrap peers
+      ${opts.bootstrapPeers?.length ? `- BOOTSTRAP_PEERS=${opts.bootstrapPeers.join(',')}` : ''}
+
+    # Volumes
+    volumes:
+      - symbiont-data:/var/lib/symbiont
+      - symbiont-config:/etc/symbiont
+      - forest-data:/var/lib/forest
+      - /dev/net/tun:/dev/net/tun
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '${opts.cpuLimit}'
+          memory: ${opts.memoryLimit}
+        reservations:
+          cpus: '1'
+          memory: 1Gi
+
+    # Ports
+    ports:
+      # P2P communication
+      - "42000:42000/udp"
+      # Federation protocol
+      - "42001:42001/tcp"
+      # API
+      - "8081:8081/tcp"
+      # Discovery beacon
+      - "42002:42002/udp"
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "forest-cli", "symbiont", "--status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  ${opts.enableFirewall ? `
+  # Chicago Forest Firewall for Symbiont
+  ${opts.nodeName}-firewall:
+    image: ghcr.io/chicago-forest/forest-firewall:latest
+    container_name: ${opts.nodeName}-symbiont-firewall
+    hostname: ${opts.nodeName}-symbiont-firewall
+    restart: unless-stopped
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - firewall-config:/etc/cfw
+    environment:
+      - FOREST_INTERFACE=${opts.forestInterface}
+      ${opts.wanInterface ? `- WAN_INTERFACE=${opts.wanInterface}` : ''}
+      - SYMBIONT_MODE=true
+    depends_on:
+      - ${opts.nodeName}-symbiont
+  ` : ''}
+
+volumes:
+  symbiont-data:
+    driver: local
+  symbiont-config:
+    driver: local
+  forest-data:
+    driver: local
+  ${opts.enableFirewall ? 'firewall-config:\n    driver: local' : ''}
+
+# Usage:
+# docker-compose -f symbiont-compose.yml up -d
+# docker-compose -f symbiont-compose.yml logs -f ${opts.nodeName}-symbiont
+# docker exec -it ${opts.nodeName}-symbiont forest-cli federation --status
+`;
+}
+
+/**
+ * Generate Kubernetes manifest for Symbiont gateway
+ */
+export function generateSymbiontKubernetesManifest(
+  options: SymbiontDeploymentOptions
+): string {
+  const opts = { ...DEFAULT_SYMBIONT_OPTIONS, ...options } as SymbiontDeploymentOptions;
+
+  return `# Chicago Forest Network - Symbiont Gateway
+# Cross-Network Federation Orchestrator - Kubernetes Deployment
+# DISCLAIMER: Theoretical framework - not operational
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chicago-forest-federation
+  labels:
+    name: chicago-forest-federation
+    component: symbiont
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ${opts.nodeName}-symbiont-config
+  namespace: chicago-forest-federation
+data:
+  # Core configuration
+  FOREST_NODE_NAME: "${opts.nodeName}"
+  FOREST_INTERFACE: "${opts.forestInterface}"
+
+  # Symbiont configuration
+  SYMBIONT_AUTO_DISCOVERY: "${opts.autoDiscovery}"
+  SYMBIONT_AUTO_FEDERATE: "${opts.autoFederate}"
+  SYMBIONT_MIN_TRUST: "${opts.minAutoFederateTrust}"
+  SYMBIONT_MAX_FEDERATIONS: "${opts.maxFederations}"
+  SYMBIONT_DISCOVERY_INTERVAL: "${opts.discoveryInterval}"
+  SYMBIONT_HEALTH_INTERVAL: "${opts.healthCheckInterval}"
+  SYMBIONT_TERMS_PRESET: "${opts.federationTermsPreset}"
+
+  # Feature flags
+  ENABLE_FIREWALL: "${opts.enableFirewall}"
+  ENABLE_ANONYMOUS_ROUTING: "${opts.enableAnonymousRouting}"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ${opts.nodeName}-symbiont-secrets
+  namespace: chicago-forest-federation
+type: Opaque
+stringData:
+  # Gateway signing key (auto-generated in production)
+  SYMBIONT_SIGNING_KEY: "auto-generated"
+
+  # Initial federations (comma-separated forest IDs)
+  SYMBIONT_INITIAL_FEDERATIONS: "${opts.initialFederations?.join(',') || ''}"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ${opts.nodeName}-symbiont-data
+  namespace: chicago-forest-federation
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: ${opts.storageLimit}Gi
+  storageClassName: standard
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${opts.nodeName}-symbiont
+  namespace: chicago-forest-federation
+  labels:
+    app: symbiont-gateway
+    forest.network/node: ${opts.nodeName}
+    forest.network/component: federation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: symbiont-gateway
+      forest.network/node: ${opts.nodeName}
+  template:
+    metadata:
+      labels:
+        app: symbiont-gateway
+        forest.network/node: ${opts.nodeName}
+        forest.network/component: federation
+    spec:
+      containers:
+        - name: symbiont-gateway
+          image: ghcr.io/chicago-forest/symbiont-gateway:latest
+          imagePullPolicy: Always
+
+          envFrom:
+            - configMapRef:
+                name: ${opts.nodeName}-symbiont-config
+            - secretRef:
+                name: ${opts.nodeName}-symbiont-secrets
+
+          securityContext:
+            privileged: ${opts.nicPassthrough}
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+                - SYS_MODULE
+
+          resources:
+            limits:
+              cpu: "${opts.cpuLimit}"
+              memory: "${opts.memoryLimit}"
+            requests:
+              cpu: "1"
+              memory: "1Gi"
+
+          volumeMounts:
+            - name: symbiont-data
+              mountPath: /var/lib/symbiont
+            - name: tun-device
+              mountPath: /dev/net/tun
+
+          ports:
+            - name: p2p
+              containerPort: 42000
+              protocol: UDP
+            - name: federation
+              containerPort: 42001
+              protocol: TCP
+            - name: api
+              containerPort: 8081
+              protocol: TCP
+            - name: discovery
+              containerPort: 42002
+              protocol: UDP
+
+          livenessProbe:
+            exec:
+              command: ["forest-cli", "symbiont", "--status"]
+            initialDelaySeconds: 60
+            periodSeconds: 30
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: api
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+      volumes:
+        - name: symbiont-data
+          persistentVolumeClaim:
+            claimName: ${opts.nodeName}-symbiont-data
+        - name: tun-device
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${opts.nodeName}-symbiont
+  namespace: chicago-forest-federation
+spec:
+  selector:
+    app: symbiont-gateway
+    forest.network/node: ${opts.nodeName}
+  ports:
+    - name: p2p
+      port: 42000
+      targetPort: 42000
+      protocol: UDP
+    - name: federation
+      port: 42001
+      targetPort: 42001
+      protocol: TCP
+    - name: api
+      port: 8081
+      targetPort: 8081
+      protocol: TCP
+    - name: discovery
+      port: 42002
+      targetPort: 42002
+      protocol: UDP
+  type: LoadBalancer
+
+---
+# Network Policy for Symbiont
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ${opts.nodeName}-symbiont-policy
+  namespace: chicago-forest-federation
+spec:
+  podSelector:
+    matchLabels:
+      app: symbiont-gateway
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - ports:
+        - port: 42000
+          protocol: UDP
+        - port: 42001
+          protocol: TCP
+        - port: 42002
+          protocol: UDP
+        - port: 8081
+          protocol: TCP
+  egress:
+    - {} # Allow all egress for federation connections
+`;
+}
+
+/**
+ * Generate Symbiont configuration file
+ */
+export function generateSymbiontConfig(
+  options: SymbiontDeploymentOptions
+): string {
+  const opts = { ...DEFAULT_SYMBIONT_OPTIONS, ...options } as SymbiontDeploymentOptions;
+
+  const termsPresets = {
+    conservative: {
+      shareBandwidth: true,
+      shareStorage: false,
+      shareCompute: false,
+      maxSharePercentage: 10,
+      allowTransit: false,
+    },
+    balanced: {
+      shareBandwidth: true,
+      shareStorage: true,
+      shareCompute: false,
+      maxSharePercentage: 20,
+      allowTransit: true,
+    },
+    permissive: {
+      shareBandwidth: true,
+      shareStorage: true,
+      shareCompute: true,
+      maxSharePercentage: 40,
+      allowTransit: true,
+    },
+  };
+
+  const terms = termsPresets[opts.federationTermsPreset];
+
+  return `# Chicago Forest Network - Symbiont Configuration
+# Cross-Network Federation Orchestrator
+# DISCLAIMER: Theoretical framework - not operational
+
+# Forest Identity
+forest:
+  id: "${opts.nodeName}"
+  name: "${opts.nodeName}"
+  region: "auto-detect"
+
+# Gateway Configuration
+gateway:
+  nodeId: "auto-generated"
+  maxConnectionsPerForest: 5
+  autoPeering: true
+
+  # Traffic rules (allow by default)
+  trafficRules: []
+
+# Discovery Configuration
+discovery:
+  enabled: ${opts.autoDiscovery}
+  interval: ${opts.discoveryInterval}s
+
+  # Discovery mechanisms
+  useDHT: true
+  useBeacon: true
+  useRegistry: true
+  usePeerExchange: true
+
+  # Beacon settings
+  beaconInterval: 30s
+
+  # DHT settings
+  dhtRefreshInterval: 120s
+  bootstrapNodes: []
+
+  # Limits
+  maxTrackedForests: 1000
+  forestTTL: 600s
+
+# Federation Configuration
+federation:
+  enabled: true
+  autoFederate: ${opts.autoFederate}
+  minAutoFederateTrust: ${opts.minAutoFederateTrust}
+  maxFederations: ${opts.maxFederations}
+
+  # Default terms for new federations
+  defaultTerms:
+    resourceSharing:
+      shareBandwidth: ${terms.shareBandwidth}
+      shareStorage: ${terms.shareStorage}
+      shareCompute: ${terms.shareCompute}
+      maxSharePercentage: ${terms.maxSharePercentage}
+      creditExchangeRate: 1.0
+
+    routingPolicy:
+      allowTransit: ${terms.allowTransit}
+      priority: "normal"
+      maxLatency: 500
+      reservedBandwidth: 0
+
+    trustRequirements:
+      minTrustScore: 0.5
+      requiredAttestations: 3
+      verificationInterval: 86400s
+
+    disputeResolution: "arbitration"
+
+  # Agreement management
+  expiryWarning: 168h # 7 days before expiry
+  autoRenew: false
+
+# Health Monitoring
+health:
+  checkInterval: ${opts.healthCheckInterval}s
+  alertThresholds:
+    degradedBridgeRatio: 0.3
+    minHealthScore: 70
+
+# Initial federations (established on startup)
+initialFederations:
+${opts.initialFederations?.map(f => `  - "${f}"`).join('\n') || '  []'}
+
+# Bridge Configuration
+bridge:
+  keepaliveInterval: 30s
+  connectionTimeout: 10s
+  maxReconnectAttempts: 5
+  reconnectDelay: 5s
+  metricsEnabled: true
+  metricsInterval: 60s
+
+# Logging
+logging:
+  level: "info"
+  format: "json"
+  output: "/var/log/symbiont/symbiont.log"
+`;
+}
+
+// =============================================================================
 // EXPORTS
 // =============================================================================
 

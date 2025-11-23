@@ -15,11 +15,20 @@
 export * from './gateway';
 export * from './federation';
 export * from './bridge';
+export * from './symbiont';
+export * from './discovery';
 
 export type {
   Forest,
   ForestInfo,
   FederationAgreement,
+  FederationType,
+  FederationTerms,
   GatewayConfig,
   BridgeConnection,
+  BridgeState,
+  BridgeMetrics,
+  SymbiosisEvents,
+  TrafficRule,
+  AgreementStatus,
 } from './types';
