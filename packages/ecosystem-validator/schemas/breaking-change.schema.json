@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://chicagoforest.net/schemas/breaking-change.json",
+  "title": "BreakingChange",
+  "description": "Schema for breaking change detection",
+  "type": "object",
+  "required": ["type", "location", "description", "impact"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Type of breaking change",
+      "enum": ["removed", "modified", "renamed", "type-change"]
+    },
+    "location": {
+      "type": "string",
+      "description": "Location of the change (e.g., method:name, type:name)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the change"
+    },
+    "impact": {
+      "type": "string",
+      "description": "Impact severity level",
+      "enum": ["high", "medium", "low"]
+    },
+    "migration": {
+      "type": "string",
+      "description": "Optional migration instructions"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://chicagoforest.net/schemas/ecosystem-health.json",
+  "title": "EcosystemHealth",
+  "description": "Schema for ecosystem health status",
+  "type": "object",
+  "required": ["timestamp", "repositories", "overallStatus"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Health check timestamp"
+    },
+    "repositories": {
+      "type": "array",
+      "description": "Status of each monitored repository",
+      "items": {
+        "type": "object",
+        "required": ["name", "status", "lastChecked", "issues"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["healthy", "warning", "critical"]
+          },
+          "lastChecked": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "overallStatus": {
+      "type": "string",
+      "description": "Aggregate ecosystem status",
+      "enum": ["healthy", "warning", "critical"]
+    }
+  },
+  "additionalProperties": false
+}

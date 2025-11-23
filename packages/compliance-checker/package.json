@@ -1,0 +1,63 @@
+{
+  "name": "@chicago-forest/compliance-checker",
+  "version": "0.1.0",
+  "description": "Disclaimer enforcement, AI-disclosure validation, and false claim detection for Chicago Forest Network",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./validators": {
+      "import": "./dist/validators/index.mjs",
+      "require": "./dist/validators/index.js",
+      "types": "./dist/validators/index.d.ts"
+    },
+    "./scanners": {
+      "import": "./dist/scanners/index.mjs",
+      "require": "./dist/scanners/index.js",
+      "types": "./dist/scanners/index.d.ts"
+    },
+    "./classifiers": {
+      "import": "./dist/classifiers/index.mjs",
+      "require": "./dist/classifiers/index.js",
+      "types": "./dist/classifiers/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "check": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/content-generator": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0",
+    "tsx": "^4.7.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "chicago-forest",
+    "compliance",
+    "disclaimer-validation",
+    "ai-disclosure",
+    "false-claim-detection",
+    "content-governance"
+  ]
+}

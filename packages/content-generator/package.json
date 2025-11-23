@@ -1,0 +1,62 @@
+{
+  "name": "@chicago-forest/content-generator",
+  "version": "0.1.0",
+  "description": "AI-assisted content generation with transparent labeling for Chicago Forest Network",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./generators": {
+      "import": "./dist/generators/index.mjs",
+      "require": "./dist/generators/index.js",
+      "types": "./dist/generators/index.d.ts"
+    },
+    "./formatters": {
+      "import": "./dist/formatters/index.mjs",
+      "require": "./dist/formatters/index.js",
+      "types": "./dist/formatters/index.d.ts"
+    },
+    "./enrichers": {
+      "import": "./dist/enrichers/index.mjs",
+      "require": "./dist/enrichers/index.js",
+      "types": "./dist/enrichers/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/tesla-archive": "workspace:*",
+    "@chicago-forest/lenr-database": "workspace:*",
+    "@chicago-forest/source-verifier": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "chicago-forest",
+    "content-generation",
+    "ai-labeling",
+    "citation-formatting",
+    "research-enrichment"
+  ]
+}
