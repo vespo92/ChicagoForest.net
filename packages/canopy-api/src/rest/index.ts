@@ -1,5 +1,10 @@
 /**
  * REST API Handler - HTTP endpoints for the forest
+ *
+ * @chicago-forest/canopy-api REST Module
+ *
+ * DISCLAIMER: This is an AI-generated theoretical framework for educational
+ * and research purposes. Not operational infrastructure.
  */
 
 import { EventEmitter } from 'eventemitter3';
@@ -13,6 +18,18 @@ import type {
   NetworkStats,
   StorageInfo,
 } from '../types';
+
+// Export routes
+export * from './routes/nodes';
+export * from './routes/routing';
+export * from './routes/research';
+
+// Export middleware
+export * from './middleware/auth';
+export * from './middleware/rate-limit';
+
+// Export server
+export { CanopyRestServer, createRestServer, type ServerConfig, type ServerStats } from './server';
 
 /**
  * Route handler type

@@ -6,12 +6,17 @@
  * applications use to interact with the mycelium network.
  *
  * Interfaces:
- * - REST/GraphQL: Traditional HTTP APIs
- * - WebSocket: Real-time bidirectional
- * - gRPC: High-performance RPC
+ * - REST: HTTP APIs with OpenAPI specification
+ * - WebSocket: Real-time bidirectional communication
+ * - GraphQL: Flexible query interface
+ * - SDK: TypeScript client libraries
  * - LibP2P: Native P2P protocol
  *
- * ⚠️ DISCLAIMER: This is an AI-generated theoretical framework for educational purposes.
+ * DISCLAIMER: This is an AI-generated theoretical framework for educational
+ * and research purposes. Not operational infrastructure.
+ *
+ * All research content provides REAL, verifiable sources (Tesla patents,
+ * LENR papers, etc.) with clear markers for theoretical extensions.
  */
 
 // REST API
@@ -27,7 +32,8 @@ export * from './sdk';
 export * from './libp2p';
 
 // GraphQL
-export * from './graphql/server';
+export { CanopyGraphQLServer, createGraphQLServer, resolvers } from './graphql/server';
+export type { GraphQLServerConfig, GraphQLRequest, GraphQLResponse } from './graphql/server';
 
 // Types
 export type {

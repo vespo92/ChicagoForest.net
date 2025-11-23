@@ -1,8 +1,10 @@
 /**
  * Forest SDK - Client library for interacting with the network
  *
+ * @chicago-forest/canopy-api SDK Module
+ *
  * DISCLAIMER: This is an AI-generated theoretical framework for educational
- * and research purposes.
+ * and research purposes. Not operational infrastructure.
  */
 
 import type { NodeId } from '@chicago-forest/shared-types';
@@ -313,6 +315,6 @@ export interface CreateProposalRequest {
 /**
  * Create a new Forest client
  */
-export function createClient(config?: Partial<SdkConfig>): ForestClient {
+export function createForestClient(config?: Partial<SdkConfig>): ForestClient {
   return new ForestClient(config);
 }

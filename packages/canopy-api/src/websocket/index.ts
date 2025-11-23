@@ -1,5 +1,10 @@
 /**
  * WebSocket Handler - Real-time bidirectional communication
+ *
+ * @chicago-forest/canopy-api WebSocket Module
+ *
+ * DISCLAIMER: This is an AI-generated theoretical framework for educational
+ * and research purposes. Not operational infrastructure.
  */
 
 import { EventEmitter } from 'eventemitter3';
@@ -9,6 +14,20 @@ import type {
   Subscription,
   CanopyEvents,
 } from '../types';
+
+// Export handlers
+export * from './handlers/node-events';
+export * from './handlers/mesh-updates';
+
+// Export server
+export {
+  CanopyWebSocketServer,
+  createWebSocketServer,
+  type WSServerConfig,
+  type WSServerStats,
+  type WSMessage,
+  type WSClient,
+} from './server';
 
 /**
  * WebSocket message types
