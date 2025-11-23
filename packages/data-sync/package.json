@@ -1,7 +1,7 @@
 {
   "name": "@chicago-forest/data-sync",
   "version": "0.1.0",
-  "description": "Real-time data synchronization, conflict resolution, and consistency management for Chicago Forest Network",
+  "description": "Real-time data synchronization with CRDT, conflict resolution, anti-entropy protocol, and partition detection for Chicago Forest Network",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -25,6 +25,21 @@
       "import": "./dist/replication/index.mjs",
       "require": "./dist/replication/index.js",
       "types": "./dist/replication/index.d.ts"
+    },
+    "./crdt": {
+      "import": "./dist/crdt/index.mjs",
+      "require": "./dist/crdt/index.js",
+      "types": "./dist/crdt/index.d.ts"
+    },
+    "./anti-entropy": {
+      "import": "./dist/anti-entropy/index.mjs",
+      "require": "./dist/anti-entropy/index.js",
+      "types": "./dist/anti-entropy/index.d.ts"
+    },
+    "./partition": {
+      "import": "./dist/partition/index.mjs",
+      "require": "./dist/partition/index.js",
+      "types": "./dist/partition/index.d.ts"
     }
   },
   "scripts": {
@@ -58,6 +73,10 @@
     "crdt",
     "conflict-resolution",
     "replication",
-    "network-split"
+    "network-split",
+    "anti-entropy",
+    "partition-tolerance",
+    "vector-clock",
+    "eventual-consistency"
   ]
 }
