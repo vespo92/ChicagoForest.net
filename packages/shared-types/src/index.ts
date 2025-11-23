@@ -39,10 +39,12 @@ export interface NodeIdentity {
 
 /** Network address for connecting to a peer */
 export interface PeerAddress {
-  protocol: 'tcp' | 'udp' | 'ws' | 'wss' | 'quic' | 'forest';
+  protocol: 'tcp' | 'udp' | 'ws' | 'wss' | 'quic' | 'forest' | 'relay' | 'utp';
   host: string;
   port: number;
   path?: string;
+  /** Public key for Hyperswarm/cryptographic addressing */
+  publicKey?: string;
 }
 
 /** Complete peer information for discovery and connection */
