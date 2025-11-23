@@ -373,10 +373,23 @@ Supports:
 ## 📚 Documentation
 
 - [Mycelium Ecosystem](./MYCELIUM_ECOSYSTEM.md) - **NEW** The global network vision
+- [Yggdrasil/CJDNS Guide](./YGGDRASIL_CJDNS_GUIDE.md) - **Join real mesh networks today**
 - [Implementation Plan](./IMPLEMENTATION_PLAN.md) - Full architecture and task breakdown
 - [Mesh Network Spec](./MESH_NETWORK_SPEC.md) - Technical mesh networking details
 - [Protocol Whitepaper](./PROTOCOL_WHITEPAPER.md) - Theoretical protocol specification
 - [Project Guidelines](./CLAUDE.md) - Development principles
+
+### Quick Install Scripts
+
+Join real mesh overlay networks with one command:
+
+```bash
+# Yggdrasil - Encrypted IPv6 mesh (recommended for new users)
+curl -sL https://raw.githubusercontent.com/vespo92/ChicagoForest.net/main/scripts/yggdrasil-quick-install.sh | sudo bash
+
+# CJDNS - Hyperboria encrypted mesh
+curl -sL https://raw.githubusercontent.com/vespo92/ChicagoForest.net/main/scripts/cjdns-quick-install.sh | sudo bash
+```
 
 ---
 
