@@ -25,6 +25,11 @@
       "import": "./dist/replication/index.mjs",
       "require": "./dist/replication/index.js",
       "types": "./dist/replication/index.d.ts"
+    },
+    "./sync": {
+      "import": "./dist/sync/index.mjs",
+      "require": "./dist/sync/index.js",
+      "types": "./dist/sync/index.d.ts"
     }
   },
   "scripts": {
@@ -39,6 +44,7 @@
   "dependencies": {
     "@chicago-forest/shared-types": "workspace:*",
     "@chicago-forest/p2p-core": "workspace:*",
+    "@chicago-forest/decentralized-sync": "workspace:*",
     "eventemitter3": "^5.0.1"
   },
   "devDependencies": {

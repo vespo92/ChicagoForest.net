@@ -1,0 +1,75 @@
+{
+  "name": "@chicago-forest/decentralized-sync",
+  "version": "0.1.0",
+  "description": "CRDT-based decentralized database sync using GUN and OrbitDB for Chicago Forest Network",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./gun": {
+      "import": "./dist/gun/index.mjs",
+      "require": "./dist/gun/index.js",
+      "types": "./dist/gun/index.d.ts"
+    },
+    "./orbitdb": {
+      "import": "./dist/orbitdb/index.mjs",
+      "require": "./dist/orbitdb/index.js",
+      "types": "./dist/orbitdb/index.d.ts"
+    },
+    "./crdt": {
+      "import": "./dist/crdt/index.mjs",
+      "require": "./dist/crdt/index.js",
+      "types": "./dist/crdt/index.d.ts"
+    },
+    "./adapters": {
+      "import": "./dist/adapters/index.mjs",
+      "require": "./dist/adapters/index.js",
+      "types": "./dist/adapters/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/p2p-core": "workspace:*",
+    "@chicago-forest/data-sync": "workspace:*",
+    "eventemitter3": "^5.0.1",
+    "gun": "^0.2020.1240",
+    "@orbitdb/core": "^2.0.1",
+    "helia": "^4.0.0",
+    "@libp2p/websockets": "^8.0.0",
+    "blockstore-core": "^4.3.0",
+    "uint8arrays": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "chicago-forest",
+    "gun",
+    "orbitdb",
+    "crdt",
+    "decentralized",
+    "p2p",
+    "sync",
+    "ipfs"
+  ]
+}

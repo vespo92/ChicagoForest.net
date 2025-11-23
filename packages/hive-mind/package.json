@@ -25,6 +25,11 @@
       "import": "./dist/proposals/index.mjs",
       "require": "./dist/proposals/index.js",
       "types": "./dist/proposals/index.d.ts"
+    },
+    "./sync": {
+      "import": "./dist/sync/index.mjs",
+      "require": "./dist/sync/index.js",
+      "types": "./dist/sync/index.d.ts"
     }
   },
   "scripts": {
@@ -40,6 +45,7 @@
     "@chicago-forest/shared-types": "workspace:*",
     "@chicago-forest/p2p-core": "workspace:*",
     "@chicago-forest/mycelium-core": "workspace:*",
+    "@chicago-forest/decentralized-sync": "workspace:*",
     "eventemitter3": "^5.0.1"
   },
   "devDependencies": {

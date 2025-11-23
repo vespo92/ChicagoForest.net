@@ -17,6 +17,7 @@
 export * from './records';
 export * from './resolver';
 export * from './replication';
+export * from './sync';
 
 export type {
   ForestRecord,

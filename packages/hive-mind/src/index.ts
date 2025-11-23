@@ -37,6 +37,7 @@ export * from './proposals';
 export * from './disputes';
 export * from './treasury';
 export * from './models';
+export * from './sync';
 
 // Extended governance modules
 export * from './controller';
