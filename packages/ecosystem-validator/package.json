@@ -1,0 +1,64 @@
+{
+  "name": "@chicago-forest/ecosystem-validator",
+  "version": "0.1.0",
+  "description": "Cross-repository compatibility validation and breaking change detection for Chicago Forest Network",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./validators": {
+      "import": "./dist/validators/index.mjs",
+      "require": "./dist/validators/index.js",
+      "types": "./dist/validators/index.d.ts"
+    },
+    "./checkers": {
+      "import": "./dist/checkers/index.mjs",
+      "require": "./dist/checkers/index.js",
+      "types": "./dist/checkers/index.d.ts"
+    },
+    "./generators": {
+      "import": "./dist/generators/index.mjs",
+      "require": "./dist/generators/index.js",
+      "types": "./dist/generators/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "validate": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/symbiosis": "workspace:*",
+    "@chicago-forest/test-utils": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0",
+    "tsx": "^4.7.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "chicago-forest",
+    "ecosystem-validation",
+    "breaking-change-detection",
+    "cross-repository",
+    "api-contract",
+    "integration-testing"
+  ]
+}

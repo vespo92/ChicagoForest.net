@@ -1,0 +1,65 @@
+{
+  "name": "@chicago-forest/network-simulator",
+  "version": "0.1.0",
+  "description": "Network behavior simulation, failure modeling, and propagation visualization for Chicago Forest Network",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./simulation": {
+      "import": "./dist/simulation/index.mjs",
+      "require": "./dist/simulation/index.js",
+      "types": "./dist/simulation/index.d.ts"
+    },
+    "./scenarios": {
+      "import": "./dist/scenarios/index.mjs",
+      "require": "./dist/scenarios/index.js",
+      "types": "./dist/scenarios/index.d.ts"
+    },
+    "./visualization": {
+      "import": "./dist/visualization/index.mjs",
+      "require": "./dist/visualization/index.js",
+      "types": "./dist/visualization/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "simulate": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/mycelium-core": "workspace:*",
+    "@chicago-forest/spore-propagation": "workspace:*",
+    "@chicago-forest/p2p-core": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0",
+    "tsx": "^4.7.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "chicago-forest",
+    "network-simulation",
+    "failure-modeling",
+    "topology-visualization",
+    "stress-testing",
+    "educational"
+  ]
+}

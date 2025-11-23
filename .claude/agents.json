@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "project": "ChicagoForest.net",
-  "description": "10 AI Agents for parallel development of the Chicago Forest Network ecosystem",
+  "description": "20 AI Agents for parallel development of the Chicago Forest Network ecosystem",
   "integrations": [
     {
       "name": "NPCPU",
@@ -311,18 +311,308 @@
       ],
       "priority": "medium",
       "estimatedFiles": 25
+    },
+    {
+      "id": 11,
+      "codename": "Verifier",
+      "domain": "Source Verification",
+      "description": "Continuously validate research sources, verify URLs, DOIs, and patent links for accuracy and accessibility",
+      "exclusiveOwnership": [
+        "packages/source-verifier/src/",
+        "packages/source-verifier/tests/",
+        "packages/source-verifier/reports/"
+      ],
+      "dependencies": ["tesla-archive", "lenr-database"],
+      "integrationPoints": {
+        "NPCPU": ["verification-ai", "source-credibility-scoring"],
+        "ConstitutionalShrinkage": []
+      },
+      "deliverables": [
+        "URL availability checker with retry logic",
+        "DOI resolver and validator",
+        "Patent link verification (patents.google.com)",
+        "Archive accessibility checker (FBI vault, LENR-CANR)",
+        "Source freshness monitoring and alerts",
+        "Verification report generator",
+        "CI/CD integration for automated source checks",
+        "Broken link detection and notification"
+      ],
+      "priority": "high",
+      "estimatedFiles": 12
+    },
+    {
+      "id": 12,
+      "codename": "Scribe",
+      "domain": "Content Generation",
+      "description": "Generate and enrich research content with AI-assisted summaries, citations, and abstracts while maintaining transparency",
+      "exclusiveOwnership": [
+        "packages/content-generator/src/",
+        "packages/content-generator/tests/",
+        "packages/content-generator/templates/"
+      ],
+      "dependencies": ["tesla-archive", "lenr-database", "source-verifier"],
+      "integrationPoints": {
+        "NPCPU": ["content-synthesis", "abstract-generation", "citation-ai"],
+        "ConstitutionalShrinkage": []
+      },
+      "deliverables": [
+        "Tesla patent summary generator",
+        "LENR paper abstract enrichment",
+        "Company profile generator with live data",
+        "Automated citation formatting (APA, MLA, Chicago)",
+        "Content freshness tracking",
+        "AI-generated content labeling system",
+        "Research timeline generator",
+        "Source cross-reference builder"
+      ],
+      "priority": "high",
+      "estimatedFiles": 15
+    },
+    {
+      "id": 13,
+      "codename": "Compliance",
+      "domain": "Disclaimer & Accuracy Enforcement",
+      "description": "Ensure all content meets transparency requirements, AI-disclosure standards, and prevents false claims",
+      "exclusiveOwnership": [
+        "packages/compliance-checker/src/",
+        "packages/compliance-checker/tests/",
+        "packages/compliance-checker/rules/"
+      ],
+      "dependencies": ["content-generator"],
+      "integrationPoints": {
+        "NPCPU": ["claim-verification", "language-analysis"],
+        "ConstitutionalShrinkage": ["content-governance", "community-standards"]
+      },
+      "deliverables": [
+        "Disclaimer presence validator for all pages",
+        "AI-generated content label checker",
+        "False claim detector (no operational/proven claims)",
+        "Financial/investment language scanner",
+        "URL fabrication detector",
+        "Theoretical vs factual content classifier",
+        "Compliance report generator",
+        "Pre-commit hooks for content validation",
+        "Red line violation alerting"
+      ],
+      "priority": "critical",
+      "estimatedFiles": 14
+    },
+    {
+      "id": 14,
+      "codename": "Prophet",
+      "domain": "Documentation Automation",
+      "description": "Auto-generate API documentation, READMEs, architecture diagrams, and integration guides from source code",
+      "exclusiveOwnership": [
+        "packages/doc-generator/src/",
+        "packages/doc-generator/tests/",
+        "packages/doc-generator/templates/",
+        "docs/generated/"
+      ],
+      "dependencies": ["canopy-api", "shared-types"],
+      "integrationPoints": {
+        "NPCPU": ["doc-synthesis", "code-explanation"],
+        "ConstitutionalShrinkage": []
+      },
+      "deliverables": [
+        "API documentation generator from TypeScript",
+        "Package README auto-generation",
+        "Architecture diagram generator (Mermaid)",
+        "Integration guide builder",
+        "Breaking change detector and documenter",
+        "Changelog automation",
+        "Type documentation extractor",
+        "Example code generator"
+      ],
+      "priority": "medium",
+      "estimatedFiles": 16
+    },
+    {
+      "id": 15,
+      "codename": "Simulator",
+      "domain": "Network Simulation",
+      "description": "Simulate network behavior, model failures, and visualize propagation patterns for testing and education",
+      "exclusiveOwnership": [
+        "packages/network-simulator/src/",
+        "packages/network-simulator/tests/",
+        "packages/network-simulator/scenarios/",
+        "apps/web/app/simulator/"
+      ],
+      "dependencies": ["mycelium-core", "spore-propagation", "p2p-core"],
+      "integrationPoints": {
+        "NPCPU": ["behavior-prediction", "anomaly-simulation"],
+        "ConstitutionalShrinkage": ["governance-simulation"]
+      },
+      "deliverables": [
+        "Network topology simulator",
+        "Packet loss and latency modeling",
+        "Node failure and recovery simulation",
+        "Spore propagation growth visualization",
+        "Attack scenario modeling",
+        "Network partition simulation",
+        "Visual feedback generator for tests",
+        "Scalability stress testing (100-10000 nodes)",
+        "Educational demonstration mode"
+      ],
+      "priority": "medium",
+      "estimatedFiles": 18
+    },
+    {
+      "id": 16,
+      "codename": "Auditor",
+      "domain": "Security Auditing",
+      "description": "Continuous security analysis, vulnerability scanning, and cryptographic validation across the codebase",
+      "exclusiveOwnership": [
+        "packages/security-auditor/src/",
+        "packages/security-auditor/tests/",
+        "packages/security-auditor/reports/",
+        "packages/security-auditor/policies/"
+      ],
+      "dependencies": ["sentinel"],
+      "integrationPoints": {
+        "NPCPU": ["threat-analysis-ai", "vulnerability-prediction"],
+        "ConstitutionalShrinkage": ["security-governance"]
+      },
+      "deliverables": [
+        "Dependency vulnerability scanner (npm audit++)",
+        "Code security analysis (SAST)",
+        "Cryptographic strength validator",
+        "Key rotation policy enforcer",
+        "Threat model validation against code",
+        "Security incident simulation runner",
+        "OWASP compliance checker",
+        "Secret detection (API keys, credentials)",
+        "Security audit report generator"
+      ],
+      "priority": "high",
+      "estimatedFiles": 16
+    },
+    {
+      "id": 17,
+      "codename": "Ambassador",
+      "domain": "Community Management",
+      "description": "Automate contributor onboarding, issue triage, PR validation, and community engagement workflows",
+      "exclusiveOwnership": [
+        "packages/community-manager/src/",
+        "packages/community-manager/tests/",
+        "packages/community-manager/templates/",
+        ".github/ISSUE_TEMPLATE/",
+        ".github/PULL_REQUEST_TEMPLATE/"
+      ],
+      "dependencies": [],
+      "integrationPoints": {
+        "NPCPU": ["sentiment-analysis", "contributor-matching"],
+        "ConstitutionalShrinkage": ["community-governance", "contributor-voting"]
+      },
+      "deliverables": [
+        "Contributor onboarding automation",
+        "Issue triage and routing system",
+        "PR validation against agent ownership",
+        "First-time contributor welcome bot",
+        "Community metrics dashboard",
+        "Newsletter generator from commits",
+        "Discussion thread summarizer",
+        "Contributor recognition system"
+      ],
+      "priority": "medium",
+      "estimatedFiles": 14
+    },
+    {
+      "id": 18,
+      "codename": "Synchronizer",
+      "domain": "Data Synchronization",
+      "description": "Manage real-time data sync across nodes, handle conflicts, and ensure consistency during network splits",
+      "exclusiveOwnership": [
+        "packages/data-sync/src/",
+        "packages/data-sync/tests/",
+        "packages/data-sync/strategies/"
+      ],
+      "dependencies": ["symbiosis", "mycelium-core", "p2p-core"],
+      "integrationPoints": {
+        "NPCPU": ["conflict-resolution-ai", "sync-optimization"],
+        "ConstitutionalShrinkage": ["governance-state-sync"]
+      },
+      "deliverables": [
+        "Real-time data synchronization engine",
+        "Conflict resolution strategies (CRDT, LWW)",
+        "Network split healing",
+        "Data consistency validator",
+        "Replication strategy optimizer",
+        "Backup and recovery automation",
+        "Migration path generator",
+        "Sync state visualizer"
+      ],
+      "priority": "high",
+      "estimatedFiles": 15
+    },
+    {
+      "id": 19,
+      "codename": "Benchmarker",
+      "domain": "Performance Testing",
+      "description": "Comprehensive performance benchmarking, scalability testing, and regression detection for the network",
+      "exclusiveOwnership": [
+        "packages/performance-suite/src/",
+        "packages/performance-suite/tests/",
+        "packages/performance-suite/benchmarks/",
+        "packages/performance-suite/reports/"
+      ],
+      "dependencies": ["mycelium-core", "p2p-core", "canopy-api"],
+      "integrationPoints": {
+        "NPCPU": ["performance-prediction", "optimization-suggestions"],
+        "ConstitutionalShrinkage": []
+      },
+      "deliverables": [
+        "Network throughput benchmarks",
+        "Latency measurement suite",
+        "CPU and memory profiler",
+        "Scalability testing framework",
+        "Performance regression detector",
+        "Benchmark comparison reports",
+        "Load testing scenarios",
+        "Performance dashboard",
+        "CI/CD performance gates"
+      ],
+      "priority": "medium",
+      "estimatedFiles": 14
+    },
+    {
+      "id": 20,
+      "codename": "Validator",
+      "domain": "Ecosystem Integration",
+      "description": "Validate cross-repository compatibility, detect breaking changes, and ensure ecosystem coherence",
+      "exclusiveOwnership": [
+        "packages/ecosystem-validator/src/",
+        "packages/ecosystem-validator/tests/",
+        "packages/ecosystem-validator/schemas/"
+      ],
+      "dependencies": ["symbiosis", "test-utils"],
+      "integrationPoints": {
+        "NPCPU": ["compatibility-analysis", "breaking-change-prediction"],
+        "ConstitutionalShrinkage": ["governance-compatibility"]
+      },
+      "deliverables": [
+        "NPCPU integration point validator",
+        "ConstitutionalShrinkage bridge verifier",
+        "Cross-repository interface checker",
+        "Breaking change detector",
+        "Automated integration test generator",
+        "API contract validator",
+        "Dependency version compatibility matrix",
+        "Ecosystem health dashboard"
+      ],
+      "priority": "high",
+      "estimatedFiles": 12
     }
   ],
   "mergeOrder": [
     { "phase": 1, "agents": [9], "reason": "Test utilities required by all other agents" },
-    { "phase": 2, "agents": [5, 6], "reason": "Independent packages with no deps" },
-    { "phase": 3, "agents": [1], "reason": "Core network foundation" },
-    { "phase": 4, "agents": [2], "reason": "Depends on mycelium-core" },
-    { "phase": 5, "agents": [4], "reason": "Security layer" },
-    { "phase": 6, "agents": [8], "reason": "Governance systems" },
-    { "phase": 7, "agents": [3], "reason": "Cross-repo bridges (needs hive-mind)" },
-    { "phase": 8, "agents": [7], "reason": "API layer (references all packages)" },
-    { "phase": 9, "agents": [10], "reason": "Frontend (last, uses all APIs)" }
+    { "phase": 2, "agents": [5, 6, 17], "reason": "Independent packages with no deps (Archivist, Beacon, Ambassador)" },
+    { "phase": 3, "agents": [1, 11], "reason": "Core network foundation + Source verification (Mycelia, Verifier)" },
+    { "phase": 4, "agents": [2, 12], "reason": "Network propagation + Content generation (Rhizome, Scribe)" },
+    { "phase": 5, "agents": [4, 16], "reason": "Security layer + Security auditing (Sentinel, Auditor)" },
+    { "phase": 6, "agents": [8, 13], "reason": "Governance + Compliance enforcement (Delegate, Compliance)" },
+    { "phase": 7, "agents": [3, 18, 20], "reason": "Cross-repo bridges + Data sync + Ecosystem validation (Symbiont, Synchronizer, Validator)" },
+    { "phase": 8, "agents": [7, 14, 19], "reason": "API layer + Documentation + Performance (Nexus, Prophet, Benchmarker)" },
+    { "phase": 9, "agents": [10, 15], "reason": "Frontend + Network simulation (Oracle, Simulator)" }
   ],
   "branchNaming": {
     "pattern": "claude/agent-{id}-{codename}-{session_id}",

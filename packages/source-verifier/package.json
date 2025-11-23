@@ -1,0 +1,64 @@
+{
+  "name": "@chicago-forest/source-verifier",
+  "version": "0.1.0",
+  "description": "Source verification, URL validation, DOI checking, and patent link verification for Chicago Forest Network",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./validators": {
+      "import": "./dist/validators/index.mjs",
+      "require": "./dist/validators/index.js",
+      "types": "./dist/validators/index.d.ts"
+    },
+    "./reporters": {
+      "import": "./dist/reporters/index.mjs",
+      "require": "./dist/reporters/index.js",
+      "types": "./dist/reporters/index.d.ts"
+    },
+    "./checkers": {
+      "import": "./dist/checkers/index.mjs",
+      "require": "./dist/checkers/index.js",
+      "types": "./dist/checkers/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "verify": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/tesla-archive": "workspace:*",
+    "@chicago-forest/lenr-database": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0",
+    "tsx": "^4.7.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "chicago-forest",
+    "source-verification",
+    "url-validation",
+    "doi-resolver",
+    "patent-checker",
+    "link-validator"
+  ]
+}
