@@ -25,6 +25,16 @@
       "import": "./dist/analyzers/index.mjs",
       "require": "./dist/analyzers/index.js",
       "types": "./dist/analyzers/index.d.ts"
+    },
+    "./owasp": {
+      "import": "./dist/owasp/index.mjs",
+      "require": "./dist/owasp/index.js",
+      "types": "./dist/owasp/index.d.ts"
+    },
+    "./simulator": {
+      "import": "./dist/simulator/index.mjs",
+      "require": "./dist/simulator/index.js",
+      "types": "./dist/simulator/index.d.ts"
     }
   },
   "scripts": {

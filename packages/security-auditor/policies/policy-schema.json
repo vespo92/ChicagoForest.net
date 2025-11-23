@@ -1,0 +1,182 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://chicagoforest.net/schemas/security-policy.json",
+  "title": "Security Policy Schema",
+  "description": "Schema for Chicago Forest Network security policies",
+  "type": "object",
+  "required": ["name", "version", "severity"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the security policy"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the policy"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the policy purpose"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the policy was last updated"
+    },
+    "severity": {
+      "type": "object",
+      "required": ["threshold", "failOn"],
+      "properties": {
+        "threshold": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low", "info"]
+        },
+        "failOn": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"]
+          }
+        },
+        "warnOn": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"]
+          }
+        },
+        "ignoreBelow": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low", "info"]
+        }
+      }
+    },
+    "secrets": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "pattern", "severity"],
+            "properties": {
+              "name": { "type": "string" },
+              "pattern": { "type": "string" },
+              "severity": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              }
+            }
+          }
+        },
+        "allowList": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "cryptography": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "algorithms": {
+          "type": "object",
+          "properties": {
+            "forbidden": { "type": "array", "items": { "type": "string" } },
+            "deprecated": { "type": "array", "items": { "type": "string" } },
+            "recommended": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "keySize": {
+          "type": "object",
+          "properties": {
+            "minimum": { "type": "integer", "minimum": 64 },
+            "recommended": { "type": "integer", "minimum": 128 }
+          }
+        },
+        "tls": {
+          "type": "object",
+          "properties": {
+            "minimumVersion": { "type": "string" },
+            "recommendedVersion": { "type": "string" },
+            "forbiddenCiphers": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "code": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "pattern", "severity"],
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "pattern": { "type": "string" },
+              "severity": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              },
+              "message": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "audit": { "type": "boolean" },
+        "knownVulnerable": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "maxSafe": { "type": "string" },
+              "severity": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "owasp": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "passingScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "requiredCategories": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "keyRotation": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "maxAgeDays": { "type": "integer", "minimum": 1 },
+        "warningDays": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "exclusions": {
+      "type": "object",
+      "properties": {
+        "paths": { "type": "array", "items": { "type": "string" } },
+        "files": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "reporting": {
+      "type": "object",
+      "properties": {
+        "format": { "type": "string", "enum": ["markdown", "json", "html"] },
+        "outputDir": { "type": "string" },
+        "includeRemediation": { "type": "boolean" },
+        "includeReferences": { "type": "boolean" }
+      }
+    }
+  }
+}

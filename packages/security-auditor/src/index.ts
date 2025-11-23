@@ -10,6 +10,8 @@
 export * from './scanners';
 export * from './validators';
 export * from './analyzers';
+export * from './owasp';
+export * from './simulator';
 
 export interface SecurityFinding {
   id: string;
