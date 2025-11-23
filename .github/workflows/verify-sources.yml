@@ -1,0 +1,181 @@
+# Source Verification CI/CD Workflow
+#
+# Agent 11: Verifier - Automated source checking
+#
+# This workflow:
+# 1. Runs on push and PR to main branch
+# 2. Runs weekly to check source freshness
+# 3. Verifies all research sources (URLs, DOIs, patents, archives)
+# 4. Generates verification reports
+# 5. Fails if success rate is below threshold
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework.
+# All source verification is performed against real, documented archives.
+
+name: Verify Sources
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/tesla-archive/**'
+      - 'packages/lenr-database/**'
+      - 'packages/source-verifier/**'
+      - 'apps/web/app/research/**'
+      - '**/BIBLIOGRAPHY.md'
+      - '**/sources.txt'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/tesla-archive/**'
+      - 'packages/lenr-database/**'
+      - 'packages/source-verifier/**'
+      - 'apps/web/app/research/**'
+      - '**/BIBLIOGRAPHY.md'
+      - '**/sources.txt'
+  schedule:
+    # Run weekly on Sunday at midnight UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+    inputs:
+      fail_threshold:
+        description: 'Minimum success rate (percentage)'
+        required: false
+        default: '90'
+      report_format:
+        description: 'Report format (json, markdown, html, csv)'
+        required: false
+        default: 'markdown'
+
+jobs:
+  verify-sources:
+    name: Verify Research Sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build source-verifier
+        run: pnpm --filter @chicago-forest/source-verifier build
+
+      - name: Verify Tesla Patents
+        id: tesla-patents
+        run: |
+          echo "## Tesla Patent Verification" >> $GITHUB_STEP_SUMMARY
+          pnpm --filter @chicago-forest/source-verifier verify tesla-patents \
+            --format markdown \
+            --output tesla-patents-report.md \
+            --min-success-rate ${{ github.event.inputs.fail_threshold || '90' }}
+          cat tesla-patents-report.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Verify FBI Tesla Files
+        id: fbi-files
+        run: |
+          echo "## FBI Vault Verification" >> $GITHUB_STEP_SUMMARY
+          pnpm --filter @chicago-forest/source-verifier verify fbi-files \
+            --format markdown \
+            --output fbi-files-report.md \
+            --min-success-rate ${{ github.event.inputs.fail_threshold || '90' }}
+          cat fbi-files-report.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Verify LENR-CANR Documents
+        id: lenr-docs
+        run: |
+          echo "## LENR-CANR Library Verification" >> $GITHUB_STEP_SUMMARY
+          pnpm --filter @chicago-forest/source-verifier verify lenr-docs \
+            --format markdown \
+            --output lenr-docs-report.md \
+            --min-success-rate ${{ github.event.inputs.fail_threshold || '90' }}
+          cat lenr-docs-report.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Verify Bibliography Sources
+        if: hashFiles('**/BIBLIOGRAPHY.md') != ''
+        run: |
+          echo "## Bibliography Verification" >> $GITHUB_STEP_SUMMARY
+          # Extract URLs from BIBLIOGRAPHY.md and verify
+          grep -oP 'https?://[^\s\)\]]+' BIBLIOGRAPHY.md > /tmp/urls.txt || true
+          if [ -s /tmp/urls.txt ]; then
+            pnpm --filter @chicago-forest/source-verifier verify batch /tmp/urls.txt \
+              --format markdown \
+              --output bibliography-report.md \
+              --min-success-rate 85
+            cat bibliography-report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No URLs found in BIBLIOGRAPHY.md" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-reports
+          path: |
+            *-report.md
+            *-report.html
+            *-report.json
+          retention-days: 30
+
+      - name: Check for Failures
+        if: failure()
+        run: |
+          echo "::error::Source verification failed. Please review the reports."
+          echo "Some sources may be broken, invalid, or unreachable."
+          echo "Check the workflow summary for detailed reports."
+
+  notify-on-failure:
+    name: Notify on Failure
+    runs-on: ubuntu-latest
+    needs: verify-sources
+    if: failure() && github.event_name == 'schedule'
+
+    steps:
+      - name: Create Issue on Failure
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const title = `[Agent 11] Weekly Source Verification Failed - ${new Date().toISOString().split('T')[0]}`;
+            const body = `## Source Verification Alert
+
+            The weekly source verification check has failed.
+
+            **Run:** [${context.runId}](${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId})
+
+            ### Required Actions
+            1. Review the verification report in the workflow artifacts
+            2. Update any broken or invalid sources
+            3. Remove sources that are no longer accessible
+            4. Run the verification again
+
+            ### Common Issues
+            - **Broken URLs**: Website may have moved or been taken down
+            - **Invalid DOIs**: DOI format may have changed or been deregistered
+            - **Patent links**: Patent database may have restructured URLs
+            - **Archive changes**: Archive sites may have reorganized content
+
+            ---
+            *Generated by Agent 11: Verifier*
+            *Chicago Forest Network - Source Verification*`;
+
+            await github.rest.issues.create({
+              owner,
+              repo,
+              title,
+              body,
+              labels: ['source-verification', 'automated', 'agent-11']
+            });

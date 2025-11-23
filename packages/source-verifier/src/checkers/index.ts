@@ -1,9 +1,26 @@
 /**
  * Source Checkers
  *
- * Specialized checkers for different archive and database types.
+ * Agent 11: Verifier - Specialized checkers for different source types.
  */
 
+// URL Checker
+export * from './url-checker';
+export { default as UrlChecker } from './url-checker';
+
+// DOI Checker
+export * from './doi-checker';
+export { default as DoiChecker } from './doi-checker';
+
+// Patent Checker
+export * from './patent-checker';
+export { default as PatentChecker } from './patent-checker';
+
+// Archive Checker
+export * from './archive-checker';
+export { default as ArchiveChecker } from './archive-checker';
+
+// Legacy exports for backwards compatibility
 export interface CheckResult {
   source: string;
   type: 'url' | 'doi' | 'patent' | 'archive';
@@ -13,119 +30,106 @@ export interface CheckResult {
   metadata?: Record<string, unknown>;
 }
 
-export class DOIChecker {
-  private readonly doiResolver = 'https://doi.org/';
+/**
+ * Combined checker that auto-detects source type
+ */
+export class UnifiedChecker {
+  private urlChecker: InstanceType<typeof import('./url-checker').default>;
+  private doiChecker: InstanceType<typeof import('./doi-checker').default>;
+  private patentChecker: InstanceType<typeof import('./patent-checker').default>;
+  private archiveChecker: InstanceType<typeof import('./archive-checker').default>;
 
-  async check(doi: string): Promise<CheckResult> {
-    const resolvedUrl = `${this.doiResolver}${doi}`;
+  constructor() {
+    const { default: UrlChecker } = require('./url-checker');
+    const { default: DoiChecker } = require('./doi-checker');
+    const { default: PatentChecker } = require('./patent-checker');
+    const { default: ArchiveChecker } = require('./archive-checker');
 
-    return {
-      source: doi,
-      type: 'doi',
-      isAccessible: true, // Would verify in production
-      isFresh: true,
-      lastChecked: new Date(),
-      metadata: {
-        resolvedUrl,
-        registrar: this.getRegistrar(doi),
-      },
-    };
+    this.urlChecker = new UrlChecker();
+    this.doiChecker = new DoiChecker();
+    this.patentChecker = new PatentChecker();
+    this.archiveChecker = new ArchiveChecker();
   }
 
-  private getRegistrar(doi: string): string {
-    // Extract registrant code from DOI
-    const match = doi.match(/^10\.(\d+)\//);
-    if (!match) return 'unknown';
+  /**
+   * Detect source type from string
+   */
+  detectType(source: string): 'url' | 'doi' | 'patent' | 'archive' {
+    // Check for DOI pattern
+    if (source.match(/^10\.\d{4,}/)) return 'doi';
+    if (source.includes('doi.org/10.')) return 'doi';
 
-    const registrantCodes: Record<string, string> = {
-      '1038': 'Nature Publishing',
-      '1126': 'Science/AAAS',
-      '1103': 'APS Physics',
-      '1016': 'Elsevier',
-      '1007': 'Springer',
-    };
+    // Check for patent pattern
+    if (source.match(/^[A-Z]{2}\d{5,}/)) return 'patent';
+    if (source.includes('patents.google.com')) return 'patent';
 
-    return registrantCodes[match[1]] || 'Other';
-  }
-}
-
-export class PatentChecker {
-  private readonly patentDatabase = 'https://patents.google.com/patent/';
-
-  async check(patentNumber: string): Promise<CheckResult> {
-    const patentUrl = `${this.patentDatabase}${patentNumber}`;
-
-    return {
-      source: patentNumber,
-      type: 'patent',
-      isAccessible: true, // Would verify in production
-      isFresh: true,
-      lastChecked: new Date(),
-      metadata: {
-        patentUrl,
-        jurisdiction: this.getJurisdiction(patentNumber),
-      },
-    };
-  }
-
-  private getJurisdiction(patent: string): string {
-    if (patent.startsWith('US')) return 'United States';
-    if (patent.startsWith('EP')) return 'European Patent Office';
-    if (patent.startsWith('WO')) return 'WIPO';
-    if (patent.startsWith('GB')) return 'United Kingdom';
-    return 'Unknown';
-  }
-}
-
-export class ArchiveChecker {
-  private readonly knownArchives = new Map<string, string>([
-    ['lenr-canr.org', 'LENR-CANR Library'],
-    ['vault.fbi.gov', 'FBI Vault'],
-    ['archive.org', 'Internet Archive'],
-    ['teslauniverse.com', 'Tesla Universe'],
-  ]);
-
-  async check(url: string): Promise<CheckResult> {
-    let archiveName = 'Unknown Archive';
+    // Check for known archives
+    const archiveHosts = [
+      'vault.fbi.gov',
+      'lenr-canr.org',
+      'archive.org',
+      'web.archive.org',
+      'teslauniverse.com',
+    ];
 
     try {
-      const parsed = new URL(url);
-      for (const [domain, name] of this.knownArchives) {
-        if (parsed.hostname.includes(domain)) {
-          archiveName = name;
-          break;
-        }
+      const url = new URL(source);
+      if (archiveHosts.some(h => url.hostname.includes(h))) {
+        return 'archive';
       }
     } catch {
-      // Invalid URL
+      // Not a valid URL
+    }
+
+    return 'url';
+  }
+
+  /**
+   * Check source with auto-detection
+   */
+  async check(source: string): Promise<CheckResult> {
+    const type = this.detectType(source);
+    const startTime = Date.now();
+
+    let result: { isValid: boolean; errorMessage?: string };
+
+    switch (type) {
+      case 'doi':
+        const doiResult = await this.doiChecker.check(source);
+        result = doiResult;
+        break;
+      case 'patent':
+        const patentResult = await this.patentChecker.check(source);
+        result = patentResult;
+        break;
+      case 'archive':
+        const archiveResult = await this.archiveChecker.check(source);
+        result = archiveResult;
+        break;
+      default:
+        const urlResult = await this.urlChecker.check(source);
+        result = urlResult;
     }
 
     return {
-      source: url,
-      type: 'archive',
-      isAccessible: true, // Would verify in production
+      source,
+      type,
+      isAccessible: result.isValid,
       isFresh: true,
       lastChecked: new Date(),
       metadata: {
-        archiveName,
-        isKnownArchive: archiveName !== 'Unknown Archive',
+        responseTime: Date.now() - startTime,
+        errorMessage: result.errorMessage,
       },
     };
   }
-}
 
-export class FreshnessChecker {
-  private readonly maxAgeMs: number;
-
-  constructor(maxAgeDays: number = 30) {
-    this.maxAgeMs = maxAgeDays * 24 * 60 * 60 * 1000;
-  }
-
-  isFresh(lastChecked: Date): boolean {
-    return Date.now() - lastChecked.getTime() < this.maxAgeMs;
-  }
-
-  getNextCheckDate(lastChecked: Date): Date {
-    return new Date(lastChecked.getTime() + this.maxAgeMs);
+  /**
+   * Batch check multiple sources
+   */
+  async checkBatch(sources: string[]): Promise<CheckResult[]> {
+    return Promise.all(sources.map(s => this.check(s)));
   }
 }
+
+export { UnifiedChecker };

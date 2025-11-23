@@ -2,9 +2,15 @@
   "name": "@chicago-forest/source-verifier",
   "version": "0.1.0",
   "description": "Source verification, URL validation, DOI checking, and patent link verification for Chicago Forest Network",
+  "author": "Chicago Forest Network",
+  "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "source-verifier": "./dist/cli.js",
+    "verify-sources": "./dist/cli.js"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -25,6 +31,11 @@
       "import": "./dist/checkers/index.mjs",
       "require": "./dist/checkers/index.js",
       "types": "./dist/checkers/index.d.ts"
+    },
+    "./monitoring": {
+      "import": "./dist/monitoring/index.mjs",
+      "require": "./dist/monitoring/index.js",
+      "types": "./dist/monitoring/index.d.ts"
     }
   },
   "scripts": {
@@ -35,13 +46,25 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "clean": "rm -rf dist",
-    "verify": "tsx src/cli.ts"
+    "verify": "tsx src/cli.ts",
+    "verify:tesla": "tsx src/cli.ts tesla-patents",
+    "verify:fbi": "tsx src/cli.ts fbi-files",
+    "verify:lenr": "tsx src/cli.ts lenr-docs"
   },
   "dependencies": {
-    "@chicago-forest/shared-types": "workspace:*",
-    "@chicago-forest/tesla-archive": "workspace:*",
-    "@chicago-forest/lenr-database": "workspace:*",
     "eventemitter3": "^5.0.1"
+  },
+  "peerDependencies": {
+    "@chicago-forest/tesla-archive": "workspace:*",
+    "@chicago-forest/lenr-database": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@chicago-forest/tesla-archive": {
+      "optional": true
+    },
+    "@chicago-forest/lenr-database": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
@@ -59,6 +82,20 @@
     "url-validation",
     "doi-resolver",
     "patent-checker",
-    "link-validator"
-  ]
+    "link-validator",
+    "tesla-patents",
+    "lenr-research",
+    "archive-verification"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vespo92/ChicagoForest.net",
+    "directory": "packages/source-verifier"
+  },
+  "bugs": {
+    "url": "https://github.com/vespo92/ChicagoForest.net/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  }
 }
