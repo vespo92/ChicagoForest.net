@@ -573,3 +573,115 @@ export interface NodeStatus {
   };
   anonymousCircuits?: number;
 }
+
+// =============================================================================
+// WEBRTC BROWSER P2P
+// =============================================================================
+
+/** WebRTC connection state */
+export type WebRTCConnectionState =
+  | 'new'
+  | 'connecting'
+  | 'connected'
+  | 'disconnected'
+  | 'failed'
+  | 'closed';
+
+/** WebRTC peer connection info */
+export interface WebRTCPeerConnection {
+  peerId: string;
+  nodeId?: NodeId;
+  state: WebRTCConnectionState;
+  dataChannel?: RTCDataChannelState;
+  connectedAt?: number;
+  lastActivity?: number;
+  bytesReceived: number;
+  bytesSent: number;
+  latency?: number;
+}
+
+/** Browser peer info for WebRTC participants */
+export interface BrowserPeerInfo extends Omit<PeerInfo, 'addresses'> {
+  peerId: string;
+  browserInfo?: {
+    userAgent?: string;
+    platform?: string;
+    language?: string;
+  };
+  webrtcCapabilities?: {
+    video: boolean;
+    audio: boolean;
+    data: boolean;
+    screen: boolean;
+  };
+}
+
+/** WebRTC message types */
+export type WebRTCMessageType =
+  | 'HANDSHAKE'
+  | 'HANDSHAKE_ACK'
+  | 'PING'
+  | 'PONG'
+  | 'DATA'
+  | 'PEER_LIST'
+  | 'PEER_REQUEST'
+  | 'BROADCAST'
+  | 'RELAY'
+  | 'ERROR';
+
+/** WebRTC message structure */
+export interface WebRTCMessage {
+  type: WebRTCMessageType;
+  id: string;
+  from: string;
+  to?: string;
+  timestamp: number;
+  payload: unknown;
+  ttl?: number;
+}
+
+/** WebRTC event types */
+export type WebRTCEventType =
+  | 'open'
+  | 'close'
+  | 'error'
+  | 'peer:connected'
+  | 'peer:disconnected'
+  | 'peer:discovered'
+  | 'message:received'
+  | 'message:sent'
+  | 'connection:state-changed';
+
+/** WebRTC network statistics */
+export interface WebRTCStats {
+  peerId: string;
+  connectedPeers: number;
+  totalBytesSent: number;
+  totalBytesReceived: number;
+  messagesSent: number;
+  messagesReceived: number;
+  uptime: number;
+  averageLatency?: number;
+}
+
+/** WebRTC configuration */
+export interface WebRTCConfig {
+  /** PeerJS server configuration */
+  peerServer?: {
+    host: string;
+    port: number;
+    path?: string;
+    secure?: boolean;
+    key?: string;
+  };
+  /** ICE servers for NAT traversal */
+  iceServers?: RTCIceServer[];
+  /** Maximum number of peer connections */
+  maxConnections?: number;
+  /** Connection timeout in milliseconds */
+  connectionTimeout?: number;
+  /** Enable debug logging */
+  debug?: boolean;
+  /** Custom peer ID prefix */
+  peerIdPrefix?: string;
+}

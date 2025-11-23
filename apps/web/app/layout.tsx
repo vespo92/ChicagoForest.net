@@ -48,6 +48,12 @@ export default function RootLayout({
                   Routing
                 </Link>
                 <Link
+                  href="/p2p"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  P2P
+                </Link>
+                <Link
                   href="/privacy"
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
