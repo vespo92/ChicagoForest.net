@@ -1,5 +1,10 @@
 # Chicago Forest Network 🌲⚡🌐
 
+[![GitHub](https://img.shields.io/badge/GitHub-vespo92%2FChicagoForest.net-blue?logo=github)](https://github.com/vespo92/ChicagoForest.net)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Repository:** [https://github.com/vespo92/ChicagoForest.net](https://github.com/vespo92/ChicagoForest.net)
+
 ## ⚠️ IMPORTANT DISCLAIMER ⚠️
 
 **This is an AI-generated theoretical framework for educational and research purposes.**

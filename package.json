@@ -2,6 +2,14 @@
   "name": "chicago-forest-network",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vespo92/ChicagoForest.net.git"
+  },
+  "homepage": "https://github.com/vespo92/ChicagoForest.net",
+  "bugs": {
+    "url": "https://github.com/vespo92/ChicagoForest.net/issues"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
