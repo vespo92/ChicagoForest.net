@@ -25,6 +25,16 @@
       "import": "./dist/metrics/index.mjs",
       "require": "./dist/metrics/index.js",
       "types": "./dist/metrics/index.d.ts"
+    },
+    "./newsletter": {
+      "import": "./dist/newsletter/index.mjs",
+      "require": "./dist/newsletter/index.js",
+      "types": "./dist/newsletter/index.d.ts"
+    },
+    "./discussions": {
+      "import": "./dist/discussions/index.mjs",
+      "require": "./dist/discussions/index.js",
+      "types": "./dist/discussions/index.d.ts"
     }
   },
   "scripts": {

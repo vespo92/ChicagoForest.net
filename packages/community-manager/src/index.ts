@@ -10,6 +10,8 @@
 export * from './triage';
 export * from './onboarding';
 export * from './metrics';
+export * from './newsletter';
+export * from './discussions';
 
 export interface Contributor {
   username: string;

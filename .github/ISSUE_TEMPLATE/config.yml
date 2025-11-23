@@ -1,0 +1,17 @@
+# Issue Template Configuration
+# Agent 17: Ambassador - Community Management
+
+blank_issues_enabled: true
+
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/vespo92/ChicagoForest.net/discussions
+    about: Ask questions and discuss ideas with the community
+
+  - name: Project Guidelines (CLAUDE.md)
+    url: https://github.com/vespo92/ChicagoForest.net/blob/main/CLAUDE.md
+    about: Read the project guidelines before contributing
+
+  - name: Agent System Documentation
+    url: https://github.com/vespo92/ChicagoForest.net/blob/main/.claude/agents.json
+    about: Understand the 20-agent ecosystem and file ownership
