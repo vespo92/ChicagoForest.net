@@ -25,6 +25,11 @@
       "import": "./dist/visualization/index.mjs",
       "require": "./dist/visualization/index.js",
       "types": "./dist/visualization/index.d.ts"
+    },
+    "./stress": {
+      "import": "./dist/stress/index.mjs",
+      "require": "./dist/stress/index.js",
+      "types": "./dist/stress/index.d.ts"
     }
   },
   "scripts": {

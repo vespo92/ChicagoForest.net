@@ -13,6 +13,7 @@
 export * from './simulation';
 export * from './scenarios';
 export * from './visualization';
+export * from './stress';
 
 export interface SimulatedNode {
   id: string;

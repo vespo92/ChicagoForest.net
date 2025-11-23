@@ -108,6 +108,127 @@ export const scenarios: Record<string, Scenario> = {
       { atTick: 100, action: 'heal_partition' },
     ],
   },
+
+  // Attack Scenarios
+  sybilAttack: {
+    name: 'Sybil Attack',
+    description: 'Simulate malicious nodes flooding the network with fake identities',
+    config: {
+      nodeCount: 50,
+      networkTopology: 'mesh',
+      failureRate: 0.02,
+      recoveryRate: 0.05,
+    },
+    events: [
+      { atTick: 50, action: 'spike_traffic', data: { maliciousNodes: 20, type: 'sybil' } },
+      { atTick: 100, action: 'spike_traffic', data: { maliciousNodes: 30, type: 'sybil' } },
+    ],
+  },
+
+  eclipseAttack: {
+    name: 'Eclipse Attack',
+    description: 'Simulate attackers isolating a target node from honest peers',
+    config: {
+      nodeCount: 30,
+      networkTopology: 'mesh',
+      failureRate: 0,
+      recoveryRate: 0.1,
+    },
+    events: [
+      { atTick: 30, action: 'partition', targets: ['node-5'], data: { isolated: true } },
+      { atTick: 80, action: 'fail_node', targets: ['node-4', 'node-6', 'node-7'] },
+    ],
+  },
+
+  routingAttack: {
+    name: 'Routing Attack',
+    description: 'Simulate BGP-style routing manipulation',
+    config: {
+      nodeCount: 40,
+      networkTopology: 'tree',
+      failureRate: 0.01,
+      recoveryRate: 0.08,
+    },
+    events: [
+      { atTick: 40, action: 'spike_traffic', data: { type: 'route_hijack', affectedPaths: 5 } },
+      { atTick: 70, action: 'partition', data: { groups: 3 } },
+    ],
+  },
+
+  ddosAttack: {
+    name: 'DDoS Attack',
+    description: 'Simulate distributed denial of service attack on key nodes',
+    config: {
+      nodeCount: 60,
+      networkTopology: 'star',
+      failureRate: 0.15,
+      recoveryRate: 0.02,
+    },
+    events: [
+      { atTick: 20, action: 'spike_traffic', data: { type: 'ddos', intensity: 'high' } },
+      { atTick: 30, action: 'fail_node', targets: ['node-0'] }, // Hub overwhelmed
+      { atTick: 60, action: 'recover_node', targets: ['node-0'] },
+    ],
+  },
+
+  // Scalability Scenarios
+  scaleTest100: {
+    name: 'Scale Test - 100 Nodes',
+    description: 'Baseline scalability test with 100 nodes',
+    config: {
+      nodeCount: 100,
+      networkTopology: 'mesh',
+      failureRate: 0.005,
+      recoveryRate: 0.1,
+      tickIntervalMs: 50,
+    },
+    events: [],
+  },
+
+  scaleTest1000: {
+    name: 'Scale Test - 1000 Nodes',
+    description: 'Large scale test with 1000 nodes',
+    config: {
+      nodeCount: 1000,
+      networkTopology: 'random',
+      failureRate: 0.002,
+      recoveryRate: 0.08,
+      tickIntervalMs: 100,
+    },
+    events: [],
+  },
+
+  scaleTest10000: {
+    name: 'Scale Test - 10000 Nodes',
+    description: 'Massive scale stress test with 10000 nodes',
+    config: {
+      nodeCount: 10000,
+      networkTopology: 'random',
+      failureRate: 0.001,
+      recoveryRate: 0.05,
+      tickIntervalMs: 200,
+    },
+    events: [],
+  },
+
+  sporePropagation: {
+    name: 'Spore Propagation',
+    description: 'Simulate organic network growth via spore propagation',
+    config: {
+      nodeCount: 5,
+      networkTopology: 'random',
+      failureRate: 0.001,
+      recoveryRate: 0.2,
+      simulationDurationMs: 180000,
+    },
+    events: [
+      ...Array.from({ length: 50 }, (_, i) => ({
+        atTick: i * 5 + 10,
+        action: 'spike_traffic' as const,
+        data: { newNodes: Math.floor(Math.random() * 3) + 1, type: 'spore_germination' },
+      })),
+    ],
+  },
 };
 
 export function getScenario(name: string): Scenario | undefined {
