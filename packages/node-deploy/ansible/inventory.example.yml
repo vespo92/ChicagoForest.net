@@ -1,0 +1,196 @@
+# Chicago Forest Network - Ansible Inventory Template
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. The Chicago Forest Network
+# is a conceptual project exploring decentralized mesh networks.
+#
+# Copy this file to inventory.yml and customize for your deployment:
+#   cp inventory.example.yml inventory.yml
+#
+# Usage:
+#   ansible-playbook -i inventory.yml playbooks/install-node.yml
+
+---
+all:
+  # ==========================================================================
+  # Global Variables (apply to all nodes)
+  # ==========================================================================
+  vars:
+    # Forest network configuration
+    forest_subnet: "10.42.0.0/16"
+    forest_dns: "10.42.0.1"
+
+    # Docker configuration
+    docker_image: "ghcr.io/chicago-forest/forest-node"
+    docker_tag: "latest"
+
+    # WireGuard configuration
+    wireguard_port: 51820
+
+    # BATMAN-adv configuration
+    mesh_protocol: "BATMAN_V"
+    mesh_interface: "bat0"
+
+    # Default feature flags
+    enable_firewall: true
+    enable_docker: true
+
+    # SSH configuration
+    ansible_user: forest
+    ansible_become: true
+    ansible_python_interpreter: /usr/bin/python3
+
+  children:
+    # ========================================================================
+    # Gateway Nodes
+    # Provide internet connectivity to the mesh network
+    # ========================================================================
+    forest_gateways:
+      vars:
+        role: gateway
+        enable_relay: true
+        batman_gw_mode: "server"
+      hosts:
+        # Example gateway node
+        # gateway-north:
+        #   ansible_host: 192.168.1.10
+        #   forest_ip: 10.42.0.1
+        #   wan_interface: eth0
+        #   forest_interface: eth1
+        #   lan_interface: eth2
+
+    # ========================================================================
+    # Standard Nodes
+    # Regular mesh participants
+    # ========================================================================
+    forest_nodes:
+      vars:
+        role: node
+        enable_relay: false
+        enable_storage: false
+      hosts:
+        # Example home node
+        # home-node-1:
+        #   ansible_host: 192.168.1.100
+        #   forest_ip: 10.42.1.1
+        #   forest_interface: eth1
+
+        # Example with WiFi mesh
+        # wifi-node-1:
+        #   ansible_host: 192.168.1.101
+        #   forest_ip: 10.42.1.2
+        #   forest_interface: wlan0
+
+    # ========================================================================
+    # Relay Nodes
+    # High-capacity nodes for routing traffic
+    # ========================================================================
+    forest_relays:
+      vars:
+        role: relay
+        enable_relay: true
+        enable_storage: true
+        max_connections: 200
+      hosts:
+        # Example relay node
+        # relay-central:
+        #   ansible_host: 192.168.1.50
+        #   forest_ip: 10.42.0.50
+        #   forest_interface: eth1
+        #   storage_limit_gb: 100
+
+    # ========================================================================
+    # Raspberry Pi Nodes
+    # Optimized for Raspberry Pi hardware
+    # ========================================================================
+    forest_pi_nodes:
+      vars:
+        role: node
+        ansible_user: pi
+        enable_docker: true
+        # Pi-specific optimizations
+        cpu_limit: "2"
+        memory_limit: "1Gi"
+      hosts:
+        # Example Pi 4 node
+        # pi4-north:
+        #   ansible_host: 192.168.1.200
+        #   forest_ip: 10.42.2.1
+        #   forest_interface: eth0
+
+        # Example Pi Zero 2 W (WiFi only)
+        # pizero-east:
+        #   ansible_host: 192.168.1.201
+        #   forest_ip: 10.42.2.2
+        #   forest_interface: wlan0
+        #   enable_storage: false
+        #   enable_relay: false
+
+    # ========================================================================
+    # Solar-Powered Nodes
+    # Off-grid nodes with power management
+    # ========================================================================
+    forest_solar_nodes:
+      vars:
+        role: node
+        enable_power_management: true
+        low_power_mode: true
+      hosts:
+        # Example solar node
+        # solar-hilltop:
+        #   ansible_host: 10.42.3.1  # May only be reachable via mesh
+        #   forest_ip: 10.42.3.1
+        #   forest_interface: wlan0
+        #   solar_panel_watts: 100
+        #   battery_capacity_ah: 100
+
+    # ========================================================================
+    # OpenWRT Routers
+    # Router-based mesh nodes
+    # ========================================================================
+    forest_routers:
+      vars:
+        role: gateway
+        enable_docker: false
+        ansible_user: root
+        ansible_python_interpreter: /usr/bin/python3
+      hosts:
+        # Example OpenWRT router
+        # router-community-center:
+        #   ansible_host: 192.168.1.1
+        #   forest_ip: 10.42.4.1
+        #   wan_interface: wan
+        #   forest_interface: lan
+        #   model: "GL-MT3000"
+
+# =============================================================================
+# Example: Chicago Neighborhood Deployment
+# =============================================================================
+# Uncomment and customize for a real deployment
+#
+# chicago_pilsen:
+#   vars:
+#     neighborhood: pilsen
+#     bootstrap_peers:
+#       - "10.42.0.1:51820"
+#       - "10.42.0.2:51820"
+#   children:
+#     pilsen_gateways:
+#       hosts:
+#         pilsen-gateway-1:
+#           ansible_host: 192.168.1.10
+#           forest_ip: 10.42.10.1
+#           role: gateway
+#           location: "18th Street"
+#     pilsen_nodes:
+#       hosts:
+#         pilsen-node-blue:
+#           ansible_host: 192.168.1.100
+#           forest_ip: 10.42.10.100
+#           role: node
+#           location: "Blue Island Ave"
+#         pilsen-node-halsted:
+#           ansible_host: 192.168.1.101
+#           forest_ip: 10.42.10.101
+#           role: node
+#           location: "Halsted St"

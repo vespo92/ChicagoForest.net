@@ -1,0 +1,455 @@
+---
+# Chicago Forest Network - Node Installation Playbook
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. The Chicago Forest Network
+# is a conceptual project exploring decentralized energy networks.
+#
+# Usage:
+#   ansible-playbook -i inventory.yml install-node.yml
+#   ansible-playbook -i inventory.yml install-node.yml --tags docker
+#   ansible-playbook -i inventory.yml install-node.yml -e "node_name=my-node"
+#
+# Requirements:
+#   - Ansible 2.12+
+#   - Target: Ubuntu 22.04+ or Debian 12+
+#   - SSH access with sudo privileges
+
+- name: Install Chicago Forest Network Node
+  hosts: forest_nodes
+  become: true
+  gather_facts: true
+
+  vars:
+    # Node configuration
+    forest_node_name: "{{ node_name | default('forest-node-' + ansible_hostname) }}"
+    forest_interface: "{{ interface | default('eth1') }}"
+    forest_subnet: "10.42.0.0/16"
+
+    # Feature flags
+    enable_firewall: true
+    enable_relay: false
+    enable_storage: false
+    enable_docker: true
+
+    # Docker settings
+    docker_image: "ghcr.io/chicago-forest/forest-node"
+    docker_tag: "latest"
+
+    # System settings
+    forest_user: forest
+    forest_group: forest
+    forest_data_dir: /var/lib/forest
+    forest_config_dir: /etc/forest
+    forest_log_dir: /var/log/forest
+
+    # Packages to install
+    system_packages:
+      - curl
+      - wget
+      - jq
+      - git
+      - iproute2
+      - iptables
+      - nftables
+      - wireguard-tools
+      - batctl
+      - openssl
+      - ca-certificates
+      - gnupg
+      - lsb-release
+
+  handlers:
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
+
+    - name: restart forest-node
+      service:
+        name: forest-node
+        state: restarted
+
+    - name: reload sysctl
+      command: sysctl -p /etc/sysctl.d/99-forest.conf
+
+  tasks:
+    # =========================================================================
+    # Pre-flight Checks
+    # =========================================================================
+    - name: Display deployment information
+      debug:
+        msg: |
+          Chicago Forest Network Node Installation
+          =========================================
+          Node Name: {{ forest_node_name }}
+          Interface: {{ forest_interface }}
+          Firewall: {{ enable_firewall }}
+          Relay: {{ enable_relay }}
+          Storage: {{ enable_storage }}
+          Docker: {{ enable_docker }}
+      tags: always
+
+    - name: Check OS compatibility
+      assert:
+        that:
+          - ansible_os_family == "Debian"
+          - ansible_distribution_major_version | int >= 11
+        fail_msg: "This playbook requires Debian 11+ or Ubuntu 22.04+"
+      tags: preflight
+
+    - name: Check for required network interface
+      command: ip link show {{ forest_interface }}
+      register: interface_check
+      failed_when: false
+      changed_when: false
+      tags: preflight
+
+    - name: Warn if interface not found
+      debug:
+        msg: "WARNING: Interface {{ forest_interface }} not found. Available interfaces will be listed."
+      when: interface_check.rc != 0
+      tags: preflight
+
+    # =========================================================================
+    # System Preparation
+    # =========================================================================
+    - name: Update apt cache
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+      tags: system
+
+    - name: Install system packages
+      apt:
+        name: "{{ system_packages }}"
+        state: present
+      tags: system
+
+    - name: Create forest user
+      user:
+        name: "{{ forest_user }}"
+        group: "{{ forest_group }}"
+        groups: netdev,docker
+        shell: /bin/bash
+        system: true
+        create_home: false
+      tags: system
+
+    - name: Create forest group
+      group:
+        name: "{{ forest_group }}"
+        system: true
+      tags: system
+
+    # =========================================================================
+    # Directory Structure
+    # =========================================================================
+    - name: Create forest directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ forest_user }}"
+        group: "{{ forest_group }}"
+        mode: '0755'
+      loop:
+        - "{{ forest_data_dir }}"
+        - "{{ forest_data_dir }}/keys"
+        - "{{ forest_data_dir }}/peers"
+        - "{{ forest_config_dir }}"
+        - "{{ forest_log_dir }}"
+        - /opt/forest
+      tags: directories
+
+    # =========================================================================
+    # Kernel Configuration
+    # =========================================================================
+    - name: Configure kernel parameters
+      copy:
+        dest: /etc/sysctl.d/99-forest.conf
+        content: |
+          # Chicago Forest Network - Kernel Parameters
+          # Enable IP forwarding
+          net.ipv4.ip_forward = 1
+          net.ipv6.conf.all.forwarding = 1
+
+          # Disable reverse path filtering for mesh networking
+          net.ipv4.conf.all.rp_filter = 0
+          net.ipv4.conf.default.rp_filter = 0
+
+          # Increase network buffers
+          net.core.rmem_max = 16777216
+          net.core.wmem_max = 16777216
+          net.ipv4.tcp_rmem = 4096 87380 16777216
+          net.ipv4.tcp_wmem = 4096 65536 16777216
+
+          # Connection tracking
+          net.netfilter.nf_conntrack_max = 262144
+        mode: '0644'
+      notify: reload sysctl
+      tags: kernel
+
+    - name: Load required kernel modules
+      modprobe:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - wireguard
+        - batman_adv
+        - tun
+        - vxlan
+      ignore_errors: true
+      tags: kernel
+
+    - name: Ensure kernel modules load on boot
+      copy:
+        dest: /etc/modules-load.d/forest.conf
+        content: |
+          # Chicago Forest Network - Kernel Modules
+          wireguard
+          batman_adv
+          tun
+          vxlan
+        mode: '0644'
+      tags: kernel
+
+    # =========================================================================
+    # Docker Installation
+    # =========================================================================
+    - name: Install Docker prerequisites
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+      when: enable_docker
+      tags: docker
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
+        state: present
+      when: enable_docker
+      tags: docker
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        state: present
+      when: enable_docker
+      tags: docker
+
+    - name: Install Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+        update_cache: true
+      when: enable_docker
+      notify: restart docker
+      tags: docker
+
+    - name: Add users to docker group
+      user:
+        name: "{{ item }}"
+        groups: docker
+        append: true
+      loop:
+        - "{{ forest_user }}"
+        - "{{ ansible_user }}"
+      when: enable_docker
+      tags: docker
+
+    - name: Enable and start Docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+      when: enable_docker
+      tags: docker
+
+    # =========================================================================
+    # Node Identity Generation
+    # =========================================================================
+    - name: Check for existing node identity
+      stat:
+        path: "{{ forest_data_dir }}/keys/node_identity.json"
+      register: identity_file
+      tags: identity
+
+    - name: Generate WireGuard keypair
+      shell: |
+        wg genkey | tee {{ forest_data_dir }}/keys/wireguard.key | wg pubkey > {{ forest_data_dir }}/keys/wireguard.pub
+      args:
+        creates: "{{ forest_data_dir }}/keys/wireguard.key"
+      when: not identity_file.stat.exists
+      tags: identity
+
+    - name: Read WireGuard public key
+      slurp:
+        src: "{{ forest_data_dir }}/keys/wireguard.pub"
+      register: wg_pubkey
+      tags: identity
+
+    - name: Read WireGuard private key
+      slurp:
+        src: "{{ forest_data_dir }}/keys/wireguard.key"
+      register: wg_privkey
+      tags: identity
+
+    - name: Generate node identity
+      copy:
+        dest: "{{ forest_data_dir }}/keys/node_identity.json"
+        content: |
+          {
+            "nodeId": "{{ (wg_pubkey.content | b64decode | trim | hash('sha256'))[:16] }}",
+            "nodeName": "{{ forest_node_name }}",
+            "wireguard": {
+              "publicKey": "{{ wg_pubkey.content | b64decode | trim }}",
+              "privateKey": "{{ wg_privkey.content | b64decode | trim }}"
+            },
+            "created": "{{ ansible_date_time.iso8601 }}"
+          }
+        owner: "{{ forest_user }}"
+        group: "{{ forest_group }}"
+        mode: '0600'
+      when: not identity_file.stat.exists
+      tags: identity
+
+    # =========================================================================
+    # Forest Node Configuration
+    # =========================================================================
+    - name: Create forest node configuration
+      template:
+        src: templates/forest-config.yaml.j2
+        dest: "{{ forest_config_dir }}/config.yaml"
+        owner: "{{ forest_user }}"
+        group: "{{ forest_group }}"
+        mode: '0644'
+      tags: config
+
+    - name: Create forest node environment file
+      copy:
+        dest: "{{ forest_config_dir }}/forest.env"
+        content: |
+          # Chicago Forest Network - Environment Configuration
+          FOREST_NODE_NAME={{ forest_node_name }}
+          FOREST_INTERFACE={{ forest_interface }}
+          FOREST_SUBNET={{ forest_subnet }}
+          ENABLE_FIREWALL={{ enable_firewall | lower }}
+          ENABLE_RELAY={{ enable_relay | lower }}
+          ENABLE_STORAGE={{ enable_storage | lower }}
+          LOG_LEVEL=info
+          FOREST_DATA_DIR={{ forest_data_dir }}
+          FOREST_CONFIG_DIR={{ forest_config_dir }}
+          FOREST_LOG_DIR={{ forest_log_dir }}
+        owner: "{{ forest_user }}"
+        group: "{{ forest_group }}"
+        mode: '0644'
+      tags: config
+
+    # =========================================================================
+    # Docker Deployment
+    # =========================================================================
+    - name: Pull forest node Docker image
+      docker_image:
+        name: "{{ docker_image }}:{{ docker_tag }}"
+        source: pull
+      when: enable_docker
+      tags: docker
+
+    - name: Create docker-compose.yml
+      template:
+        src: templates/docker-compose.yml.j2
+        dest: /opt/forest/docker-compose.yml
+        owner: "{{ forest_user }}"
+        group: "{{ forest_group }}"
+        mode: '0644'
+      when: enable_docker
+      tags: docker
+
+    # =========================================================================
+    # Systemd Service
+    # =========================================================================
+    - name: Create systemd service for forest node
+      copy:
+        dest: /etc/systemd/system/forest-node.service
+        content: |
+          [Unit]
+          Description=Chicago Forest Network Node
+          Documentation=https://github.com/chicago-forest/chicago-forest
+          After=network-online.target docker.service
+          Wants=network-online.target
+          Requires=docker.service
+
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          EnvironmentFile={{ forest_config_dir }}/forest.env
+          WorkingDirectory=/opt/forest
+          ExecStartPre=/usr/bin/docker compose pull
+          ExecStart=/usr/bin/docker compose up -d
+          ExecStop=/usr/bin/docker compose down
+          ExecReload=/usr/bin/docker compose restart
+
+          # Security
+          ProtectSystem=strict
+          ReadWritePaths={{ forest_data_dir }} {{ forest_log_dir }} /opt/forest
+
+          [Install]
+          WantedBy=multi-user.target
+        mode: '0644'
+      notify: restart forest-node
+      tags: service
+
+    - name: Reload systemd daemon
+      systemd:
+        daemon_reload: true
+      tags: service
+
+    - name: Enable and start forest-node service
+      service:
+        name: forest-node
+        state: started
+        enabled: true
+      tags: service
+
+    # =========================================================================
+    # Verification
+    # =========================================================================
+    - name: Wait for forest node to start
+      wait_for:
+        port: 8080
+        host: localhost
+        delay: 10
+        timeout: 120
+      tags: verify
+
+    - name: Verify forest node health
+      uri:
+        url: http://localhost:8080/health
+        return_content: true
+      register: health_check
+      ignore_errors: true
+      tags: verify
+
+    - name: Display deployment result
+      debug:
+        msg: |
+          Chicago Forest Network Node Deployment Complete!
+          =================================================
+          Node Name: {{ forest_node_name }}
+          Node ID: {{ (wg_pubkey.content | b64decode | trim | hash('sha256'))[:16] }}
+          Status: {{ 'Healthy' if health_check is succeeded else 'Starting...' }}
+
+          Commands:
+            Status: systemctl status forest-node
+            Logs: docker logs {{ forest_node_name }}
+            CLI: docker exec {{ forest_node_name }} forest-cli status
+      tags: verify

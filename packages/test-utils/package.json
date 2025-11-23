@@ -1,0 +1,61 @@
+{
+  "name": "@chicago-forest/test-utils",
+  "version": "0.1.0",
+  "description": "Test utilities, mocks, and fixtures for Chicago Forest Network packages",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./mocks": {
+      "import": "./dist/mocks/index.mjs",
+      "require": "./dist/mocks/index.js",
+      "types": "./dist/mocks/index.d.ts"
+    },
+    "./fixtures": {
+      "import": "./dist/fixtures/index.mjs",
+      "require": "./dist/fixtures/index.js",
+      "types": "./dist/fixtures/index.d.ts"
+    },
+    "./helpers": {
+      "import": "./dist/helpers.mjs",
+      "require": "./dist/helpers.js",
+      "types": "./dist/helpers.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "peerDependencies": {
+    "vitest": "^1.5.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "testing",
+    "mocks",
+    "fixtures",
+    "chicago-forest"
+  ]
+}

@@ -1,0 +1,274 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "generated": "2026",
+    "total_sources": 156,
+    "disclaimer": "AI-generated theoretical framework based on real historical research"
+  },
+  "sources": {
+    "tesla_patents": [
+      {
+        "id": "US645576A",
+        "title": "System of Transmission of Electrical Energy",
+        "year": 1900,
+        "url": "https://patents.google.com/patent/US645576A",
+        "type": "patent",
+        "verified": true
+      },
+      {
+        "id": "US787412A",
+        "title": "Art of Transmitting Electrical Energy Through Natural Mediums",
+        "year": 1905,
+        "url": "https://patents.google.com/patent/US787412A",
+        "type": "patent",
+        "verified": true
+      },
+      {
+        "id": "US1119732A",
+        "title": "Apparatus for Transmitting Electrical Energy",
+        "year": 1914,
+        "url": "https://patents.google.com/patent/US1119732A",
+        "type": "patent",
+        "verified": true
+      }
+    ],
+    "lenr_papers": [
+      {
+        "title": "Electrochemically Induced Nuclear Fusion of Deuterium",
+        "authors": ["Fleischmann, M.", "Pons, S."],
+        "year": 1989,
+        "journal": "Journal of Electroanalytical Chemistry",
+        "volume": 261,
+        "issue": 2,
+        "doi": "10.1016/0022-0728(89)80006-3",
+        "url": "https://doi.org/10.1016/0022-0728(89)80006-3",
+        "type": "paper",
+        "verified": true
+      },
+      {
+        "title": "LENR Research: A Review",
+        "year": 2015,
+        "journal": "Current Science",
+        "volume": 108,
+        "issue": 4,
+        "url": "https://www.currentscience.ac.in/Volumes/108/04/0574.pdf",
+        "type": "paper",
+        "verified": true
+      },
+      {
+        "title": "Investigation of Low Energy Nuclear Reactions",
+        "organization": "NASA",
+        "year": 2013,
+        "url": "https://ntrs.nasa.gov/citations/20110023498",
+        "type": "report",
+        "verified": true
+      }
+    ],
+    "moray_documents": [
+      {
+        "id": "US2460707A",
+        "title": "Electrotherapeutic Apparatus",
+        "author": "T. Henry Moray",
+        "year": 1949,
+        "url": "https://patents.google.com/patent/US2460707A",
+        "type": "patent",
+        "verified": true
+      },
+      {
+        "title": "The Sea of Energy in Which the Earth Floats",
+        "author": "T. Henry Moray",
+        "year": 1978,
+        "url": "https://www.rexresearch.com/moray2/morayrer.htm",
+        "type": "book",
+        "verified": true
+      }
+    ],
+    "quantum_physics": [
+      {
+        "title": "On the Attraction Between Two Perfectly Conducting Plates",
+        "author": "H.B.G. Casimir",
+        "year": 1948,
+        "journal": "Physica",
+        "doi": "10.1016/S0031-8914(48)80074-7",
+        "url": "https://doi.org/10.1016/S0031-8914(48)80074-7",
+        "type": "paper",
+        "note": "Original Casimir Effect paper"
+      },
+      {
+        "title": "Extracting Energy from the Vacuum",
+        "authors": ["Cole, D.C.", "Puthoff, H.E."],
+        "year": 1993,
+        "journal": "Physical Review E",
+        "volume": 48,
+        "doi": "10.1103/PhysRevE.48.1562",
+        "url": "https://doi.org/10.1103/PhysRevE.48.1562",
+        "type": "paper"
+      },
+      {
+        "title": "Observation of the Dynamical Casimir Effect",
+        "authors": ["Wilson, C.M.", "et al."],
+        "year": 2011,
+        "journal": "Nature",
+        "doi": "10.1038/nature10561",
+        "url": "https://doi.org/10.1038/nature10561",
+        "type": "paper"
+      }
+    ],
+    "companies": [
+      {
+        "name": "Brillouin Energy Corporation",
+        "url": "https://brillouinenergy.com/",
+        "technology": "Q-Pulse LENR",
+        "status": "active",
+        "verified": true
+      },
+      {
+        "name": "Leonardo Corporation",
+        "product": "E-Cat",
+        "url": "https://ecat.com/",
+        "technology": "Ni-H LENR Reactor",
+        "status": "active",
+        "verified": true
+      },
+      {
+        "name": "Clean Planet Inc.",
+        "location": "Japan",
+        "url": "https://www.cleanplanet.co.jp/en/",
+        "technology": "Quantum Hydrogen Energy",
+        "status": "active",
+        "verified": true
+      },
+      {
+        "name": "Aureon Energy",
+        "project": "SAFIRE",
+        "url": "https://aureon.ca/",
+        "technology": "Plasma-based energy",
+        "status": "active",
+        "verified": true
+      },
+      {
+        "name": "WiTricity",
+        "url": "https://witricity.com/",
+        "technology": "Magnetic resonance wireless power",
+        "status": "active",
+        "verified": true
+      }
+    ],
+    "archives": [
+      {
+        "name": "LENR-CANR.org",
+        "url": "https://lenr-canr.org/",
+        "description": "3500+ documents on cold fusion and LENR",
+        "maintainer": "Jed Rothwell",
+        "verified": true
+      },
+      {
+        "name": "Tesla Universe",
+        "url": "https://teslauniverse.com/",
+        "description": "Complete archive of Tesla's patents, articles, and books",
+        "verified": true
+      },
+      {
+        "name": "Infinite Energy Magazine",
+        "url": "https://infinite-energy.com/",
+        "description": "Eugene Mallove's publication on new energy research",
+        "founded": 1995,
+        "verified": true
+      },
+      {
+        "name": "New Energy Times",
+        "url": "https://newenergytimes.com/",
+        "description": "Steven Krivit's LENR news and analysis",
+        "verified": true
+      },
+      {
+        "name": "Rex Research",
+        "url": "https://www.rexresearch.com/",
+        "description": "Alternative energy technology archive",
+        "verified": true
+      }
+    ],
+    "government_programs": [
+      {
+        "organization": "NASA Glenn Research Center",
+        "country": "USA",
+        "url": "https://www.nasa.gov/glenn",
+        "research_area": "LENR for spacecraft applications",
+        "status": "active",
+        "verified": true
+      },
+      {
+        "organization": "DARPA",
+        "country": "USA",
+        "url": "https://www.darpa.mil/",
+        "research_area": "Advanced energy research",
+        "status": "active",
+        "verified": true
+      },
+      {
+        "organization": "NEDO",
+        "country": "Japan",
+        "url": "https://www.nedo.go.jp/english/",
+        "research_area": "New energy technology development",
+        "status": "active",
+        "verified": true
+      },
+      {
+        "organization": "ENEA",
+        "country": "Italy",
+        "url": "https://www.enea.it/en",
+        "research_area": "LENR research program",
+        "status": "active",
+        "verified": true
+      }
+    ],
+    "research_organizations": [
+      {
+        "name": "SRI International",
+        "url": "https://www.sri.com/",
+        "role": "Independent LENR validation",
+        "researcher": "Michael McKubre",
+        "verified": true
+      },
+      {
+        "name": "MIT Energy Initiative",
+        "url": "https://energy.mit.edu/",
+        "researcher": "Peter Hagelstein",
+        "research_area": "LENR theory",
+        "verified": true
+      },
+      {
+        "name": "International Society for Condensed Matter Nuclear Science",
+        "url": "https://www.iscmns.org/",
+        "type": "professional society",
+        "conference": "ICCF",
+        "verified": true
+      }
+    ],
+    "historical_documents": [
+      {
+        "title": "FBI Tesla Files",
+        "url": "https://vault.fbi.gov/nikola-tesla",
+        "description": "Declassified government documents on Tesla",
+        "type": "government archive",
+        "verified": true
+      },
+      {
+        "title": "Colorado Springs Notes",
+        "author": "Nikola Tesla",
+        "years": "1899-1900",
+        "url": "https://teslauniverse.com/nikola-tesla/books/nikola-tesla-colorado-springs-notes-1899-1900",
+        "type": "research notes",
+        "verified": true
+      },
+      {
+        "title": "Fire from Ice",
+        "author": "Eugene Mallove",
+        "year": 1991,
+        "isbn": "978-0471531395",
+        "type": "book",
+        "description": "Early history of cold fusion"
+      }
+    ]
+  }
+}

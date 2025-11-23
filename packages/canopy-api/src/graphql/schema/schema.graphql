@@ -1,0 +1,713 @@
+# Chicago Forest Network - GraphQL Schema
+#
+# DISCLAIMER: This is an AI-generated theoretical framework for educational
+# and research purposes. The schema defines a conceptual API for a
+# decentralized energy network inspired by Tesla's wireless transmission
+# research and modern mesh networking.
+
+"""
+Root query type for the Chicago Forest Network API.
+All queries are read-only operations.
+"""
+type Query {
+  """Get the local node's information"""
+  node: Node
+
+  """Get a specific node by ID"""
+  nodeById(id: ID!): Node
+
+  """List all nodes with optional filtering"""
+  nodes(filter: NodeFilter, pagination: PaginationInput): NodeConnection!
+
+  """Get network statistics"""
+  networkStats: NetworkStats!
+
+  """Get routing table"""
+  routingTable: RoutingTable!
+
+  """Get mesh topology"""
+  meshTopology: MeshTopology!
+
+  """Search research documents"""
+  research(query: ResearchQuery!): ResearchConnection!
+
+  """Get research document by ID"""
+  researchDocument(id: ID!): ResearchDocument
+
+  """Get historical research pioneers"""
+  pioneers: [Pioneer!]!
+
+  """Get active research organizations"""
+  organizations: [Organization!]!
+
+  """API health check"""
+  health: HealthStatus!
+}
+
+"""
+Root mutation type for state-changing operations.
+Requires authentication for most operations.
+"""
+type Mutation {
+  """Register a new node in the network [THEORETICAL]"""
+  registerNode(input: RegisterNodeInput!): RegisterNodePayload!
+
+  """Update node status (heartbeat)"""
+  updateNodeStatus(input: NodeStatusInput!): NodeStatusPayload!
+
+  """Connect to a peer"""
+  connectPeer(address: String!): ConnectPeerPayload!
+
+  """Disconnect from a peer"""
+  disconnectPeer(nodeId: ID!): DisconnectPeerPayload!
+
+  """Create a traffic rule"""
+  createTrafficRule(input: TrafficRuleInput!): TrafficRulePayload!
+
+  """Delete a traffic rule"""
+  deleteTrafficRule(id: ID!): DeletePayload!
+
+  """Trigger route optimization [THEORETICAL]"""
+  optimizeRoutes(aggressive: Boolean): OptimizeRoutesPayload!
+}
+
+"""
+Root subscription type for real-time updates.
+"""
+type Subscription {
+  """Subscribe to node events"""
+  nodeEvents(filter: NodeEventFilter): NodeEvent!
+
+  """Subscribe to mesh topology updates"""
+  meshUpdates(filter: MeshUpdateFilter): MeshUpdate!
+
+  """Subscribe to routing changes"""
+  routeChanges: RouteChange!
+
+  """Subscribe to link quality updates"""
+  linkQuality(minChange: Float): LinkQualityUpdate!
+}
+
+# =============================================================================
+# Node Types
+# =============================================================================
+
+"""
+A node in the Chicago Forest Network.
+[THEORETICAL] Represents a participant in the decentralized network.
+"""
+type Node {
+  """Unique node identifier (derived from public key)"""
+  id: ID!
+
+  """Node's Ed25519 public key"""
+  publicKey: String!
+
+  """Human-readable name"""
+  name: String
+
+  """Node capabilities"""
+  capabilities: [NodeCapability!]!
+
+  """Reputation score (0-1)"""
+  reputation: Float!
+
+  """Current status"""
+  status: NodeStatus!
+
+  """Last seen timestamp"""
+  lastSeen: DateTime!
+
+  """Uptime in seconds"""
+  uptime: Int!
+
+  """Connected peers"""
+  peers: [Peer!]!
+
+  """Number of connections"""
+  connectionCount: Int!
+
+  """Network metrics"""
+  metrics: NodeMetrics
+}
+
+"""Node capabilities enum"""
+enum NodeCapability {
+  RELAY
+  STORAGE
+  EXIT
+  BOOTSTRAP
+  BRIDGE
+  ANTENNA
+  TOWER
+  FIREWALL
+  ANONYMOUS
+}
+
+"""Node status enum"""
+enum NodeStatus {
+  ONLINE
+  OFFLINE
+  DEGRADED
+  UNKNOWN
+}
+
+"""Node metrics"""
+type NodeMetrics {
+  """Bandwidth in (bytes/sec)"""
+  bandwidthIn: Float!
+
+  """Bandwidth out (bytes/sec)"""
+  bandwidthOut: Float!
+
+  """Active tunnels"""
+  tunnelCount: Int!
+
+  """Anonymous circuits"""
+  anonymousCircuits: Int!
+
+  """CPU usage percentage"""
+  cpuUsage: Float
+
+  """Memory usage percentage"""
+  memoryUsage: Float
+}
+
+"""Peer connection information"""
+type Peer {
+  """Peer node ID"""
+  nodeId: ID!
+
+  """Peer public key"""
+  publicKey: String!
+
+  """Connection addresses"""
+  addresses: [Address!]!
+
+  """Connection latency (ms)"""
+  latency: Float!
+
+  """Link quality (0-100)"""
+  linkQuality: Int!
+
+  """Connection duration (seconds)"""
+  connectionDuration: Int!
+
+  """Bytes exchanged"""
+  bytesExchanged: Float!
+}
+
+"""Network address"""
+type Address {
+  protocol: String!
+  host: String!
+  port: Int!
+}
+
+# =============================================================================
+# Network Types
+# =============================================================================
+
+"""Network-wide statistics"""
+type NetworkStats {
+  """Total nodes in network"""
+  nodeCount: Int!
+
+  """Currently online nodes"""
+  onlineNodes: Int!
+
+  """Total peer connections"""
+  connectionCount: Int!
+
+  """Active routes"""
+  routeCount: Int!
+
+  """Active tunnels"""
+  tunnelCount: Int!
+
+  """Network bandwidth"""
+  bandwidth: BandwidthStats!
+
+  """Network latency"""
+  latency: LatencyStats!
+}
+
+"""Bandwidth statistics"""
+type BandwidthStats {
+  incoming: Float!
+  outgoing: Float!
+  total: Float!
+}
+
+"""Latency statistics"""
+type LatencyStats {
+  min: Float!
+  max: Float!
+  avg: Float!
+  p95: Float!
+}
+
+"""Routing table"""
+type RoutingTable {
+  """Routing protocol in use"""
+  protocol: MeshProtocol!
+
+  """Total routes"""
+  routeCount: Int!
+
+  """Routes"""
+  routes: [Route!]!
+
+  """Last update timestamp"""
+  lastUpdate: DateTime!
+
+  """Direct neighbors"""
+  neighborCount: Int!
+}
+
+"""Mesh routing protocol"""
+enum MeshProtocol {
+  BATMAN_ADV
+  OLSR
+  BABEL
+  BMX7
+  CJDNS
+  FOREST
+}
+
+"""Network route"""
+type Route {
+  """Route ID"""
+  id: ID!
+
+  """Destination network/node"""
+  destination: String!
+
+  """Next hop node"""
+  nextHop: ID!
+
+  """Route metric"""
+  metric: Int!
+
+  """Hop count"""
+  hopCount: Int!
+
+  """Estimated latency"""
+  latency: Float!
+
+  """Available bandwidth"""
+  bandwidth: Float!
+
+  """Route source protocol"""
+  protocol: MeshProtocol!
+
+  """Is route active"""
+  active: Boolean!
+}
+
+"""Mesh network topology"""
+type MeshTopology {
+  """Topology nodes"""
+  nodes: [TopologyNode!]!
+
+  """Topology links"""
+  links: [TopologyLink!]!
+
+  """Number of partitions"""
+  partitions: Int!
+
+  """Average link quality"""
+  avgLinkQuality: Float!
+}
+
+"""Node in topology graph"""
+type TopologyNode {
+  nodeId: ID!
+  role: NodeRole!
+  neighbors: [ID!]!
+  load: Float!
+}
+
+"""Node role in mesh"""
+enum NodeRole {
+  GATEWAY
+  RELAY
+  EDGE
+  ISOLATED
+}
+
+"""Link in topology graph"""
+type TopologyLink {
+  source: ID!
+  target: ID!
+  quality: Int!
+  latency: Float!
+  bandwidth: Float!
+  type: LinkType!
+}
+
+"""Link type"""
+enum LinkType {
+  WIRELESS
+  WIRED
+  TUNNEL
+  VIRTUAL
+}
+
+# =============================================================================
+# Research Types
+# =============================================================================
+
+"""
+Research document from historical archives.
+Sources are REAL and verifiable. Theoretical content is clearly marked.
+"""
+type ResearchDocument {
+  """Document ID"""
+  id: ID!
+
+  """Document type"""
+  type: DocumentType!
+
+  """Document title"""
+  title: String!
+
+  """Author(s)"""
+  authors: [String!]!
+
+  """Publication date"""
+  date: String!
+
+  """Research category"""
+  category: ResearchCategory!
+
+  """Abstract or summary"""
+  abstract: String!
+
+  """
+  Source URL - ALWAYS a real, verifiable link.
+  Patents link to patents.google.com, papers to DOI or LENR-CANR, etc.
+  """
+  sourceUrl: String!
+
+  """DOI if available"""
+  doi: String
+
+  """Patent number if applicable"""
+  patentNumber: String
+
+  """Is this theoretical/AI-generated content"""
+  isTheoretical: Boolean!
+
+  """Search tags"""
+  tags: [String!]!
+
+  """Citation count"""
+  citations: Int
+}
+
+"""Document types"""
+enum DocumentType {
+  PATENT
+  PAPER
+  ARTICLE
+  ARCHIVE
+  GOVERNMENT
+  THEORETICAL
+}
+
+"""Research categories"""
+enum ResearchCategory {
+  TESLA_WIRELESS
+  LENR_COLD_FUSION
+  ZERO_POINT
+  RADIANT_ENERGY
+  ATMOSPHERIC_ELECTRICITY
+  MESH_NETWORKING
+  THEORETICAL_FRAMEWORK
+}
+
+"""Historical research pioneer"""
+type Pioneer {
+  id: ID!
+  name: String!
+  dates: String!
+  nationality: String!
+  fields: [String!]!
+  biography: String!
+  keyContributions: [String!]!
+  patents: [String!]!
+  papers: [String!]!
+  sourceUrls: [String!]!
+  isHistorical: Boolean!
+}
+
+"""Research organization"""
+type Organization {
+  id: ID!
+  name: String!
+  country: String!
+  type: OrgType!
+  researchAreas: [String!]!
+  website: String!
+  fundingSources: [String!]
+  isActive: Boolean!
+}
+
+"""Organization type"""
+enum OrgType {
+  COMPANY
+  UNIVERSITY
+  GOVERNMENT
+  NONPROFIT
+}
+
+# =============================================================================
+# Event Types (for Subscriptions)
+# =============================================================================
+
+"""Node event"""
+type NodeEvent {
+  type: NodeEventType!
+  nodeId: ID!
+  timestamp: DateTime!
+  data: JSON
+}
+
+"""Node event types"""
+enum NodeEventType {
+  NODE_ONLINE
+  NODE_OFFLINE
+  NODE_STATUS_CHANGED
+  PEER_CONNECTED
+  PEER_DISCONNECTED
+}
+
+"""Mesh update event"""
+type MeshUpdate {
+  type: MeshUpdateType!
+  source: ID!
+  timestamp: DateTime!
+  data: JSON
+}
+
+"""Mesh update types"""
+enum MeshUpdateType {
+  TOPOLOGY_CHANGED
+  ROUTE_ADDED
+  ROUTE_REMOVED
+  ROUTE_UPDATED
+  LINK_QUALITY_CHANGED
+  TUNNEL_UP
+  TUNNEL_DOWN
+}
+
+"""Route change event"""
+type RouteChange {
+  routeId: ID!
+  changeType: RouteChangeType!
+  destination: String!
+  newNextHop: ID
+  oldNextHop: ID
+  timestamp: DateTime!
+}
+
+"""Route change types"""
+enum RouteChangeType {
+  ADDED
+  REMOVED
+  UPDATED
+}
+
+"""Link quality update"""
+type LinkQualityUpdate {
+  peerId: ID!
+  quality: Int!
+  previousQuality: Int
+  changePercent: Float!
+  timestamp: DateTime!
+}
+
+# =============================================================================
+# Input Types
+# =============================================================================
+
+"""Pagination input"""
+input PaginationInput {
+  page: Int = 1
+  pageSize: Int = 20
+}
+
+"""Node filter input"""
+input NodeFilter {
+  capabilities: [NodeCapability!]
+  minReputation: Float
+  status: NodeStatus
+  region: String
+}
+
+"""Research query input"""
+input ResearchQuery {
+  query: String
+  type: DocumentType
+  category: ResearchCategory
+  author: String
+  historicalOnly: Boolean
+  pagination: PaginationInput
+}
+
+"""Register node input"""
+input RegisterNodeInput {
+  publicKey: String!
+  name: String
+  capabilities: [NodeCapability!]!
+}
+
+"""Node status input"""
+input NodeStatusInput {
+  health: NodeHealth!
+  load: Float!
+  capacity: CapacityInput!
+}
+
+"""Node health enum"""
+enum NodeHealth {
+  HEALTHY
+  DEGRADED
+  OFFLINE
+}
+
+"""Capacity input"""
+input CapacityInput {
+  bandwidth: Float!
+  storage: Float!
+  compute: Float!
+}
+
+"""Traffic rule input"""
+input TrafficRuleInput {
+  name: String!
+  priority: Int!
+  srcNetwork: String
+  dstNetwork: String
+  protocol: String
+  policy: PathPolicy!
+}
+
+"""Path selection policy"""
+enum PathPolicy {
+  LOWEST_LATENCY
+  HIGHEST_BANDWIDTH
+  LOWEST_COST
+  ROUND_ROBIN
+}
+
+"""Node event filter"""
+input NodeEventFilter {
+  nodeIds: [ID!]
+  eventTypes: [NodeEventType!]
+  capabilities: [NodeCapability!]
+}
+
+"""Mesh update filter"""
+input MeshUpdateFilter {
+  updateTypes: [MeshUpdateType!]
+  sourceNodes: [ID!]
+  minQualityChange: Float
+}
+
+# =============================================================================
+# Payload Types
+# =============================================================================
+
+"""Register node response"""
+type RegisterNodePayload {
+  nodeId: ID!
+  registeredAt: DateTime!
+  bootstrapPeers: [Peer!]!
+  segment: String!
+}
+
+"""Node status update response"""
+type NodeStatusPayload {
+  success: Boolean!
+  nextHeartbeat: DateTime!
+}
+
+"""Connect peer response"""
+type ConnectPeerPayload {
+  success: Boolean!
+  peer: Peer
+  error: String
+}
+
+"""Disconnect peer response"""
+type DisconnectPeerPayload {
+  success: Boolean!
+  message: String
+}
+
+"""Traffic rule response"""
+type TrafficRulePayload {
+  id: ID!
+  success: Boolean!
+}
+
+"""Delete response"""
+type DeletePayload {
+  success: Boolean!
+  message: String
+}
+
+"""Optimize routes response"""
+type OptimizeRoutesPayload {
+  optimized: Boolean!
+  changes: Int!
+  latencyImprovement: Float!
+  bandwidthImprovement: Float!
+}
+
+"""Health status"""
+type HealthStatus {
+  status: String!
+  timestamp: DateTime!
+  version: String!
+  disclaimer: String!
+}
+
+# =============================================================================
+# Connection Types (Pagination)
+# =============================================================================
+
+"""Paginated node connection"""
+type NodeConnection {
+  nodes: [Node!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+"""Paginated research connection"""
+type ResearchConnection {
+  documents: [ResearchDocument!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+"""Pagination info"""
+type PageInfo {
+  page: Int!
+  pageSize: Int!
+  totalPages: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+# =============================================================================
+# Scalar Types
+# =============================================================================
+
+"""DateTime scalar (ISO 8601)"""
+scalar DateTime
+
+"""JSON scalar for flexible data"""
+scalar JSON

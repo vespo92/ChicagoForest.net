@@ -1,0 +1,57 @@
+{
+  "name": "@chicago-forest/canopy-api",
+  "version": "0.1.0",
+  "description": "The public interface to the forest - REST, GraphQL, WebSocket, and LibP2P APIs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./rest": {
+      "import": "./dist/rest/index.mjs",
+      "require": "./dist/rest/index.js",
+      "types": "./dist/rest/index.d.ts"
+    },
+    "./websocket": {
+      "import": "./dist/websocket/index.mjs",
+      "require": "./dist/websocket/index.js",
+      "types": "./dist/websocket/index.d.ts"
+    },
+    "./sdk": {
+      "import": "./dist/sdk/index.mjs",
+      "require": "./dist/sdk/index.js",
+      "types": "./dist/sdk/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/p2p-core": "workspace:*",
+    "@chicago-forest/mycelium-core": "workspace:*",
+    "@chicago-forest/forest-registry": "workspace:*",
+    "@chicago-forest/nutrient-exchange": "workspace:*",
+    "@chicago-forest/hive-mind": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "files": [
+    "dist"
+  ]
+}

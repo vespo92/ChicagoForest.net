@@ -1,0 +1,74 @@
+{
+  "name": "@chicago-forest/nutrient-exchange",
+  "version": "0.2.0",
+  "description": "Resource sharing economy - bandwidth, storage, compute, and trust exchange between nodes. THEORETICAL framework inspired by BitTorrent, Filecoin, and decentralized economies.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./resources": {
+      "import": "./dist/resources/index.mjs",
+      "require": "./dist/resources/index.js",
+      "types": "./dist/resources/index.d.ts"
+    },
+    "./credits": {
+      "import": "./dist/credits/index.mjs",
+      "require": "./dist/credits/index.js",
+      "types": "./dist/credits/index.d.ts"
+    },
+    "./exchange": {
+      "import": "./dist/exchange/index.mjs",
+      "require": "./dist/exchange/index.js",
+      "types": "./dist/exchange/index.d.ts"
+    },
+    "./economy": {
+      "import": "./dist/economy/index.mjs",
+      "require": "./dist/economy/index.js",
+      "types": "./dist/economy/index.d.ts"
+    },
+    "./protocols": {
+      "import": "./dist/protocols/index.mjs",
+      "require": "./dist/protocols/index.js",
+      "types": "./dist/protocols/index.d.ts"
+    },
+    "./models": {
+      "import": "./dist/models/index.mjs",
+      "require": "./dist/models/index.js",
+      "types": "./dist/models/index.d.ts"
+    },
+    "./simulation": {
+      "import": "./dist/simulation/index.mjs",
+      "require": "./dist/simulation/index.js",
+      "types": "./dist/simulation/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/p2p-core": "workspace:*",
+    "@chicago-forest/mycelium-core": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "files": [
+    "dist"
+  ]
+}
