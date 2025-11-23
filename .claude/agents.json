@@ -101,30 +101,38 @@
       "id": 4,
       "codename": "Sentinel",
       "domain": "Security & Privacy",
-      "description": "Implement anonymous routing, firewall rules, and privacy-preserving communication",
+      "description": "Implement security orchestration, threat detection, privacy protection, and anonymous routing",
       "exclusiveOwnership": [
+        "packages/sentinel/src/",
+        "packages/sentinel/tests/",
         "packages/anon-routing/src/circuits/",
         "packages/anon-routing/src/encryption/",
         "packages/anon-routing/src/hidden-services/",
         "packages/anon-routing/src/traffic/",
         "packages/anon-routing/tests/",
         "packages/firewall/src/rules/",
-        "packages/firewall/tests/"
+        "packages/firewall/tests/",
+        "apps/web/app/security/"
       ],
-      "dependencies": ["p2p-core", "routing"],
+      "dependencies": ["p2p-core", "routing", "shared-types"],
       "integrationPoints": {
-        "NPCPU": [],
+        "NPCPU": ["threat-intelligence", "anomaly-detection-ai"],
         "ConstitutionalShrinkage": ["anonymous-voting", "privacy-proposals"]
       },
       "deliverables": [
+        "Sentinel security orchestration package",
+        "Cryptographic primitives (ChaCha20-Poly1305, X25519, HKDF)",
+        "Threat detection and intrusion monitoring",
+        "Tamper-evident audit logging",
+        "PII detection and anonymization",
+        "Privacy consent management",
         "Circuit-based onion routing",
         "Hidden service protocol",
         "Traffic padding and obfuscation",
-        "Guard node selection algorithm",
-        "Privacy-preserving voting bridge"
+        "Security dashboard web page"
       ],
       "priority": "high",
-      "estimatedFiles": 16
+      "estimatedFiles": 24
     },
     {
       "id": 5,
