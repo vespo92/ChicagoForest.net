@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://chicagoforest.net/schemas/integration-point.json",
+  "title": "IntegrationPoint",
+  "description": "Schema for ecosystem integration point definition",
+  "type": "object",
+  "required": ["name", "sourceRepo", "targetPackage", "interface", "version", "status"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique identifier for the integration point",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "sourceRepo": {
+      "type": "string",
+      "description": "Source repository name",
+      "enum": ["NPCPU", "ConstitutionalShrinkage", "ChicagoForest.net"]
+    },
+    "targetPackage": {
+      "type": "string",
+      "description": "Target package in @chicago-forest scope",
+      "pattern": "^@chicago-forest/[a-z][a-z0-9-]*$"
+    },
+    "interface": {
+      "type": "string",
+      "description": "TypeScript interface name",
+      "pattern": "^[A-Z][a-zA-Z0-9]*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current compatibility status",
+      "enum": ["compatible", "warning", "breaking"]
+    }
+  },
+  "additionalProperties": false
+}

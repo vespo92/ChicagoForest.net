@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://chicagoforest.net/schemas/compatibility-report.json",
+  "title": "CompatibilityReport",
+  "description": "Schema for ecosystem compatibility reports",
+  "type": "object",
+  "required": ["timestamp", "sourcePackage", "targetRepo", "isCompatible", "breakingChanges", "warnings", "integrationPoints"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Report generation timestamp"
+    },
+    "sourcePackage": {
+      "type": "string",
+      "description": "Package being validated",
+      "pattern": "^@chicago-forest/[a-z][a-z0-9-]*$"
+    },
+    "targetRepo": {
+      "type": "string",
+      "description": "Target repository for compatibility check",
+      "enum": ["NPCPU", "ConstitutionalShrinkage"]
+    },
+    "isCompatible": {
+      "type": "boolean",
+      "description": "Overall compatibility status"
+    },
+    "breakingChanges": {
+      "type": "array",
+      "description": "List of detected breaking changes",
+      "items": {
+        "$ref": "breaking-change.json"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "description": "Non-breaking warnings",
+      "items": {
+        "type": "string"
+      }
+    },
+    "integrationPoints": {
+      "type": "array",
+      "description": "Relevant integration points",
+      "items": {
+        "$ref": "integration-point.json"
+      }
+    }
+  },
+  "additionalProperties": false
+}

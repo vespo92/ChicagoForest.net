@@ -5,6 +5,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "ecosystem-validator": "./dist/cli.mjs"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -25,6 +28,10 @@
       "import": "./dist/generators/index.mjs",
       "require": "./dist/generators/index.js",
       "types": "./dist/generators/index.d.ts"
+    },
+    "./cli": {
+      "import": "./dist/cli.mjs",
+      "require": "./dist/cli.js"
     }
   },
   "scripts": {
