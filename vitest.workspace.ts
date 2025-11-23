@@ -42,7 +42,7 @@ export default defineWorkspace([
     test: {
       name: 'test-utils',
       root: './packages/test-utils',
-      include: ['tests/**/*.test.ts'],
+      include: ['tests/**/*.test.ts', 'tests/**/*.integration.test.ts'],
       environment: 'node',
     },
   },

@@ -126,9 +126,9 @@ export function createTestNodeIds(count: number): NodeId[] {
 }
 
 /**
- * Create a test network of connected peers
+ * Create a test peer map of connected peers
  */
-export function createTestNetwork(size: number): Map<NodeId, PeerInfo> {
+export function createTestPeerMap(size: number): Map<NodeId, PeerInfo> {
   const network = new Map<NodeId, PeerInfo>();
 
   for (let i = 0; i < size; i++) {
@@ -198,7 +198,7 @@ export function collectEvents<T extends Record<string, (...args: unknown[]) => v
 /**
  * Create a spy function that tracks calls
  */
-export function createSpy<T extends (...args: unknown[]) => unknown>(
+export function createSpy<T extends (...args: any[]) => any>(
   implementation?: T
 ): T & {
   calls: Array<{ args: Parameters<T>; returnValue: ReturnType<T> }>;
@@ -238,6 +238,10 @@ export async function expectThrows(
     throw new Error('Expected function to throw');
   } catch (error) {
     if (error instanceof Error) {
+      // Re-throw if this is our own "expected function to throw" error
+      if (error.message === 'Expected function to throw') {
+        throw error;
+      }
       if (errorMatch) {
         if (typeof errorMatch === 'string') {
           if (!error.message.includes(errorMatch)) {
