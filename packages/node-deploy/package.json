@@ -5,16 +5,23 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "forest-deploy": "./dist/cli.js"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./cli": {
+      "import": "./dist/cli.mjs",
+      "require": "./dist/cli.js"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup src/index.ts src/cli.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts src/cli.ts --format cjs,esm --dts --watch",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
@@ -33,6 +40,8 @@
     "dist",
     "docker",
     "kubernetes",
-    "vm"
+    "terraform",
+    "ansible",
+    "guides"
   ]
 }

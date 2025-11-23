@@ -98,3 +98,33 @@ export {
   // Aggregate export
   SOLAR_SPECS,
 } from './solar-powered';
+
+// ESP32 Node Specifications
+export {
+  // Types
+  type ESP32ChipSpec,
+  type ESP32BoardSpec,
+  type ESP32NodeConfig,
+  // Chip Specifications
+  ESP32_SPEC,
+  ESP32_S3_SPEC,
+  ESP32_C3_SPEC,
+  // Development Boards
+  TBEAM_SUPREME,
+  TBEAM_V12,
+  HELTEC_LORA_V3,
+  RAK_WISBLOCK_STARTER,
+  STATION_G2,
+  // Node Configurations
+  PORTABLE_MESHTASTIC_NODE,
+  SOLAR_RELAY_NODE,
+  FIXED_RELAY_NODE,
+  WIFI_GATEWAY_NODE,
+  // Firmware Options
+  ESP32_FIRMWARE_OPTIONS,
+  // Calculators
+  calculateESP32BatteryLife,
+  calculateESP32SolarSize,
+  // Aggregate export
+  ESP32_SPECS,
+} from './esp32-node';

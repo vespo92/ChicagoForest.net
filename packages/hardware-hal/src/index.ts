@@ -625,3 +625,16 @@ export * from './calculators';
 
 // Platform Detection and Configuration
 export * from './platforms';
+
+// BOM Generator
+export {
+  BOM_GENERATOR,
+  generatePiBOM,
+  generateESP32BOM,
+  formatBOMAsMarkdown,
+  formatBOMAsCSV,
+  COMMON_COMPONENTS,
+  type BillOfMaterials,
+  type BOMLineItem,
+  type BOMCategory,
+} from './bom-generator';
