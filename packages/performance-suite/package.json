@@ -12,19 +12,49 @@
       "types": "./dist/index.d.ts"
     },
     "./benchmarks": {
-      "import": "./dist/benchmarks/index.mjs",
-      "require": "./dist/benchmarks/index.js",
-      "types": "./dist/benchmarks/index.d.ts"
+      "import": "./dist/benchmarks.mjs",
+      "require": "./dist/benchmarks.js",
+      "types": "./dist/benchmarks.d.ts"
     },
     "./profilers": {
-      "import": "./dist/profilers/index.mjs",
-      "require": "./dist/profilers/index.js",
-      "types": "./dist/profilers/index.d.ts"
+      "import": "./dist/profilers.mjs",
+      "require": "./dist/profilers.js",
+      "types": "./dist/profilers.d.ts"
     },
     "./reporters": {
-      "import": "./dist/reporters/index.mjs",
-      "require": "./dist/reporters/index.js",
-      "types": "./dist/reporters/index.d.ts"
+      "import": "./dist/reporters.mjs",
+      "require": "./dist/reporters.js",
+      "types": "./dist/reporters.d.ts"
+    },
+    "./load": {
+      "import": "./dist/load.mjs",
+      "require": "./dist/load.js",
+      "types": "./dist/load.d.ts"
+    },
+    "./latency": {
+      "import": "./dist/latency.mjs",
+      "require": "./dist/latency.js",
+      "types": "./dist/latency.d.ts"
+    },
+    "./baseline": {
+      "import": "./dist/baseline.mjs",
+      "require": "./dist/baseline.js",
+      "types": "./dist/baseline.d.ts"
+    },
+    "./gates": {
+      "import": "./dist/gates.mjs",
+      "require": "./dist/gates.js",
+      "types": "./dist/gates.d.ts"
+    },
+    "./utils": {
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.js",
+      "types": "./dist/utils.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.mjs",
+      "require": "./dist/types.js",
+      "types": "./dist/types.d.ts"
     }
   },
   "scripts": {
@@ -60,6 +90,15 @@
     "benchmarking",
     "scalability",
     "profiling",
-    "regression-detection"
-  ]
+    "regression-detection",
+    "load-testing",
+    "latency",
+    "ci-cd"
+  ],
+  "author": "Chicago Forest Network",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vespo92/ChicagoForest.net"
+  }
 }
