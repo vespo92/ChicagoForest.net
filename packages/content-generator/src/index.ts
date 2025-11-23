@@ -6,6 +6,9 @@
  * Generate and enrich research content with AI-assisted summaries, citations,
  * and abstracts while maintaining transparency about AI-generated content.
  *
+ * CRITICAL: All AI-generated content MUST be clearly labeled per CLAUDE.md
+ * guidelines for transparency and honesty in the Chicago Forest Network.
+ *
  * DISCLAIMER: This is part of an AI-generated theoretical framework.
  * All generated content is clearly labeled as AI-generated.
  */
@@ -13,11 +16,16 @@
 export * from './generators';
 export * from './formatters';
 export * from './enrichers';
+export * from './labeling';
+export * from './templates';
 
-// Content labels
-export const AI_GENERATED_LABEL = '⚠️ AI-GENERATED CONTENT';
-export const THEORETICAL_LABEL = '⚠️ THEORETICAL FRAMEWORK';
-export const VERIFIED_SOURCE_LABEL = '✅ VERIFIED SOURCE';
+// Re-export core labels from labeling module for convenience
+import { STANDARD_LABELS } from './labeling';
+
+// Legacy exports for backward compatibility
+export const AI_GENERATED_LABEL = STANDARD_LABELS.AI_GENERATED;
+export const THEORETICAL_LABEL = STANDARD_LABELS.THEORETICAL;
+export const VERIFIED_SOURCE_LABEL = STANDARD_LABELS.VERIFIED_SOURCE;
 
 export interface GeneratedContent {
   content: string;
