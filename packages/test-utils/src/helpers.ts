@@ -208,9 +208,9 @@ export function createSpy<T extends (...args: unknown[]) => unknown>(
   const calls: Array<{ args: Parameters<T>; returnValue: ReturnType<T> }> = [];
 
   const spy = function (...args: Parameters<T>): ReturnType<T> {
-    const returnValue = implementation
+    const returnValue = (implementation
       ? implementation(...args)
-      : undefined as ReturnType<T>;
+      : undefined) as ReturnType<T>;
     calls.push({ args, returnValue });
     return returnValue;
   } as T & {

@@ -16,9 +16,11 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.13",
     "prettier": "^3.2.5",
     "turbo": "^2.3.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^4.0.13"
   },
   "pnpm": {
     "overrides": {

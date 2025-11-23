@@ -30,6 +30,21 @@
       "import": "./dist/growth/index.mjs",
       "require": "./dist/growth/index.js",
       "types": "./dist/growth/index.d.ts"
+    },
+    "./clustering": {
+      "import": "./dist/clustering/index.mjs",
+      "require": "./dist/clustering/index.js",
+      "types": "./dist/clustering/index.d.ts"
+    },
+    "./pathfinding": {
+      "import": "./dist/pathfinding/index.mjs",
+      "require": "./dist/pathfinding/index.js",
+      "types": "./dist/pathfinding/index.d.ts"
+    },
+    "./metrics": {
+      "import": "./dist/metrics/index.mjs",
+      "require": "./dist/metrics/index.js",
+      "types": "./dist/metrics/index.d.ts"
     }
   },
   "scripts": {
