@@ -5,6 +5,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "doc-generator": "./dist/cli.js"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -20,6 +23,26 @@
       "import": "./dist/generators/index.mjs",
       "require": "./dist/generators/index.js",
       "types": "./dist/generators/index.d.ts"
+    },
+    "./breaking-changes": {
+      "import": "./dist/breaking-changes/index.mjs",
+      "require": "./dist/breaking-changes/index.js",
+      "types": "./dist/breaking-changes/index.d.ts"
+    },
+    "./examples": {
+      "import": "./dist/examples/index.mjs",
+      "require": "./dist/examples/index.js",
+      "types": "./dist/examples/index.d.ts"
+    },
+    "./npcpu": {
+      "import": "./dist/npcpu/index.mjs",
+      "require": "./dist/npcpu/index.js",
+      "types": "./dist/npcpu/index.d.ts"
+    },
+    "./templates": {
+      "import": "./dist/templates/index.mjs",
+      "require": "./dist/templates/index.js",
+      "types": "./dist/templates/index.d.ts"
     }
   },
   "scripts": {
@@ -53,6 +76,9 @@
     "api-docs",
     "readme-generator",
     "mermaid-diagrams",
-    "changelog-automation"
+    "changelog-automation",
+    "breaking-changes",
+    "typescript-parser",
+    "npcpu-integration"
   ]
 }
