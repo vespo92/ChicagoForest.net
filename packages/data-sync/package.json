@@ -1,0 +1,63 @@
+{
+  "name": "@chicago-forest/data-sync",
+  "version": "0.1.0",
+  "description": "Real-time data synchronization, conflict resolution, and consistency management for Chicago Forest Network",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./sync": {
+      "import": "./dist/sync/index.mjs",
+      "require": "./dist/sync/index.js",
+      "types": "./dist/sync/index.d.ts"
+    },
+    "./conflict": {
+      "import": "./dist/conflict/index.mjs",
+      "require": "./dist/conflict/index.js",
+      "types": "./dist/conflict/index.d.ts"
+    },
+    "./replication": {
+      "import": "./dist/replication/index.mjs",
+      "require": "./dist/replication/index.js",
+      "types": "./dist/replication/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/symbiosis": "workspace:*",
+    "@chicago-forest/mycelium-core": "workspace:*",
+    "@chicago-forest/p2p-core": "workspace:*",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "chicago-forest",
+    "data-synchronization",
+    "crdt",
+    "conflict-resolution",
+    "replication",
+    "network-split"
+  ]
+}
