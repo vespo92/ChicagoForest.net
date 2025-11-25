@@ -1,11 +1,22 @@
-"use client"
-
 import Link from "next/link"
-import { useParams } from "next/navigation"
 import {
   Radio, FileText, ExternalLink, Calendar, User,
   Info, ChevronLeft, Globe, Zap
 } from "lucide-react"
+
+// Generate static params for all patents
+export function generateStaticParams() {
+  return [
+    { patent: "US645576A" },
+    { patent: "US787412A" },
+    { patent: "US1119732A" },
+    { patent: "US514168A" },
+    { patent: "US454622A" },
+    { patent: "US685012A" },
+    { patent: "US593138A" },
+    { patent: "US568176A" },
+  ]
+}
 
 // Patent database with detailed information
 const patentDatabase: Record<string, {
@@ -184,9 +195,12 @@ const patentDatabase: Record<string, {
   },
 }
 
-export default function PatentDetailPage() {
-  const params = useParams()
-  const patentId = params.patent as string
+export default async function PatentDetailPage({
+  params
+}: {
+  params: Promise<{ patent: string }>
+}) {
+  const { patent: patentId } = await params
 
   const patent = patentDatabase[patentId]
 

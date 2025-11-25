@@ -12,7 +12,7 @@ export default defineConfig({
     'metrics/index': 'src/metrics/index.ts',
   },
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,
   clean: true,
   sourcemap: true,
   splitting: false,

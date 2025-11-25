@@ -370,7 +370,7 @@ export class RegistryResolver extends EventEmitter<RegistryEvents> {
     });
   }
 
-  private timeout<T>(ms: number): Promise<T> {
+  private timeout(ms: number): Promise<never> {
     return new Promise((_, reject) =>
       setTimeout(() => reject(new Error('Timeout')), ms)
     );

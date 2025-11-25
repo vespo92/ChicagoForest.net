@@ -8,7 +8,7 @@
     "forest-cli": "./dist/cli.js"
   },
   "scripts": {
-    "build": "tsup src/cli.ts src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/cli.ts src/index.ts --format cjs,esm",
     "dev": "tsup src/cli.ts src/index.ts --format cjs,esm --dts --watch",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"

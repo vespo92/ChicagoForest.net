@@ -607,7 +607,7 @@ export function generatePrivacyId(): string {
 // EXPORTS
 // =============================================================================
 
-export { PrivacyGuard };
+// PrivacyGuard class already exported at definition
 export type {
   PIIType,
   PIIDetection,

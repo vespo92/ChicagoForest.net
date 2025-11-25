@@ -652,7 +652,7 @@ export function createAuditLogger(
 // EXPORTS
 // =============================================================================
 
-export { AuditLogger };
+// AuditLogger class already exported at definition
 export type {
   SecurityEventCategory,
   AuditSeverity,

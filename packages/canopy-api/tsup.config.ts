@@ -8,7 +8,7 @@ export default defineConfig({
     'sdk/index': 'src/sdk/index.ts',
   },
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,
   clean: true,
   sourcemap: true,
   splitting: false,

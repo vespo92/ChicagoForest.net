@@ -919,7 +919,7 @@ export class ThreatMonitor extends EventEmitter<ThreatMonitorEvents> {
 // EXPORTS
 // =============================================================================
 
-export { ThreatMonitor };
+// ThreatMonitor class already exported at definition
 export type {
   ThreatLevel,
   ThreatType,

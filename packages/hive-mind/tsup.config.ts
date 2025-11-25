@@ -8,7 +8,7 @@ export default defineConfig({
     'proposals/index': 'src/proposals/index.ts',
   },
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,
   clean: true,
   sourcemap: true,
   splitting: false,

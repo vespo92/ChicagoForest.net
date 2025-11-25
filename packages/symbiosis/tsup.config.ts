@@ -10,7 +10,7 @@ export default defineConfig({
     'discovery/index': 'src/discovery/index.ts',
   },
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,
   clean: true,
   sourcemap: true,
   splitting: false,

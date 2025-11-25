@@ -8,7 +8,7 @@ export default defineConfig({
     'replication/index': 'src/replication/index.ts',
   },
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,
   clean: true,
   sourcemap: true,
   splitting: false,

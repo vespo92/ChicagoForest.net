@@ -9,7 +9,7 @@ export default defineConfig({
     'privacy/index': 'src/privacy/index.ts',
   },
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,
   splitting: false,
   sourcemap: true,
   clean: true,

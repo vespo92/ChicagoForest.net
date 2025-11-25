@@ -406,5 +406,5 @@ export class Sentinel extends EventEmitter<SentinelEvents> {
 // EXPORTS
 // =============================================================================
 
-export { Sentinel };
+// Sentinel class already exported at definition
 export type { SentinelConfig, SentinelEvents, SentinelStatus };
