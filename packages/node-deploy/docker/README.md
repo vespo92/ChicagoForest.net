@@ -24,8 +24,8 @@ This directory contains Docker deployment configurations for the Chicago Forest 
 
 ```bash
 # Clone the repository
-git clone https://github.com/chicago-forest/chicago-forest.git
-cd chicago-forest/packages/node-deploy/docker
+git clone https://github.com/vespo92/ChicagoForest.net.git
+cd ChicagoForest.net/packages/node-deploy/docker
 
 # Create environment file
 cp .env.example .env

@@ -283,7 +283,7 @@ COMPARISON
 LEARN MORE
 
   Website:  https://chicagoforest.net/mesh
-  GitHub:   https://github.com/chicagoforest/ipv7
+  GitHub:   https://github.com/vespo92/ChicagoForest.net
   Discord:  discord.gg/chicagoforest
 
 This is a theoretical framework for educational purposes.

@@ -132,7 +132,7 @@ await node.joinMesh('chicago-north');`}</code>
         <div className="mt-12 text-center">
           <div className="inline-flex flex-col sm:flex-row gap-4">
             <a
-              href="https://github.com/chicago-forest"
+              href="https://github.com/vespo92/ChicagoForest.net"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"

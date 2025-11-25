@@ -20,8 +20,8 @@ This directory contains Ansible playbooks for automated deployment and configura
 pip install ansible
 
 # Clone the repository
-git clone https://github.com/chicago-forest/chicago-forest
-cd chicago-forest/packages/node-deploy/ansible
+git clone https://github.com/vespo92/ChicagoForest.net.git
+cd ChicagoForest.net/packages/node-deploy/ansible
 
 # Install required collections
 ansible-galaxy collection install -r requirements.yml

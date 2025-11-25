@@ -131,8 +131,8 @@ For more control over the installation:
 sudo apt install ansible -y
 
 # Clone repository
-git clone https://github.com/chicago-forest/chicago-forest.git
-cd chicago-forest/packages/node-deploy/ansible
+git clone https://github.com/vespo92/ChicagoForest.net.git
+cd ChicagoForest.net/packages/node-deploy/ansible
 
 # Create inventory
 cat > inventory.yml << EOF
@@ -170,8 +170,8 @@ sudo mkdir -p /var/lib/forest/keys /etc/forest /var/log/forest
 wg genkey | sudo tee /var/lib/forest/keys/wireguard.key | wg pubkey | sudo tee /var/lib/forest/keys/wireguard.pub
 
 # Clone and build
-git clone https://github.com/chicago-forest/chicago-forest.git
-cd chicago-forest
+git clone https://github.com/vespo92/ChicagoForest.net.git
+cd ChicagoForest.net
 npm install
 npm run build
 
@@ -497,7 +497,7 @@ A: Your node will wait for peers and bootstrap nodes. This is a theoretical fram
 
 - **Documentation**: [chicago-forest.network/docs](https://chicago-forest.network/docs) (theoretical)
 - **Community**: [discord.gg/chicago-forest](https://discord.gg/chicago-forest) (theoretical)
-- **Issues**: [GitHub Issues](https://github.com/chicago-forest/chicago-forest/issues)
+- **Issues**: [GitHub Issues](https://github.com/vespo92/ChicagoForest.net/issues)
 
 ## Next Steps
 

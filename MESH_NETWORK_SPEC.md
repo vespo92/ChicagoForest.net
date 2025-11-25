@@ -566,7 +566,7 @@ sudo mesh-join chicago
 ## 10. Get Involved
 
 ### 10.1 For Developers
-- **GitHub**: https://github.com/chicagoforest/mesh-network
+- **GitHub**: https://github.com/vespo92/ChicagoForest.net
 - **Code**: Reference implementations, scripts, configs
 - **Issues**: Bug reports, feature requests
 - **PRs**: Contributions welcome!

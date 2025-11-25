@@ -447,7 +447,7 @@ This protocol specification provides the technical foundation for a network that
 
 **Chicago Forest Network Foundation**
 Email: protocol@chicagoforest.net
-GitHub: github.com/chicago-forest
+GitHub: github.com/vespo92/ChicagoForest.net
 Discord: discord.gg/chicagoforest
 
 ---

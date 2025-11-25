@@ -470,7 +470,7 @@ sudo mesh-join chicago`}
                 Help improve mesh protocols and deployment tools.
               </p>
               <a
-                href="https://github.com/chicagoforest/mesh-network"
+                href="https://github.com/vespo92/ChicagoForest.net"
                 className="text-green-400 hover:text-green-300 text-sm font-semibold"
               >
                 GitHub →
@@ -498,7 +498,7 @@ sudo mesh-join chicago`}
               Technical Specification
             </Link>
             <a
-              href="https://github.com/chicagoforest/mesh-network"
+              href="https://github.com/vespo92/ChicagoForest.net"
               className="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-lg font-semibold transition"
             >
               View on GitHub

@@ -383,7 +383,7 @@
         content: |
           [Unit]
           Description=Chicago Forest Network Node
-          Documentation=https://github.com/chicago-forest/chicago-forest
+          Documentation=https://github.com/vespo92/ChicagoForest.net
           After=network-online.target docker.service
           Wants=network-online.target
           Requires=docker.service

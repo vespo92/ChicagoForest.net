@@ -49,7 +49,7 @@ FROM node:20-alpine AS runtime
 LABEL maintainer="Chicago Forest Network <contact@chicago-forest.network>"
 LABEL description="Chicago Forest Network Node - Decentralized Mesh Network Node"
 LABEL version="0.1.0"
-LABEL org.opencontainers.image.source="https://github.com/chicago-forest/chicago-forest"
+LABEL org.opencontainers.image.source="https://github.com/vespo92/ChicagoForest.net"
 
 WORKDIR /app
 

@@ -114,8 +114,8 @@ docker compose --profile gateway up -d
 
 ```bash
 # Clone repository
-git clone https://github.com/chicago-forest/chicago-forest.git
-cd chicago-forest/packages/node-deploy/ansible
+git clone https://github.com/vespo92/ChicagoForest.net.git
+cd ChicagoForest.net/packages/node-deploy/ansible
 
 # Create gateway inventory
 cat > inventory.yml << EOF
