@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, Radio, Atom, Zap, Users, Clock, FileText } from "lucide-react"
+import { BookOpen, Radio, Atom, Zap, Users, Clock, FileText, ArrowUpFromDot } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Research Portal | Chicago Plasma Forest Network",
@@ -13,6 +13,7 @@ const researchNav = [
   { href: "/research/lenr", label: "LENR", icon: Atom },
   { href: "/research/moray", label: "Moray", icon: Zap },
   { href: "/research/mallove", label: "Mallove", icon: Users },
+  { href: "/research/energy-reversal", label: "Energy Reversal", icon: ArrowUpFromDot },
   { href: "/research/timeline", label: "Timeline", icon: Clock },
   { href: "/research/sources", label: "Sources", icon: FileText },
 ]
