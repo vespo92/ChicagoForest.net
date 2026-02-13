@@ -3,7 +3,7 @@
 import Link from "next/link"
 import {
   Radio, Atom, Zap, Users, Clock, FileText, ExternalLink,
-  AlertTriangle, Info, BookOpen, Globe, Search
+  AlertTriangle, Info, BookOpen, Globe, Search, ArrowUpFromDot
 } from "lucide-react"
 
 const researchAreas = [
@@ -179,6 +179,49 @@ export default function ResearchPortal() {
               </div>
             </Link>
           ))}
+        </div>
+
+        {/* Energy Reversal - Featured Theoretical Research */}
+        <div className="mb-16">
+          <Link
+            href="/research/energy-reversal"
+            className="group relative p-8 rounded-2xl bg-card border-2 border-orange-500/30 hover:shadow-xl transition-all duration-300 overflow-hidden block"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="relative flex items-start space-x-6">
+              <div className="p-3 rounded-xl bg-orange-500/10">
+                <ArrowUpFromDot className="h-8 w-8 text-orange-500" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center space-x-3 mb-2">
+                  <h2 className="text-2xl font-bold">Plasma Energy Reversal</h2>
+                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-orange-500/20 text-orange-600">
+                    THEORETICAL + DOCUMENTED
+                  </span>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Can we reverse the ground tendency of electricity? Exploring Earth&apos;s atmospheric electrical circuit
+                  (~250kV ionosphere potential, ~1,800A global current) and Tesla&apos;s resonant coupling approach
+                  to extract energy from the Earth-ionosphere system rather than dissipating into it.
+                  Includes solar farm priming architecture for the Chicago Plasma Forest.
+                </p>
+                <div className="flex flex-wrap gap-4 text-sm">
+                  <div className="flex items-center space-x-1">
+                    <span className="font-semibold">5</span>
+                    <span className="text-muted-foreground">Patents</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <span className="font-semibold">6</span>
+                    <span className="text-muted-foreground">Verified Sources</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <span className="font-semibold">8</span>
+                    <span className="text-muted-foreground">Atmospheric Facts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
 
         {/* Timeline & Sources Links */}
