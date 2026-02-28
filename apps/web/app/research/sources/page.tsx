@@ -280,7 +280,7 @@ export default function SourcesPage() {
         </div>
 
         {/* Essential Archives */}
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-8">
+        <div className="bg-linear-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-8">
           <h2 className="text-2xl font-bold mb-6">Essential Archives</h2>
           <p className="text-muted-foreground mb-6">
             These four archives contain the vast majority of free energy research documentation:

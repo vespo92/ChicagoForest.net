@@ -348,7 +348,7 @@ export default function MalloveResearchPage() {
         </div>
 
         {/* Legacy */}
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-8 mb-12">
+        <div className="bg-linear-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-8 mb-12">
           <h2 className="text-2xl font-bold mb-4">Legacy</h2>
           <p className="text-muted-foreground mb-4">
             Eugene Mallove's work continues to influence alternative energy research. The Infinite Energy

@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function SolarTowerPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-amber-950/20 to-slate-950">
+    <div className="min-h-screen bg-linear-to-b from-slate-950 via-amber-950/20 to-slate-950">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 px-4">
         <div className="max-w-6xl mx-auto">
@@ -21,7 +21,7 @@ export default function SolarTowerPage() {
                 ACTIVE PLANNING - MENDOTA, ILLINOIS
               </span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent mb-6">
+            <h1 className="text-5xl md:text-7xl font-bold bg-linear-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent mb-6">
               Solar Tower
               <br />
               Junction Hub

@@ -165,7 +165,7 @@ export default function CommunityOnboarding() {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center py-12 px-8 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border">
+        <div className="text-center py-12 px-8 rounded-lg bg-linear-to-r from-primary/10 to-primary/5 border">
           <h3 className="text-2xl font-bold mb-4">Ready to Join the Revolution?</h3>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Sign up for updates and be the first to know when node applications open

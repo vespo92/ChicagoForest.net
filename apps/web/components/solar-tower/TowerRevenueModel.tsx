@@ -277,7 +277,7 @@ export default function TowerRevenueModel() {
             </h4>
             <div className="relative h-64">
               {/* Tower visualization */}
-              <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-4 bg-gradient-to-t from-gray-600 to-gray-400 rounded-t"
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-4 bg-linear-to-t from-gray-600 to-gray-400 rounded-t"
                 style={{ height: `${Math.min((towerHeightM / 120) * 100, 100)}%` }}
               />
               {/* Tier markers */}
