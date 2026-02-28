@@ -48,6 +48,12 @@ export default function RootLayout({
                   Routing
                 </Link>
                 <Link
+                  href="/solar-tower"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Solar Tower
+                </Link>
+                <Link
                   href="/privacy"
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
