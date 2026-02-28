@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function MeshNetworkPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-green-950 to-slate-950">
+    <div className="min-h-screen bg-linear-to-b from-slate-950 via-green-950 to-slate-950">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 px-4">
         <div className="max-w-6xl mx-auto">
@@ -10,7 +10,7 @@ export default function MeshNetworkPage() {
             <div className="inline-block bg-green-500/10 border border-green-500/30 rounded-full px-4 py-2 mb-6">
               <span className="text-green-400 text-sm font-semibold">REAL TECHNOLOGY • ACTIVE DEPLOYMENTS</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-6">
+            <h1 className="text-5xl md:text-7xl font-bold bg-linear-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-6">
               Chicago Community
               <br />
               Mesh Network

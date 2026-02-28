@@ -191,7 +191,7 @@ export function RoutingDashboard() {
             <p className="text-4xl font-bold text-cyan-400">{stats.averageLatency}ms</p>
             <div className="mt-4 h-2 bg-muted rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500"
+                className="h-full bg-linear-to-r from-green-500 via-yellow-500 to-red-500"
                 style={{ width: `${Math.min(stats.averageLatency / 2, 100)}%` }}
               />
             </div>

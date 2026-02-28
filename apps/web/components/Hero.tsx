@@ -4,7 +4,7 @@ import { Zap, Network, Trees } from "lucide-react"
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-background to-secondary/20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-b from-background to-secondary/20">
       {/* Animated background effect */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -inset-[10px] opacity-50">

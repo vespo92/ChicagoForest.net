@@ -242,7 +242,7 @@ export default function LENRResearchPage() {
         </div>
 
         {/* LENR-CANR Archive Link */}
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-8 mb-12">
+        <div className="bg-linear-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-8 mb-12">
           <div className="flex items-start justify-between">
             <div>
               <h2 className="text-2xl font-bold mb-2">LENR-CANR.org Library</h2>

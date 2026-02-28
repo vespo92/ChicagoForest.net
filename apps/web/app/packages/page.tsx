@@ -227,7 +227,7 @@ export default function PackagesPage() {
   return (
     <main className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-900/20 via-background to-blue-900/20 py-20">
+      <section className="relative overflow-hidden bg-linear-to-br from-purple-900/20 via-background to-blue-900/20 py-20">
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -235,7 +235,7 @@ export default function PackagesPage() {
               <span className="text-2xl">📦</span>
               <span className="text-purple-400 text-sm font-medium">Open Source Packages</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-linear-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
               Chicago Forest Packages
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">

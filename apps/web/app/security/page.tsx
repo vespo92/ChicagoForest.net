@@ -108,7 +108,7 @@ export default function SecurityPage() {
   return (
     <main className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-red-900/30 via-background to-orange-900/20 py-20">
+      <section className="relative overflow-hidden bg-linear-to-br from-red-900/30 via-background to-orange-900/20 py-20">
         <div className="absolute inset-0">
           {/* Animated shield */}
           <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -123,7 +123,7 @@ export default function SecurityPage() {
               <span className="text-2xl">🛡️</span>
               <span className="text-red-400 text-sm font-medium">Sentinel Security System</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-linear-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
               Security & Privacy
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">

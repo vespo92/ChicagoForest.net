@@ -142,7 +142,7 @@ export default function ResearchPortal() {
               className="group relative p-8 rounded-2xl bg-card border hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               {/* Background Gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${area.color} opacity-0 group-hover:opacity-100 transition-opacity`}></div>
+              <div className={`absolute inset-0 bg-linear-to-br ${area.color} opacity-0 group-hover:opacity-100 transition-opacity`}></div>
 
               <div className="relative">
                 {/* Header */}
@@ -187,7 +187,7 @@ export default function ResearchPortal() {
             href="/research/energy-reversal"
             className="group relative p-8 rounded-2xl bg-card border-2 border-orange-500/30 hover:shadow-xl transition-all duration-300 overflow-hidden block"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative flex items-start space-x-6">
               <div className="p-3 rounded-xl bg-orange-500/10">
                 <ArrowUpFromDot className="h-8 w-8 text-orange-500" />
@@ -228,7 +228,7 @@ export default function ResearchPortal() {
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           <Link
             href="/research/timeline"
-            className="p-8 rounded-2xl bg-gradient-to-br from-slate-500/20 to-gray-500/20 border hover:shadow-lg transition-all"
+            className="p-8 rounded-2xl bg-linear-to-br from-slate-500/20 to-gray-500/20 border hover:shadow-lg transition-all"
           >
             <div className="flex items-center space-x-4">
               <div className="p-3 rounded-xl bg-primary/10">
@@ -243,7 +243,7 @@ export default function ResearchPortal() {
 
           <Link
             href="/research/sources"
-            className="p-8 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border hover:shadow-lg transition-all"
+            className="p-8 rounded-2xl bg-linear-to-br from-indigo-500/20 to-violet-500/20 border hover:shadow-lg transition-all"
           >
             <div className="flex items-center space-x-4">
               <div className="p-3 rounded-xl bg-primary/10">

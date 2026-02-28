@@ -5,7 +5,7 @@ import Link from "next/link"
 
 export default function ResearchHero() {
   return (
-    <section className="relative py-24 px-4 md:px-6 overflow-hidden bg-gradient-to-b from-primary/5 to-background">
+    <section className="relative py-24 px-4 md:px-6 overflow-hidden bg-linear-to-b from-primary/5 to-background">
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden opacity-30">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />

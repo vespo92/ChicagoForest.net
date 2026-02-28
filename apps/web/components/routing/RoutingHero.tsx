@@ -6,7 +6,7 @@
 
 export function RoutingHero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-cyan-900/20 via-background to-purple-900/20 py-20">
+    <section className="relative overflow-hidden bg-linear-to-br from-cyan-900/20 via-background to-purple-900/20 py-20">
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
 
       {/* Animated network nodes background */}
@@ -53,7 +53,7 @@ export function RoutingHero() {
             <span className="text-cyan-400 text-sm font-medium">Unified Routing Layer</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-linear-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
             Multi-Protocol Routing
           </h1>
 
