@@ -1,16 +1,17 @@
 import type { NextConfig } from "next";
 
+const isGitHubPages = process.env.GITHUB_PAGES === "true";
+
 const nextConfig: NextConfig = {
-  output: "export",
+  ...(isGitHubPages && { output: "export" as const }),
   images: {
-    unoptimized: true,
+    unoptimized: isGitHubPages,
   },
-  // For GitHub Pages project site, set basePath
-  // Comment this out if using a custom domain
-  basePath: process.env.GITHUB_PAGES === "true" ? "/ChicagoForest.net" : "",
-  assetPrefix: process.env.GITHUB_PAGES === "true" ? "/ChicagoForest.net/" : "",
+  ...(isGitHubPages && {
+    basePath: "/ChicagoForest.net",
+    assetPrefix: "/ChicagoForest.net/",
+  }),
   trailingSlash: true,
-  // Transpile workspace packages
   transpilePackages: [
     "@chicago-forest/p2p-core",
     "@chicago-forest/routing",
