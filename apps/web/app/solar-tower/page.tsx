@@ -2,6 +2,7 @@ import IllinoisNetworkMap from "@/components/solar-tower/IllinoisNetworkMap";
 import TowerSitePlanner from "@/components/solar-tower/TowerSitePlanner";
 import MendotaLinkBudget from "@/components/solar-tower/MendotaLinkBudget";
 import TowerRevenueModel from "@/components/solar-tower/TowerRevenueModel";
+import TowerConstructionProposal from "@/components/solar-tower/TowerConstructionProposal";
 
 export const metadata = {
   title: "Mendota Solar Tower - Infrastructure Planning | Chicago Forest Network",
@@ -54,6 +55,12 @@ export default function SolarTowerPage() {
                 className="bg-slate-800 hover:bg-slate-700 text-white px-8 py-3 rounded-lg font-semibold transition border border-slate-700"
               >
                 Revenue Model
+              </a>
+              <a
+                href="#construction-proposal"
+                className="bg-slate-800 hover:bg-slate-700 text-white px-8 py-3 rounded-lg font-semibold transition border border-slate-700"
+              >
+                Cost Proposal
               </a>
             </div>
           </div>
@@ -744,6 +751,9 @@ export default function SolarTowerPage() {
           </div>
         </div>
       </section>
+
+      {/* Construction Proposal */}
+      <TowerConstructionProposal />
 
       {/* Next Steps */}
       <section className="py-16 px-4 bg-amber-600">
