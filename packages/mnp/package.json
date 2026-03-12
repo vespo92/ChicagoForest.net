@@ -1,7 +1,7 @@
 {
-  "name": "@chicago-forest/ipv7",
+  "name": "@chicago-forest/mnp",
   "version": "0.1.0",
-  "description": "IPV7 Protocol - Next-generation P2P addressing and routing for mesh networks (theoretical framework)",
+  "description": "MNP (Mycelium Network Protocol) - Next-generation P2P addressing and routing for mesh networks (theoretical framework)",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -33,7 +33,7 @@
     }
   },
   "bin": {
-    "ipv7": "./dist/cli.js"
+    "mnp": "./dist/cli.js"
   },
   "files": [
     "dist",
@@ -48,7 +48,7 @@
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "ipv7",
+    "mnp",
     "p2p",
     "mesh-network",
     "peer-to-peer",

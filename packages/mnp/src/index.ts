@@ -1,10 +1,10 @@
 /**
- * IPV7 Protocol - Next-Generation P2P Addressing for Mesh Networks
+ * MNP Protocol - Next-Generation P2P Addressing for Mesh Networks
  *
  * ⚠️ THEORETICAL FRAMEWORK - AI-GENERATED CONCEPTUAL PROTOCOL ⚠️
  *
  * This is an experimental protocol implementation for the Chicago Forest Network.
- * IPV7 is "1 better than IPv6" - a conceptual next-generation protocol featuring:
+ * MNP (Mycelium Network Protocol) is a conceptual next-generation protocol featuring:
  *
  * - 256-bit addresses (double IPv6's 128-bit)
  * - Built-in cryptographic identity (derived from public keys)
@@ -37,7 +37,7 @@ export {
   bytesToHex,
   hexToBytes,
   geohash,
-  IPV7_VERSION,
+  MNP_VERSION,
   ADDRESS_LENGTH,
   NODE_ID_LENGTH,
   GEOHASH_PRECISION,
@@ -91,7 +91,7 @@ export {
 } from './transport/index.js';
 
 // Node
-export { IPV7Node, createTestNode } from './node/index.js';
+export { MNPNode, createTestNode } from './node/index.js';
 
 /**
  * Protocol version
@@ -101,14 +101,14 @@ export const VERSION = '0.1.0';
 /**
  * Protocol identifier
  */
-export const PROTOCOL_ID = 'ipv7';
+export const PROTOCOL_ID = 'mnp';
 
 /**
- * Quick start: Create and start an IPV7 node
+ * Quick start: Create and start an MNP node
  *
  * @example
  * ```typescript
- * import { createNode } from '@chicago-forest/ipv7';
+ * import { createNode } from '@chicago-forest/mnp';
  *
  * const node = await createNode({
  *   location: { latitude: 41.8781, longitude: -87.6298 }, // Chicago
@@ -131,9 +131,9 @@ export async function createNode(config?: {
   listen?: { tcp?: number; udp?: number };
   bootstrapPeers?: Array<{ type: string; address: string; port: number }>;
 }) {
-  const { IPV7Node } = await import('./node/index.js');
+  const { MNPNode } = await import('./node/index.js');
 
-  const node = new IPV7Node({
+  const node = new MNPNode({
     location: config?.location,
     listen: config?.listen,
     bootstrapPeers: config?.bootstrapPeers as any,

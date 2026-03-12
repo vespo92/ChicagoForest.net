@@ -1,5 +1,5 @@
 /**
- * IPV7 Transport Layer
+ * MNP Transport Layer
  *
  * THEORETICAL FRAMEWORK - Abstract transport for P2P connectivity
  * over various physical media (WiFi, Ethernet, WebRTC, etc.)

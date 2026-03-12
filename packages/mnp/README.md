@@ -1,8 +1,8 @@
-# @chicago-forest/ipv7
+# @chicago-forest/mnp
 
 > **⚠️ THEORETICAL FRAMEWORK** - This is an AI-generated conceptual protocol for the Chicago Forest Network. It is NOT a replacement for standard internet protocols.
 
-**IPV7** is "1 better than IPv6" - a next-generation P2P addressing and routing protocol designed for mesh networks.
+**MNP (Mycelium Network Protocol)** is a next-generation P2P addressing and routing protocol designed for mesh networks, inspired by the organic resilience of mycelium networks.
 
 ## Features
 
@@ -16,15 +16,15 @@
 ## Installation
 
 ```bash
-npm install @chicago-forest/ipv7
+npm install @chicago-forest/mnp
 # or
-bun add @chicago-forest/ipv7
+bun add @chicago-forest/mnp
 ```
 
 ## Quick Start
 
 ```typescript
-import { createNode } from '@chicago-forest/ipv7';
+import { createNode } from '@chicago-forest/mnp';
 
 // Create and start a node
 const node = await createNode({
@@ -33,7 +33,7 @@ const node = await createNode({
 });
 
 console.log('Node address:', node.getAddressString());
-// Output: ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e
+// Output: mnp:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e
 
 // Listen for messages
 node.on('packet:received', (packet) => {
@@ -41,7 +41,7 @@ node.on('packet:received', (packet) => {
 });
 
 // Send message to another node
-const destination = parseAddress('ipv7:dp3w:abc123def456789:8080');
+const destination = parseAddress('mnp:dp3w:abc123def456789:8080');
 await node.send(destination, Buffer.from('Hello, Forest!'));
 ```
 
@@ -49,24 +49,24 @@ await node.send(destination, Buffer.from('Hello, Forest!'));
 
 ```bash
 # Start a node
-npx @chicago-forest/ipv7 start --lat 41.8781 --lon -87.6298 --tcp 7777
+npx @chicago-forest/mnp start --lat 41.8781 --lon -87.6298 --tcp 7777
 
 # Generate an address
-npx @chicago-forest/ipv7 address --lat 41.8781 --lon -87.6298
+npx @chicago-forest/mnp address --lat 41.8781 --lon -87.6298
 
 # Parse an address
-npx @chicago-forest/ipv7 parse ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
+npx @chicago-forest/mnp parse mnp:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
 
 # Show protocol info
-npx @chicago-forest/ipv7 info
+npx @chicago-forest/mnp info
 ```
 
 ## Address Format
 
 ```
-ipv7:<geohash>:<nodeId>:<port>
+mnp:<geohash>:<nodeId>:<port>
 
-Example: ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
+Example: mnp:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
          │    │    │                        │
          │    │    │                        └─ Service port (optional)
          │    │    └──────────────────────────── 128-bit node ID (crypto hash)
@@ -86,7 +86,7 @@ import {
   validateAddress,   // Check address validity
   addressEquals,     // Compare two addresses
   routingDistance,   // Calculate routing metric
-} from '@chicago-forest/ipv7';
+} from '@chicago-forest/mnp';
 ```
 
 ### Cryptography
@@ -97,7 +97,7 @@ import {
   sign,             // Sign data with private key
   verify,           // Verify signature
   hash,             // SHA-256 hash
-} from '@chicago-forest/ipv7';
+} from '@chicago-forest/mnp';
 ```
 
 ### Packets
@@ -109,15 +109,15 @@ import {
   createHeartbeat,    // Create keepalive packet
   serializePacket,    // Serialize to bytes
   deserializePacket,  // Parse from bytes
-} from '@chicago-forest/ipv7';
+} from '@chicago-forest/mnp';
 ```
 
 ### Node
 
 ```typescript
-import { IPV7Node } from '@chicago-forest/ipv7';
+import { MNPNode } from '@chicago-forest/mnp';
 
-const node = new IPV7Node({
+const node = new MNPNode({
   location: { latitude: 41.8781, longitude: -87.6298 },
   listen: { tcp: 7777, udp: 7778 },
   enableRelay: true,
@@ -166,7 +166,7 @@ The protocol supports multiple transport layers:
 
 ## Comparison with IPv6
 
-| Feature | IPv6 | IPV7 |
+| Feature | IPv6 | MNP |
 |---------|------|------|
 | Address Size | 128-bit | 256-bit |
 | Identity | None | Cryptographic |

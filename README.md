@@ -43,7 +43,7 @@ chicago-forest-network/
 │   ├── sdwan-bridge/                 # SD-WAN virtual bridge & tunneling
 │   ├── firewall/                     # Chicago Forest Firewall (CFW)
 │   ├── node-deploy/                  # Docker/K8s/VM deployment configs
-│   ├── ipv7-adapter/                 # IPV7 protocol integration
+│   ├── mnp-adapter/                 # MNP protocol integration
 │   ├── anon-routing/                 # Anonymous onion routing
 │   ├── hardware-hal/                 # Hardware abstraction (radios, antennas)
 │   ├── cli/                          # Command-line interface
@@ -273,7 +273,7 @@ forest deploy --docker    # Generate Docker config
 │  └─────────────────────────────────────────────────────────────────┘   │
 │  ┌─────────────────────┐    ┌─────────────────────────────────────┐   │
 │  │ @chicago-forest/    │    │    @chicago-forest/p2p-core         │   │
-│  │   ipv7-adapter      │◄───│  Node Identity | Peer Discovery     │   │
+│  │   mnp-adapter      │◄───│  Node Identity | Peer Discovery     │   │
 │  └─────────────────────┘    └─────────────────────────────────────┘   │
 ├─────────────────────────────────────────────────────────────────────────┤
 │  TRANSPORT LAYER                                                        │

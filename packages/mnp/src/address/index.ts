@@ -1,17 +1,17 @@
 /**
- * IPV7 Addressing System
+ * MNP Addressing System
  *
  * THEORETICAL FRAMEWORK - 256-bit addresses with:
  * - Cryptographic node identity (derived from public key)
  * - Geographic proximity encoding (geohash)
  * - Self-allocation (no central authority)
  *
- * Human-readable format: ipv7:<geohash>:<nodeId>:<port>
- * Example: ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
+ * Human-readable format: mnp:<geohash>:<nodeId>:<port>
+ * Example: mnp:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
  */
 
 import {
-  IPV7Address,
+  MNPAddress,
   AddressFlags,
   GeoCoordinates,
   KeyPair,
@@ -22,7 +22,7 @@ import * as geohash from './geohash.js';
 export { geohash };
 
 /** Current protocol version */
-export const IPV7_VERSION = 7;
+export const MNP_VERSION = 7;
 
 /** Address byte length (256 bits = 32 bytes) */
 export const ADDRESS_LENGTH = 32;
@@ -34,13 +34,13 @@ export const NODE_ID_LENGTH = 16;
 export const GEOHASH_PRECISION = 4;
 
 /**
- * Generate a new IPV7 address from a key pair and location
+ * Generate a new MNP address from a key pair and location
  */
 export function generateAddress(
   keyPair: KeyPair,
   location?: GeoCoordinates,
   flags: AddressFlags = AddressFlags.UNICAST
-): IPV7Address {
+): MNPAddress {
   const nodeId = generateNodeId(keyPair.publicKey);
 
   // Default to 0,0 if no location (e.g., "s000" geohash)
@@ -50,7 +50,7 @@ export function generateAddress(
 
   // Calculate checksum of version + flags + geohash + nodeId
   const checksumData = new Uint8Array([
-    IPV7_VERSION,
+    MNP_VERSION,
     flags,
     ...Buffer.from(geoStr),
     ...nodeId,
@@ -58,7 +58,7 @@ export function generateAddress(
   const checksum = crc16(checksumData);
 
   return {
-    version: IPV7_VERSION,
+    version: MNP_VERSION,
     flags,
     geohash: geoStr,
     nodeId,
@@ -67,19 +67,19 @@ export function generateAddress(
 }
 
 /**
- * Parse a human-readable IPV7 address string
- * Format: ipv7:<geohash>:<nodeId>:<port>
+ * Parse a human-readable MNP address string
+ * Format: mnp:<geohash>:<nodeId>:<port>
  */
-export function parseAddress(addressStr: string): IPV7Address {
+export function parseAddress(addressStr: string): MNPAddress {
   const parts = addressStr.split(':');
 
-  if (parts[0] !== 'ipv7') {
-    throw new Error('Invalid IPV7 address: must start with "ipv7:"');
+  if (parts[0] !== 'mnp') {
+    throw new Error('Invalid MNP address: must start with "mnp:"');
   }
 
   if (parts.length < 3) {
     throw new Error(
-      'Invalid IPV7 address: format is ipv7:<geohash>:<nodeId>:<port?>'
+      'Invalid MNP address: format is mnp:<geohash>:<nodeId>:<port?>'
     );
   }
 
@@ -99,7 +99,7 @@ export function parseAddress(addressStr: string): IPV7Address {
 
   // Recalculate checksum
   const checksumData = new Uint8Array([
-    IPV7_VERSION,
+    MNP_VERSION,
     AddressFlags.UNICAST,
     ...Buffer.from(geoStr),
     ...nodeId,
@@ -107,7 +107,7 @@ export function parseAddress(addressStr: string): IPV7Address {
   const checksum = crc16(checksumData);
 
   return {
-    version: IPV7_VERSION,
+    version: MNP_VERSION,
     flags: AddressFlags.UNICAST,
     geohash: geoStr,
     nodeId,
@@ -117,11 +117,11 @@ export function parseAddress(addressStr: string): IPV7Address {
 }
 
 /**
- * Format an IPV7 address as a human-readable string
+ * Format an MNP address as a human-readable string
  */
-export function formatAddress(address: IPV7Address): string {
+export function formatAddress(address: MNPAddress): string {
   const nodeIdHex = bytesToHex(address.nodeId);
-  let str = `ipv7:${address.geohash}:${nodeIdHex}`;
+  let str = `mnp:${address.geohash}:${nodeIdHex}`;
   if (address.port !== undefined) {
     str += `:${address.port}`;
   }
@@ -129,7 +129,7 @@ export function formatAddress(address: IPV7Address): string {
 }
 
 /**
- * Serialize an IPV7 address to bytes (32 bytes / 256 bits)
+ * Serialize an MNP address to bytes (32 bytes / 256 bits)
  *
  * Layout:
  * - Byte 0: Version (4 bits) + Flags (4 bits)
@@ -139,7 +139,7 @@ export function formatAddress(address: IPV7Address): string {
  * - Bytes 23-24: Port (2 bytes, 0 if unset)
  * - Bytes 25-31: Reserved for future use
  */
-export function serializeAddress(address: IPV7Address): Uint8Array {
+export function serializeAddress(address: MNPAddress): Uint8Array {
   const buffer = new Uint8Array(ADDRESS_LENGTH);
 
   // Byte 0: Version (high nibble) + Flags (low nibble)
@@ -167,9 +167,9 @@ export function serializeAddress(address: IPV7Address): Uint8Array {
 }
 
 /**
- * Deserialize an IPV7 address from bytes
+ * Deserialize an MNP address from bytes
  */
-export function deserializeAddress(buffer: Uint8Array): IPV7Address {
+export function deserializeAddress(buffer: Uint8Array): MNPAddress {
   if (buffer.length < ADDRESS_LENGTH) {
     throw new Error(`Invalid address buffer: need ${ADDRESS_LENGTH} bytes`);
   }
@@ -202,11 +202,11 @@ export function deserializeAddress(buffer: Uint8Array): IPV7Address {
 }
 
 /**
- * Validate an IPV7 address
+ * Validate an MNP address
  */
-export function validateAddress(address: IPV7Address): boolean {
+export function validateAddress(address: MNPAddress): boolean {
   // Check version
-  if (address.version !== IPV7_VERSION) {
+  if (address.version !== MNP_VERSION) {
     return false;
   }
 
@@ -235,7 +235,7 @@ export function validateAddress(address: IPV7Address): boolean {
 /**
  * Check if two addresses are equal
  */
-export function addressEquals(a: IPV7Address, b: IPV7Address): boolean {
+export function addressEquals(a: MNPAddress, b: MNPAddress): boolean {
   if (a.version !== b.version) return false;
   if (a.flags !== b.flags) return false;
   if (a.geohash !== b.geohash) return false;
@@ -252,7 +252,7 @@ export function addressEquals(a: IPV7Address, b: IPV7Address): boolean {
  * Calculate routing distance between two addresses
  * Combines geohash proximity and XOR distance
  */
-export function routingDistance(a: IPV7Address, b: IPV7Address): number {
+export function routingDistance(a: MNPAddress, b: MNPAddress): number {
   // Geographic component (0-1 based on geohash prefix match)
   const geoPrefix = geohash.commonPrefixLength(a.geohash, b.geohash);
   const geoScore = geoPrefix / GEOHASH_PRECISION;
@@ -272,11 +272,11 @@ export function routingDistance(a: IPV7Address, b: IPV7Address): number {
 /**
  * Create a broadcast address for a geohash area
  */
-export function createBroadcastAddress(geoArea: string): IPV7Address {
+export function createBroadcastAddress(geoArea: string): MNPAddress {
   const nodeId = new Uint8Array(NODE_ID_LENGTH).fill(0xff);
 
   const checksumData = new Uint8Array([
-    IPV7_VERSION,
+    MNP_VERSION,
     AddressFlags.BROADCAST,
     ...Buffer.from(geoArea.padEnd(4, '0').substring(0, 4)),
     ...nodeId,
@@ -284,7 +284,7 @@ export function createBroadcastAddress(geoArea: string): IPV7Address {
   const checksum = crc16(checksumData);
 
   return {
-    version: IPV7_VERSION,
+    version: MNP_VERSION,
     flags: AddressFlags.BROADCAST,
     geohash: geoArea.padEnd(4, '0').substring(0, 4),
     nodeId,
@@ -296,8 +296,8 @@ export function createBroadcastAddress(geoArea: string): IPV7Address {
  * Check if address matches a broadcast address
  */
 export function matchesBroadcast(
-  address: IPV7Address,
-  broadcast: IPV7Address
+  address: MNPAddress,
+  broadcast: MNPAddress
 ): boolean {
   if (broadcast.flags !== AddressFlags.BROADCAST) {
     return false;

@@ -1,5 +1,5 @@
 /**
- * IPV7 Node - Main P2P Node Implementation
+ * MNP Node - Main P2P Node Implementation
  *
  * THEORETICAL FRAMEWORK - A complete mesh network node
  * that combines addressing, routing, and transport.
@@ -7,7 +7,7 @@
 
 import { EventEmitter } from 'events';
 import {
-  IPV7Address,
+  MNPAddress,
   NodeConfig,
   NodeStats,
   Packet,
@@ -52,10 +52,10 @@ const ANNOUNCE_INTERVAL = 60000;
 const PEER_TIMEOUT = 90000;
 
 /**
- * IPV7 Node - Core P2P network participant
+ * MNP Node - Core P2P network participant
  */
-export class IPV7Node extends EventEmitter {
-  readonly address: IPV7Address;
+export class MNPNode extends EventEmitter {
+  readonly address: MNPAddress;
   readonly keyPair: KeyPair;
   readonly location?: GeoCoordinates;
 
@@ -117,13 +117,13 @@ export class IPV7Node extends EventEmitter {
       this.emit('peer:discovered', peer);
     });
 
-    this.dht.on('peer:removed', (address: IPV7Address) => {
+    this.dht.on('peer:removed', (address: MNPAddress) => {
       this.emit('peer:disconnected', address);
       this.router.handlePeerDisconnect(address);
     });
 
     // Router events
-    this.router.on('route:request', (destination: IPV7Address) => {
+    this.router.on('route:request', (destination: MNPAddress) => {
       this.sendRouteRequest(destination);
     });
 
@@ -202,7 +202,7 @@ export class IPV7Node extends EventEmitter {
    * Send data to another node
    */
   async send(
-    destination: IPV7Address,
+    destination: MNPAddress,
     data: Uint8Array,
     _options: { reliable?: boolean } = {}
   ): Promise<void> {
@@ -373,7 +373,7 @@ export class IPV7Node extends EventEmitter {
   /**
    * Send route request
    */
-  private async sendRouteRequest(destination: IPV7Address): Promise<void> {
+  private async sendRouteRequest(destination: MNPAddress): Promise<void> {
     const packet = createRouteRequest(this.address, destination);
 
     // Send to closest known peers
@@ -444,9 +444,9 @@ export class IPV7Node extends EventEmitter {
   }
 
   /**
-   * Find IPV7 address for a transport endpoint
+   * Find MNP address for a transport endpoint
    */
-  private findAddressForEndpoint(endpoint: TransportEndpoint): IPV7Address | null {
+  private findAddressForEndpoint(endpoint: TransportEndpoint): MNPAddress | null {
     for (const peer of this.dht.getAllPeers()) {
       for (const ep of peer.endpoints) {
         if (ep.address === endpoint.address && ep.port === endpoint.port) {
@@ -511,8 +511,8 @@ export class IPV7Node extends EventEmitter {
 export function createTestNode(
   id: string,
   location?: GeoCoordinates
-): IPV7Node {
-  const node = new IPV7Node({ location });
+): MNPNode {
+  const node = new MNPNode({ location });
 
   // Add memory transport
   const transport = new MemoryTransport(id);

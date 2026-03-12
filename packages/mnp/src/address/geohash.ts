@@ -1,5 +1,5 @@
 /**
- * Geohash Implementation for IPV7 Proximity Routing
+ * Geohash Implementation for MNP Proximity Routing
  *
  * Geohash encodes geographic coordinates into a string that enables
  * proximity-based routing - nodes with similar geohashes are physically close.

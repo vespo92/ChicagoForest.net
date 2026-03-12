@@ -1,5 +1,5 @@
 /**
- * IPV7 Packet System
+ * MNP Packet System
  *
  * THEORETICAL FRAMEWORK - Packet structure for P2P mesh networks
  *
@@ -15,7 +15,7 @@ import {
   PacketType,
   PacketExtension,
   ExtensionType,
-  IPV7Address,
+  MNPAddress,
 } from '../types.js';
 import {
   serializeAddress,
@@ -46,8 +46,8 @@ let sequenceCounter = 0;
  * Create a new data packet
  */
 export function createPacket(
-  source: IPV7Address,
-  destination: IPV7Address,
+  source: MNPAddress,
+  destination: MNPAddress,
   payload: Uint8Array,
   options: {
     type?: PacketType;
@@ -84,8 +84,8 @@ export function createPacket(
  * Create a route request packet
  */
 export function createRouteRequest(
-  source: IPV7Address,
-  destination: IPV7Address,
+  source: MNPAddress,
+  destination: MNPAddress,
   ttl: number = MAX_TTL
 ): Packet {
   return createPacket(source, destination, new Uint8Array(0), {
@@ -98,9 +98,9 @@ export function createRouteRequest(
  * Create a route reply packet
  */
 export function createRouteReply(
-  source: IPV7Address,
-  destination: IPV7Address,
-  hops: IPV7Address[]
+  source: MNPAddress,
+  destination: MNPAddress,
+  hops: MNPAddress[]
 ): Packet {
   // Encode hops in payload
   const payload = new Uint8Array(hops.length * ADDRESS_LENGTH);
@@ -117,11 +117,11 @@ export function createRouteReply(
  * Create an announcement packet (peer discovery)
  */
 export function createAnnounce(
-  source: IPV7Address,
+  source: MNPAddress,
   capabilities: Uint8Array
 ): Packet {
   // Broadcast destination (all 0xff in node ID)
-  const broadcastDest: IPV7Address = {
+  const broadcastDest: MNPAddress = {
     version: 7,
     flags: 0x03, // BROADCAST
     geohash: source.geohash,
@@ -139,8 +139,8 @@ export function createAnnounce(
  * Create a heartbeat/keepalive packet
  */
 export function createHeartbeat(
-  source: IPV7Address,
-  destination: IPV7Address
+  source: MNPAddress,
+  destination: MNPAddress
 ): Packet {
   return createPacket(source, destination, new Uint8Array(0), {
     type: PacketType.HEARTBEAT,
@@ -152,8 +152,8 @@ export function createHeartbeat(
  * Create an acknowledgment packet
  */
 export function createAck(
-  source: IPV7Address,
-  destination: IPV7Address,
+  source: MNPAddress,
+  destination: MNPAddress,
   sequenceNumber: number
 ): Packet {
   const payload = new Uint8Array(4);

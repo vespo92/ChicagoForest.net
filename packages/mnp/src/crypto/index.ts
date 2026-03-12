@@ -1,5 +1,5 @@
 /**
- * IPV7 Cryptographic Utilities
+ * MNP Cryptographic Utilities
  *
  * THEORETICAL FRAMEWORK - Simplified crypto for demonstration.
  * Production would use libsodium/nacl for proper Ed25519/X25519.
