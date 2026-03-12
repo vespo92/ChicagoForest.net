@@ -759,7 +759,7 @@ export default function SolarTowerPage() {
       <section className="py-16 px-4 bg-amber-600">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            From Framework to Reality
+            Next Steps
           </h2>
           <p className="text-amber-100 mb-8">
             The Mendota Solar Tower is the first step toward a community-owned,
@@ -792,14 +792,11 @@ export default function SolarTowerPage() {
         </div>
       </section>
 
-      {/* Disclaimer */}
+      {/* Note */}
       <section className="py-8 px-4 bg-slate-950">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 text-sm text-gray-400">
-            <strong className="text-yellow-400">Disclaimer:</strong> This page
-            contains planning calculations and projections for a proposed tower
-            infrastructure project. RF calculations are based on standard
-            engineering formulas and should be validated with site-specific
+          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 text-sm text-gray-400">
+            RF calculations are based on standard engineering formulas and should be validated with site-specific
             terrain analysis using tools like{" "}
             <a
               href="https://www.ve2dbe.com/english1.html"
@@ -810,10 +807,8 @@ export default function SolarTowerPage() {
               VE2DBE Radio Mobile
             </a>
             . Revenue projections are estimates based on typical Illinois tower
-            lease rates and should not be considered guaranteed. All tower
-            construction requires proper engineering, permitting, and regulatory
-            compliance (FAA, FCC, local zoning). This framework is provided for
-            planning and proposal purposes.
+            lease rates. All tower construction requires proper engineering, permitting, and regulatory
+            compliance (FAA, FCC, local zoning).
           </div>
         </div>
       </section>

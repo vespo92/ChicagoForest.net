@@ -79,22 +79,22 @@ export default function NetworkArchitecture() {
               <div className="flex items-start space-x-4">
                 <Activity className="h-6 w-6 text-primary mt-1" />
                 <div className="flex-1">
-                  <h4 className="text-xl font-semibold mb-2">Layer 3: Quantum Coherence Channel</h4>
+                  <h4 className="text-xl font-semibold mb-2">Layer 3: Microwave Backbone</h4>
                   <p className="text-muted-foreground mb-3">
-                    Experimental quantum entanglement layer for instantaneous state synchronization
+                    High-capacity licensed point-to-point radio links connecting tower sites across Illinois
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                     <div className="p-3 bg-secondary/50 rounded">
                       <div className="text-sm font-semibold">Technology</div>
-                      <div className="text-sm text-muted-foreground">Quantum dots</div>
+                      <div className="text-sm text-muted-foreground">11 GHz Licensed PTP</div>
                     </div>
                     <div className="p-3 bg-secondary/50 rounded">
-                      <div className="text-sm font-semibold">Entanglement</div>
-                      <div className="text-sm text-muted-foreground">Bell state pairs</div>
+                      <div className="text-sm font-semibold">Capacity</div>
+                      <div className="text-sm text-muted-foreground">5-10 Gbps per link</div>
                     </div>
                     <div className="p-3 bg-secondary/50 rounded">
-                      <div className="text-sm font-semibold">Latency</div>
-                      <div className="text-sm text-muted-foreground">~0 ms theoretical</div>
+                      <div className="text-sm font-semibold">Range</div>
+                      <div className="text-sm text-muted-foreground">50-120 km per hop</div>
                     </div>
                   </div>
                 </div>

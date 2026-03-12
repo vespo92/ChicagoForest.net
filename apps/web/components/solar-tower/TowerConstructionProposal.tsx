@@ -339,7 +339,7 @@ export default function TowerConstructionProposal() {
             </div>
           </div>
           <p className="text-xs text-gray-400 text-center">
-            Cost ranges reflect 2025-2026 Illinois market pricing. Actual costs
+            Cost ranges reflect 2026-2027 Illinois market pricing. Actual costs
             depend on vendor selection, soil conditions, permitting timeline, and
             material pricing at time of construction.
           </p>

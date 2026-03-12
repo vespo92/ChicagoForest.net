@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Chicago Plasma Forest Network",
-  description: "Revolutionary peer-to-peer network for wireless energy distribution across the entire Chicago metropolitan area including suburbs",
+  description: "Community-owned wireless energy and communications infrastructure connecting Illinois metro areas through solar-powered tower network",
 };
 
 export default function RootLayout({
