@@ -103,7 +103,7 @@ export default function CommunityOnboarding() {
                     Learn about wireless energy transmission and P2P protocols
                   </p>
                   <div className="flex items-center space-x-4 text-sm">
-                    <span className="text-muted-foreground">Jan 15, 2026</span>
+                    <span className="text-muted-foreground">Jan 15, 2027</span>
                     <span className="text-muted-foreground">•</span>
                     <span className="text-muted-foreground">7:00 PM CST</span>
                   </div>
@@ -120,7 +120,7 @@ export default function CommunityOnboarding() {
                     Hands-on session to build your own plasma node
                   </p>
                   <div className="flex items-center space-x-4 text-sm">
-                    <span className="text-muted-foreground">Jan 22, 2026</span>
+                    <span className="text-muted-foreground">Jan 22, 2027</span>
                     <span className="text-muted-foreground">•</span>
                     <span className="text-muted-foreground">2:00 PM CST</span>
                   </div>
@@ -137,7 +137,7 @@ export default function CommunityOnboarding() {
                     Witness the first live demonstration of the plasma forest
                   </p>
                   <div className="flex items-center space-x-4 text-sm">
-                    <span className="text-muted-foreground">Feb 1, 2026</span>
+                    <span className="text-muted-foreground">Feb 1, 2027</span>
                     <span className="text-muted-foreground">•</span>
                     <span className="text-muted-foreground">12:00 PM CST</span>
                   </div>
@@ -154,7 +154,7 @@ export default function CommunityOnboarding() {
                     Participate in network decisions and protocol development
                   </p>
                   <div className="flex items-center space-x-4 text-sm">
-                    <span className="text-muted-foreground">Feb 10, 2026</span>
+                    <span className="text-muted-foreground">Feb 10, 2027</span>
                     <span className="text-muted-foreground">•</span>
                     <span className="text-muted-foreground">6:00 PM CST</span>
                   </div>

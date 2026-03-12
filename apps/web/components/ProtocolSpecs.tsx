@@ -155,7 +155,7 @@ await node.joinMesh('chicago-north');`}</code>
           <h3 className="text-2xl font-semibold mb-8 text-center">Implementation Roadmap</h3>
           <div className="space-y-4">
             <div className="flex items-center space-x-4">
-              <div className="w-24 text-right text-sm text-muted-foreground">Q1 2026</div>
+              <div className="w-24 text-right text-sm text-muted-foreground">Q1 2027</div>
               <div className="w-4 h-4 rounded-full bg-primary" />
               <div className="flex-1 p-4 rounded-lg bg-card border">
                 <div className="font-semibold">Protocol Development</div>
@@ -163,7 +163,7 @@ await node.joinMesh('chicago-north');`}</code>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="w-24 text-right text-sm text-muted-foreground">Q2 2026</div>
+              <div className="w-24 text-right text-sm text-muted-foreground">Q2 2027</div>
               <div className="w-4 h-4 rounded-full bg-primary/70" />
               <div className="flex-1 p-4 rounded-lg bg-card border">
                 <div className="font-semibold">Pilot Deployment</div>
@@ -171,7 +171,7 @@ await node.joinMesh('chicago-north');`}</code>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="w-24 text-right text-sm text-muted-foreground">Q3 2026</div>
+              <div className="w-24 text-right text-sm text-muted-foreground">Q3 2027</div>
               <div className="w-4 h-4 rounded-full bg-primary/50" />
               <div className="flex-1 p-4 rounded-lg bg-card border">
                 <div className="font-semibold">Community Expansion</div>
@@ -179,7 +179,7 @@ await node.joinMesh('chicago-north');`}</code>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="w-24 text-right text-sm text-muted-foreground">Q4 2026</div>
+              <div className="w-24 text-right text-sm text-muted-foreground">Q4 2027</div>
               <div className="w-4 h-4 rounded-full bg-primary/30" />
               <div className="flex-1 p-4 rounded-lg bg-card border">
                 <div className="font-semibold">City-Wide Launch</div>

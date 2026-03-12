@@ -22,6 +22,9 @@ interface TowerLink {
   distanceKm: number;
   bearing: string;
   terrain: string;
+  technology: string;
+  frequency: string;
+  capacity: string;
 }
 
 const nodes: TowerNode[] = [
@@ -36,7 +39,7 @@ const nodes: TowerNode[] = [
     distanceFromMendota: 0,
     distanceMiles: 0,
     type: "primary",
-    status: "Phase 1 - Planning",
+    status: "Phase 1 - Active Planning",
   },
   {
     id: "rockford",
@@ -49,7 +52,7 @@ const nodes: TowerNode[] = [
     distanceFromMendota: 80,
     distanceMiles: 50,
     type: "target",
-    status: "Target - Phase 2",
+    status: "Phase 2 - 2027",
   },
   {
     id: "naperville",
@@ -62,7 +65,7 @@ const nodes: TowerNode[] = [
     distanceFromMendota: 113,
     distanceMiles: 70,
     type: "target",
-    status: "Target - Phase 2",
+    status: "Phase 2 - 2027",
   },
   {
     id: "quadcities",
@@ -75,7 +78,7 @@ const nodes: TowerNode[] = [
     distanceFromMendota: 110,
     distanceMiles: 68,
     type: "target",
-    status: "Target - Phase 2",
+    status: "Phase 2 - 2027",
   },
   {
     id: "peoria",
@@ -88,7 +91,7 @@ const nodes: TowerNode[] = [
     distanceFromMendota: 100,
     distanceMiles: 62,
     type: "target",
-    status: "Target - Phase 3",
+    status: "Phase 3 - 2028",
   },
   {
     id: "dekalb",
@@ -152,8 +155,8 @@ const nodes: TowerNode[] = [
     elevation: 829,
     distanceFromMendota: 118,
     distanceMiles: 73,
-    type: "future",
-    status: "Target - Phase 3",
+    type: "target",
+    status: "Phase 3 - 2028",
   },
 ];
 
@@ -164,6 +167,9 @@ const links: TowerLink[] = [
     distanceKm: 23,
     bearing: "S",
     terrain: "Flat agricultural",
+    technology: "Licensed PTP",
+    frequency: "11 GHz",
+    capacity: "10 Gbps",
   },
   {
     from: "mendota",
@@ -171,6 +177,9 @@ const links: TowerLink[] = [
     distanceKm: 46,
     bearing: "NE",
     terrain: "Flat agricultural",
+    technology: "Licensed PTP",
+    frequency: "11 GHz",
+    capacity: "10 Gbps",
   },
   {
     from: "mendota",
@@ -178,6 +187,9 @@ const links: TowerLink[] = [
     distanceKm: 53,
     bearing: "W",
     terrain: "Flat agricultural",
+    technology: "Licensed PTP",
+    frequency: "11 GHz",
+    capacity: "5 Gbps",
   },
   {
     from: "mendota",
@@ -185,6 +197,9 @@ const links: TowerLink[] = [
     distanceKm: 30,
     bearing: "SE",
     terrain: "Flat, Illinois River valley",
+    technology: "Unlicensed PTP",
+    frequency: "5 GHz",
+    capacity: "2 Gbps",
   },
   {
     from: "dekalb",
@@ -192,6 +207,9 @@ const links: TowerLink[] = [
     distanceKm: 67,
     bearing: "E",
     terrain: "Flat suburban",
+    technology: "Licensed PTP",
+    frequency: "11 GHz",
+    capacity: "10 Gbps",
   },
   {
     from: "dekalb",
@@ -199,6 +217,9 @@ const links: TowerLink[] = [
     distanceKm: 50,
     bearing: "NW",
     terrain: "Rolling prairie",
+    technology: "Licensed PTP",
+    frequency: "11 GHz",
+    capacity: "10 Gbps",
   },
   {
     from: "sterling",
@@ -206,6 +227,9 @@ const links: TowerLink[] = [
     distanceKm: 65,
     bearing: "W",
     terrain: "River valley",
+    technology: "Licensed PTP",
+    frequency: "11 GHz",
+    capacity: "5 Gbps",
   },
   {
     from: "lasalle",
@@ -213,6 +237,9 @@ const links: TowerLink[] = [
     distanceKm: 80,
     bearing: "SW",
     terrain: "Illinois River corridor",
+    technology: "Licensed PTP",
+    frequency: "11 GHz",
+    capacity: "5 Gbps",
   },
   {
     from: "ottawa",
@@ -220,6 +247,9 @@ const links: TowerLink[] = [
     distanceKm: 16,
     bearing: "W",
     terrain: "Illinois River valley",
+    technology: "Unlicensed PTP",
+    frequency: "60 GHz",
+    capacity: "10 Gbps",
   },
   {
     from: "peoria",
@@ -227,6 +257,9 @@ const links: TowerLink[] = [
     distanceKm: 60,
     bearing: "SE",
     terrain: "Flat agricultural",
+    technology: "Licensed PTP",
+    frequency: "11 GHz",
+    capacity: "5 Gbps",
   },
   {
     from: "mendota",
@@ -234,6 +267,9 @@ const links: TowerLink[] = [
     distanceKm: 80,
     bearing: "N",
     terrain: "Flat agricultural",
+    technology: "Licensed PTP",
+    frequency: "11 GHz",
+    capacity: "10 Gbps",
   },
 ];
 
@@ -324,19 +360,23 @@ export default function IllinoisNetworkMap() {
 
               const isMendotaLink =
                 link.from === "mendota" || link.to === "mendota";
+              const isLicensed = link.frequency === "11 GHz";
 
               return (
                 <g
                   key={idx}
                   className="cursor-pointer"
-                  onClick={() => setSelectedLink(link)}
+                  onClick={() => {
+                    setSelectedLink(link);
+                    setSelectedNode(null);
+                  }}
                 >
                   <line
                     x1={fromNode.x}
                     y1={fromNode.y}
                     x2={toNode.x}
                     y2={toNode.y}
-                    stroke={isMendotaLink ? "#f59e0b" : "#3b82f6"}
+                    stroke={isMendotaLink ? "#f59e0b" : isLicensed ? "#3b82f6" : "#10b981"}
                     strokeWidth={isMendotaLink ? "0.8" : "0.4"}
                     strokeDasharray={isMendotaLink ? "none" : "2 2"}
                     opacity={isMendotaLink ? 0.6 : 0.3}
@@ -443,8 +483,20 @@ export default function IllinoisNetworkMap() {
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 rounded-full bg-gray-500" />
               <span className="text-xs text-gray-400">
-                Relay / Future Nodes
+                Relay / Junction Nodes
               </span>
+            </div>
+            <div className="flex items-center space-x-2 mt-2">
+              <div className="w-6 h-0.5 bg-amber-500" />
+              <span className="text-xs text-gray-400">Primary backbone</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-6 h-0.5 bg-blue-500" style={{backgroundImage: "repeating-linear-gradient(90deg, #3b82f6 0, #3b82f6 4px, transparent 4px, transparent 8px)"}} />
+              <span className="text-xs text-gray-400">11 GHz licensed</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-6 h-0.5 bg-emerald-500" style={{backgroundImage: "repeating-linear-gradient(90deg, #10b981 0, #10b981 4px, transparent 4px, transparent 8px)"}} />
+              <span className="text-xs text-gray-400">5/60 GHz unlicensed</span>
             </div>
           </div>
         </div>
@@ -540,9 +592,50 @@ export default function IllinoisNetworkMap() {
                 <span className="text-gray-400">Terrain:</span>
                 <span className="text-white">{selectedLink.terrain}</span>
               </div>
+              <div className="border-t border-slate-600 pt-2 mt-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Technology:</span>
+                  <span className="text-amber-400 font-semibold">{selectedLink.technology}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Frequency:</span>
+                  <span className="text-white">{selectedLink.frequency}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Capacity:</span>
+                  <span className="text-green-400 font-semibold">{selectedLink.capacity}</span>
+                </div>
+              </div>
             </div>
           </div>
         )}
+
+        {/* Communication Technology */}
+        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-5">
+          <h3 className="text-lg font-bold text-white mb-3">
+            Tower-to-Tower Communication
+          </h3>
+          <div className="space-y-3 text-sm">
+            <div className="bg-slate-900/50 rounded p-3">
+              <div className="font-semibold text-amber-400 mb-1">Primary Backbone: 11 GHz Licensed PTP</div>
+              <p className="text-gray-400 text-xs">
+                High-capacity licensed microwave links using narrow-beam dish antennas (33-38 dBi). Up to 10 Gbps per link. Requires FCC Part 101 licensing. Used for all long-haul backbone connections.
+              </p>
+            </div>
+            <div className="bg-slate-900/50 rounded p-3">
+              <div className="font-semibold text-blue-400 mb-1">Short-haul: 5 GHz / 60 GHz Unlicensed</div>
+              <p className="text-gray-400 text-xs">
+                Shorter relay links under 30 km use unlicensed 5 GHz (Ubiquiti, Cambium) for 1-2 Gbps, or 60 GHz (Siklu) for 10 Gbps over short distances. No licensing fees.
+              </p>
+            </div>
+            <div className="bg-slate-900/50 rounded p-3">
+              <div className="font-semibold text-green-400 mb-1">Fiber Backhaul at Each Hub</div>
+              <p className="text-gray-400 text-xs">
+                Each primary tower site connects to fiber internet for upstream transit. The radio backbone provides redundancy and connects communities between fiber points.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Strategic Value */}
         <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-5">
@@ -551,7 +644,7 @@ export default function IllinoisNetworkMap() {
           </h3>
           <p className="text-gray-400 text-sm mb-3">
             Mendota sits at the geographic center of northern Illinois, making
-            it an ideal junction point for connecting the state&apos;s major
+            it the ideal junction point for connecting the state&apos;s major
             metropolitan areas via high-powered point-to-point radio links.
           </p>
           <div className="space-y-2">
@@ -579,13 +672,19 @@ export default function IllinoisNetworkMap() {
                 ~100 km to Peoria (SW)
               </span>
             </div>
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+              <span className="text-sm text-gray-300">
+                ~118 km to Bloomington (SE)
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Network Reach */}
         <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-5">
           <h3 className="text-lg font-bold text-amber-400 mb-3">
-            Coverage Potential
+            Network Coverage
           </h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
@@ -604,6 +703,12 @@ export default function IllinoisNetworkMap() {
               <span className="text-gray-400">Terrain:</span>
               <span className="text-white font-semibold">
                 Flat prairie (ideal)
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">Backbone Capacity:</span>
+              <span className="text-white font-semibold">
+                5-10 Gbps per link
               </span>
             </div>
           </div>
