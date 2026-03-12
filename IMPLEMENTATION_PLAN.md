@@ -47,7 +47,7 @@
 │                                ▼                                        │
 │  ┌──────────────────────┐    ┌──────────────────────────────────────┐  │
 │  │ @chicago-forest/     │◄───│    @chicago-forest/p2p-core          │  │
-│  │   ipv7-adapter       │    │  Node Identity | Peer Discovery      │  │
+│  │   mnp-adapter       │    │  Node Identity | Peer Discovery      │  │
 │  │ (Integration Layer)  │    │  Key Exchange | DHT                  │  │
 │  └──────────────────────┘    └───────────────────┬──────────────────┘  │
 │                                                  │                      │
@@ -90,8 +90,8 @@ Custom firewall implementation + OPNsense integration profiles.
 ### MACRO 6: Build Node Deployment Package (`@chicago-forest/node-deploy`)
 Docker, Kubernetes, VM deployment configurations with NIC passthrough support.
 
-### MACRO 7: Build IPV7 Integration Adapter (`@chicago-forest/ipv7-adapter`)
-Integration layer for the companion IPV7 protocol package.
+### MACRO 7: Build MNP Integration Adapter (`@chicago-forest/mnp-adapter`)
+Integration layer for the companion MNP protocol package.
 
 ### MACRO 8: Build Anonymous Routing Package (`@chicago-forest/anon-routing`)
 Onion routing, multi-hop encryption, anonymous peer connections.
@@ -200,17 +200,17 @@ Command-line interface for network management, node configuration, and monitorin
 - [ ] 6.13 Add resource limit configurations
 - [ ] 6.14 Write deployment documentation
 
-### MACRO 7 MICRO TASKS: IPV7 Integration Adapter
+### MACRO 7 MICRO TASKS: MNP Integration Adapter
 
-- [ ] 7.1 Initialize `@chicago-forest/ipv7-adapter` package
-- [ ] 7.2 Define IPV7 interface contracts
+- [ ] 7.1 Initialize `@chicago-forest/mnp-adapter` package
+- [ ] 7.2 Define MNP interface contracts
 - [ ] 7.3 Create address translation layer
 - [ ] 7.4 Implement packet encapsulation
-- [ ] 7.5 Create bridge between wireless-mesh and IPV7
+- [ ] 7.5 Create bridge between wireless-mesh and MNP
 - [ ] 7.6 Add protocol negotiation mechanism
 - [ ] 7.7 Implement fallback to standard protocols
 - [ ] 7.8 Create adapter configuration schema
-- [ ] 7.9 Add tests with mock IPV7 implementation
+- [ ] 7.9 Add tests with mock MNP implementation
 - [ ] 7.10 Document integration patterns
 
 ### MACRO 8 MICRO TASKS: Anonymous Routing Package
@@ -273,7 +273,7 @@ Command-line interface for network management, node configuration, and monitorin
 3. **MACRO 9** (Hardware HAL) - Physical layer abstraction
 4. **MACRO 3** (Wireless Mesh) - Wireless transport
 5. **MACRO 4** (SD-WAN Bridge) - Network overlay
-6. **MACRO 7** (IPV7 Adapter) - Protocol integration
+6. **MACRO 7** (MNP Adapter) - Protocol integration
 7. **MACRO 8** (Anonymous Routing) - Privacy layer
 8. **MACRO 5** (Firewall) - Security enforcement
 9. **MACRO 6** (Node Deploy) - Deployment tooling

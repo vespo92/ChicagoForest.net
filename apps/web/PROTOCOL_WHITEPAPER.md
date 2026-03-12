@@ -24,7 +24,7 @@ The Chicago Forest Network (CFN) envisions a peer-to-peer wireless infrastructur
 - OLSR for mobile ad-hoc networks
 
 ### Layer 3: Network Layer
-- IPV7 theoretical addressing scheme
+- MNP theoretical addressing scheme
 - IPv6 compatibility layer
 - Geographic-aware routing
 

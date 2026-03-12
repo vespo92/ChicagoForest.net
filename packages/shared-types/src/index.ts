@@ -442,27 +442,27 @@ export interface NetworkInterfaceConfig {
 }
 
 // =============================================================================
-// IPV7 INTEGRATION (Stub for companion package)
+// MNP INTEGRATION (Stub for companion package)
 // =============================================================================
 
-/** IPV7 address format (placeholder for companion package) */
-export type IPv7Address = string;
+/** MNP address format (placeholder for companion package) */
+export type MNPAddress = string;
 
-/** IPV7 packet header (placeholder) */
-export interface IPv7Header {
+/** MNP packet header (placeholder) */
+export interface MNPHeader {
   version: 7;
-  sourceAddress: IPv7Address;
-  destAddress: IPv7Address;
+  sourceAddress: MNPAddress;
+  destAddress: MNPAddress;
   hopLimit: number;
   payloadLength: number;
   nextHeader: number;
 }
 
-/** IPV7 adapter configuration */
-export interface IPv7AdapterConfig {
+/** MNP adapter configuration */
+export interface MNPAdapterConfig {
   enabled: boolean;
-  localAddress: IPv7Address;
-  gateway?: IPv7Address;
+  localAddress: MNPAddress;
+  gateway?: MNPAddress;
   translateToIPv4: boolean;
   translateToIPv6: boolean;
 }
@@ -524,7 +524,7 @@ export interface ForestNodeConfig {
     circuitTimeout: number;
     allowExit: boolean;
   };
-  ipv7?: IPv7AdapterConfig;
+  mnp?: MNPAdapterConfig;
   storage?: {
     enabled: boolean;
     maxSize: number;

@@ -44,7 +44,7 @@ The Chicago Forest Network represents a **theoretical framework** for decentrali
 │  │  │ Identity │ │ Unified  │ │  mesh    │ │ Security │ │ Tunnels  │      ││
 │  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘      ││
 │  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      ││
-│  │  │anon-rout.│ │ hardware │ │node-depl.│ │   ipv7   │ │   cli    │      ││
+│  │  │anon-rout.│ │ hardware │ │node-depl.│ │   mnp   │ │   cli    │      ││
 │  │  │ Privacy  │ │   HAL    │ │  Infra   │ │ Protocol │ │ Commands │      ││
 │  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘      ││
 │  └─────────────────────────────────────────────────────────────────────────┘│
@@ -80,8 +80,8 @@ The Chicago Forest Network represents a **theoretical framework** for decentrali
 | **Foundation** | `anon-routing` | Scaffolded | Onion routing |
 | **Foundation** | `hardware-hal` | Scaffolded | Hardware abstraction |
 | **Foundation** | `node-deploy` | Active | Deployment configs |
-| **Foundation** | `ipv7` | Active | IPV7 protocol |
-| **Foundation** | `ipv7-adapter` | Scaffolded | IPV7 integration |
+| **Foundation** | `mnp` | Active | MNP protocol |
+| **Foundation** | `mnp-adapter` | Scaffolded | MNP integration |
 | **Foundation** | `cli` | Scaffolded | Command line tools |
 | **Foundation** | `shared-types` | Active | TypeScript definitions |
 | **Research** | `tesla-archive` | Scaffolded | Tesla patent index |

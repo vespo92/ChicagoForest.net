@@ -1,11 +1,11 @@
 /**
- * @chicago-forest/ipv7-adapter
+ * @chicago-forest/mnp-adapter
  *
- * Integration layer for the companion IPV7 protocol package.
+ * Integration layer for the companion MNP protocol package.
  * This adapter bridges between the wireless mesh layer and the
- * theoretical IPV7 protocol (IPv6 + 1 = 1 better than IPv6).
+ * theoretical MNP (Mycelium Network Protocol).
  *
- * The IPV7 package handles physical/wired connections while this
+ * The MNP package handles physical/wired connections while this
  * adapter enables interoperability with the wireless mesh.
  *
  * DISCLAIMER: This is part of an AI-generated theoretical framework
@@ -13,10 +13,10 @@
  *
  * @example
  * ```typescript
- * import { IPv7Adapter, createIPv7Address } from '@chicago-forest/ipv7-adapter';
+ * import { MNPAdapter, createMNPAddress } from '@chicago-forest/mnp-adapter';
  *
- * const adapter = new IPv7Adapter({
- *   localAddress: createIPv7Address('forest', 1, 1),
+ * const adapter = new MNPAdapter({
+ *   localAddress: createMNPAddress('forest', 1, 1),
  *   translateToIPv4: false,
  *   translateToIPv6: true,
  * });
@@ -26,20 +26,20 @@
  */
 
 import type {
-  IPv7Address,
-  IPv7Header,
-  IPv7AdapterConfig,
+  MNPAddress,
+  MNPHeader,
+  MNPAdapterConfig,
   NodeId,
   PeerAddress,
 } from '@chicago-forest/shared-types';
 import { ForestEventEmitter, getEventBus } from '@chicago-forest/p2p-core';
 
 // =============================================================================
-// IPV7 ADDRESS FORMAT
+// MNP ADDRESS FORMAT
 // =============================================================================
 
 /**
- * IPV7 address structure
+ * MNP address structure
  * Format: <realm>:<zone>:<node>:<subnet>:<host>
  *
  * Realms:
@@ -48,7 +48,7 @@ import { ForestEventEmitter, getEventBus } from '@chicago-forest/p2p-core';
  * - local: Local network only
  * - anon: Anonymous/onion addresses
  */
-export interface IPv7AddressComponents {
+export interface MNPAddressComponents {
   realm: 'forest' | 'global' | 'local' | 'anon';
   zone: number;     // Geographic/logical zone (0-65535)
   node: number;     // Node identifier (0-65535)
@@ -57,26 +57,26 @@ export interface IPv7AddressComponents {
 }
 
 /**
- * Create an IPV7 address string
+ * Create an MNP address string
  */
-export function createIPv7Address(
-  realm: IPv7AddressComponents['realm'],
+export function createMNPAddress(
+  realm: MNPAddressComponents['realm'],
   zone: number,
   node: number,
   subnet = 0,
   host = 1
-): IPv7Address {
+): MNPAddress {
   return `${realm}:${zone.toString(16).padStart(4, '0')}:${node.toString(16).padStart(4, '0')}:${subnet.toString(16).padStart(2, '0')}:${host.toString(16).padStart(2, '0')}`;
 }
 
 /**
- * Parse an IPV7 address string
+ * Parse an MNP address string
  */
-export function parseIPv7Address(address: IPv7Address): IPv7AddressComponents | null {
+export function parseMNPAddress(address: MNPAddress): MNPAddressComponents | null {
   const parts = address.split(':');
   if (parts.length !== 5) return null;
 
-  const realm = parts[0] as IPv7AddressComponents['realm'];
+  const realm = parts[0] as MNPAddressComponents['realm'];
   if (!['forest', 'global', 'local', 'anon'].includes(realm)) return null;
 
   return {
@@ -89,10 +89,10 @@ export function parseIPv7Address(address: IPv7Address): IPv7AddressComponents | 
 }
 
 /**
- * Convert IPV7 address to IPv6 (for compatibility)
+ * Convert MNP address to IPv6 (for compatibility)
  */
-export function ipv7ToIPv6(address: IPv7Address): string {
-  const components = parseIPv7Address(address);
+export function mnpToIPv6(address: MNPAddress): string {
+  const components = parseMNPAddress(address);
   if (!components) return '::1';
 
   // Map realm to IPv6 prefix
@@ -109,13 +109,13 @@ export function ipv7ToIPv6(address: IPv7Address): string {
 }
 
 /**
- * Convert IPv6 to IPV7 address
+ * Convert IPv6 to MNP address
  */
-export function ipv6ToIPv7(ipv6: string): IPv7Address {
+export function ipv6ToMNP(ipv6: string): MNPAddress {
   // Simplified conversion - in production, more complex mapping
   const parts = ipv6.split(':').filter(Boolean);
 
-  let realm: IPv7AddressComponents['realm'] = 'forest';
+  let realm: MNPAddressComponents['realm'] = 'forest';
   if (parts[0] === '2001') realm = 'global';
   else if (parts[0] === 'fe80') realm = 'local';
   else if (parts[0] === 'fc00') realm = 'anon';
@@ -123,14 +123,14 @@ export function ipv6ToIPv7(ipv6: string): IPv7Address {
   const zone = parseInt(parts[1] || '0', 16);
   const node = parseInt(parts[2] || '0', 16);
 
-  return createIPv7Address(realm, zone, node);
+  return createMNPAddress(realm, zone, node);
 }
 
 /**
- * Convert IPV7 to Node ID
+ * Convert MNP to Node ID
  */
-export function ipv7ToNodeId(address: IPv7Address): NodeId {
-  const components = parseIPv7Address(address);
+export function mnpToNodeId(address: MNPAddress): NodeId {
+  const components = parseMNPAddress(address);
   if (!components) return 'CFN-0000000000000000';
 
   const hash = `${components.zone.toString(16).padStart(8, '0')}${components.node.toString(16).padStart(8, '0')}`;
@@ -138,26 +138,26 @@ export function ipv7ToNodeId(address: IPv7Address): NodeId {
 }
 
 // =============================================================================
-// IPV7 PACKET
+// MNP PACKET
 // =============================================================================
 
 /**
- * IPV7 packet structure
+ * MNP packet structure
  */
-export interface IPv7Packet {
-  header: IPv7Header;
+export interface MNPPacket {
+  header: MNPHeader;
   payload: Uint8Array;
 }
 
 /**
- * Create an IPV7 packet header
+ * Create an MNP packet header
  */
-export function createIPv7Header(
-  source: IPv7Address,
-  destination: IPv7Address,
+export function createMNPHeader(
+  source: MNPAddress,
+  destination: MNPAddress,
   payloadLength: number,
   nextHeader = 17 // UDP by default
-): IPv7Header {
+): MNPHeader {
   return {
     version: 7,
     sourceAddress: source,
@@ -169,9 +169,9 @@ export function createIPv7Header(
 }
 
 /**
- * Serialize IPV7 header to bytes
+ * Serialize MNP header to bytes
  */
-export function serializeIPv7Header(header: IPv7Header): Uint8Array {
+export function serializeMNPHeader(header: MNPHeader): Uint8Array {
   const buffer = new ArrayBuffer(40); // Fixed header size
   const view = new DataView(buffer);
 
@@ -184,20 +184,20 @@ export function serializeIPv7Header(header: IPv7Header): Uint8Array {
   view.setUint8(7, header.hopLimit);
 
   // Source Address (encoded as bytes)
-  const srcBytes = encodeIPv7Address(header.sourceAddress);
+  const srcBytes = encodeMNPAddress(header.sourceAddress);
   new Uint8Array(buffer, 8, 16).set(srcBytes);
 
   // Destination Address
-  const dstBytes = encodeIPv7Address(header.destAddress);
+  const dstBytes = encodeMNPAddress(header.destAddress);
   new Uint8Array(buffer, 24, 16).set(dstBytes);
 
   return new Uint8Array(buffer);
 }
 
 /**
- * Deserialize IPV7 header from bytes
+ * Deserialize MNP header from bytes
  */
-export function deserializeIPv7Header(data: Uint8Array): IPv7Header | null {
+export function deserializeMNPHeader(data: Uint8Array): MNPHeader | null {
   if (data.length < 40) return null;
 
   const view = new DataView(data.buffer, data.byteOffset);
@@ -212,16 +212,16 @@ export function deserializeIPv7Header(data: Uint8Array): IPv7Header | null {
     payloadLength: view.getUint16(4),
     nextHeader: view.getUint8(6),
     hopLimit: view.getUint8(7),
-    sourceAddress: decodeIPv7Address(data.slice(8, 24)),
-    destAddress: decodeIPv7Address(data.slice(24, 40)),
+    sourceAddress: decodeMNPAddress(data.slice(8, 24)),
+    destAddress: decodeMNPAddress(data.slice(24, 40)),
   };
 }
 
 /**
- * Encode IPV7 address to bytes
+ * Encode MNP address to bytes
  */
-function encodeIPv7Address(address: IPv7Address): Uint8Array {
-  const components = parseIPv7Address(address);
+function encodeMNPAddress(address: MNPAddress): Uint8Array {
+  const components = parseMNPAddress(address);
   if (!components) return new Uint8Array(16);
 
   const bytes = new Uint8Array(16);
@@ -240,13 +240,13 @@ function encodeIPv7Address(address: IPv7Address): Uint8Array {
 }
 
 /**
- * Decode IPV7 address from bytes
+ * Decode MNP address from bytes
  */
-function decodeIPv7Address(bytes: Uint8Array): IPv7Address {
+function decodeMNPAddress(bytes: Uint8Array): MNPAddress {
   const view = new DataView(bytes.buffer, bytes.byteOffset);
 
   const realmByte = bytes[0];
-  const realm: IPv7AddressComponents['realm'] =
+  const realm: MNPAddressComponents['realm'] =
     realmByte === 0x01 ? 'global' :
     realmByte === 0x80 ? 'local' :
     realmByte === 0xfc ? 'anon' : 'forest';
@@ -256,24 +256,24 @@ function decodeIPv7Address(bytes: Uint8Array): IPv7Address {
   const subnet = bytes[14];
   const host = bytes[15];
 
-  return createIPv7Address(realm, zone, node, subnet, host);
+  return createMNPAddress(realm, zone, node, subnet, host);
 }
 
 // =============================================================================
-// IPV7 ADAPTER
+// MNP ADAPTER
 // =============================================================================
 
 /**
- * IPV7 Protocol Adapter
- * Bridges between wireless mesh and IPV7 protocol
+ * MNP Protocol Adapter
+ * Bridges between wireless mesh and MNP protocol
  */
-export class IPv7Adapter {
-  private config: IPv7AdapterConfig;
+export class MNPAdapter {
+  private config: MNPAdapterConfig;
   private eventBus: ForestEventEmitter;
   private running = false;
-  private addressTable: Map<IPv7Address, NodeId> = new Map();
+  private addressTable: Map<MNPAddress, NodeId> = new Map();
 
-  constructor(config: IPv7AdapterConfig, eventBus?: ForestEventEmitter) {
+  constructor(config: MNPAdapterConfig, eventBus?: ForestEventEmitter) {
     this.config = config;
     this.eventBus = eventBus ?? getEventBus();
   }
@@ -295,34 +295,34 @@ export class IPv7Adapter {
   }
 
   /**
-   * Get local IPV7 address
+   * Get local MNP address
    */
-  getLocalAddress(): IPv7Address {
+  getLocalAddress(): MNPAddress {
     return this.config.localAddress;
   }
 
   /**
-   * Register a node ID with an IPV7 address
+   * Register a node ID with an MNP address
    */
-  registerAddress(address: IPv7Address, nodeId: NodeId): void {
+  registerAddress(address: MNPAddress, nodeId: NodeId): void {
     this.addressTable.set(address, nodeId);
   }
 
   /**
-   * Lookup node ID for an IPV7 address
+   * Lookup node ID for an MNP address
    */
-  lookupNodeId(address: IPv7Address): NodeId | null {
+  lookupNodeId(address: MNPAddress): NodeId | null {
     return this.addressTable.get(address) ?? null;
   }
 
   /**
-   * Encapsulate payload in IPV7 packet
+   * Encapsulate payload in MNP packet
    */
   encapsulate(
-    destination: IPv7Address,
+    destination: MNPAddress,
     payload: Uint8Array
-  ): IPv7Packet {
-    const header = createIPv7Header(
+  ): MNPPacket {
+    const header = createMNPHeader(
       this.config.localAddress,
       destination,
       payload.length
@@ -332,11 +332,11 @@ export class IPv7Adapter {
   }
 
   /**
-   * Decapsulate IPV7 packet
+   * Decapsulate MNP packet
    */
-  decapsulate(packet: IPv7Packet): {
-    source: IPv7Address;
-    destination: IPv7Address;
+  decapsulate(packet: MNPPacket): {
+    source: MNPAddress;
+    destination: MNPAddress;
     payload: Uint8Array;
   } {
     return {
@@ -347,9 +347,9 @@ export class IPv7Adapter {
   }
 
   /**
-   * Translate IPV7 packet to IPv6 (if enabled)
+   * Translate MNP packet to IPv6 (if enabled)
    */
-  translateToIPv6(packet: IPv7Packet): Uint8Array | null {
+  translateToIPv6(packet: MNPPacket): Uint8Array | null {
     if (!this.config.translateToIPv6) return null;
 
     // In production: Create proper IPv6 packet

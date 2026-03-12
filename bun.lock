@@ -253,8 +253,8 @@
         "vitest": "^1.5.0",
       },
     },
-    "packages/ipv7": {
-      "name": "@chicago-forest/ipv7",
+    "packages/mnp": {
+      "name": "@chicago-forest/mnp",
       "version": "0.1.0",
       "bin": {
         "ipv7": "./dist/cli.js",
@@ -267,8 +267,8 @@
         "typescript": "^5.0.0",
       },
     },
-    "packages/ipv7-adapter": {
-      "name": "@chicago-forest/ipv7-adapter",
+    "packages/mnp-adapter": {
+      "name": "@chicago-forest/mnp-adapter",
       "version": "0.1.0",
       "dependencies": {
         "@chicago-forest/p2p-core": "workspace:*",
@@ -618,9 +618,9 @@
 
     "@chicago-forest/hive-mind": ["@chicago-forest/hive-mind@workspace:packages/hive-mind"],
 
-    "@chicago-forest/ipv7": ["@chicago-forest/ipv7@workspace:packages/ipv7"],
+    "@chicago-forest/mnp": ["@chicago-forest/mnp@workspace:packages/mnp"],
 
-    "@chicago-forest/ipv7-adapter": ["@chicago-forest/ipv7-adapter@workspace:packages/ipv7-adapter"],
+    "@chicago-forest/mnp-adapter": ["@chicago-forest/mnp-adapter@workspace:packages/mnp-adapter"],
 
     "@chicago-forest/lenr-database": ["@chicago-forest/lenr-database@workspace:packages/lenr-database"],
 

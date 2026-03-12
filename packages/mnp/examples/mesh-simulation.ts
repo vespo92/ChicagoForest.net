@@ -1,5 +1,5 @@
 /**
- * IPV7 Mesh Network Simulation
+ * MNP Mesh Network Simulation
  *
  * Simulates a small mesh network with multiple nodes
  * to demonstrate routing and message passing.
@@ -8,7 +8,7 @@
  */
 
 import {
-  IPV7Node,
+  MNPNode,
   createTestNode,
   formatAddress,
   geohash,
@@ -30,8 +30,8 @@ const CHICAGO_NEIGHBORHOODS: Record<string, GeoCoordinates> = {
 /**
  * Create a mesh network of nodes
  */
-async function createMeshNetwork(nodeCount: number): Promise<Map<string, IPV7Node>> {
-  const nodes = new Map<string, IPV7Node>();
+async function createMeshNetwork(nodeCount: number): Promise<Map<string, MNPNode>> {
+  const nodes = new Map<string, MNPNode>();
   const neighborhoods = Object.entries(CHICAGO_NEIGHBORHOODS);
 
   console.log(`Creating ${nodeCount} nodes across Chicago...\n`);
@@ -93,7 +93,7 @@ async function createMeshNetwork(nodeCount: number): Promise<Map<string, IPV7Nod
 /**
  * Simulate message routing through the mesh
  */
-async function simulateRouting(nodes: Map<string, IPV7Node>) {
+async function simulateRouting(nodes: Map<string, MNPNode>) {
   console.log('\n=== Routing Simulation ===\n');
 
   const nodeList = Array.from(nodes.entries());
@@ -134,7 +134,7 @@ async function simulateRouting(nodes: Map<string, IPV7Node>) {
 /**
  * Display network statistics
  */
-function displayStats(nodes: Map<string, IPV7Node>) {
+function displayStats(nodes: Map<string, MNPNode>) {
   console.log('\n=== Network Statistics ===\n');
 
   let totalPeers = 0;
@@ -163,7 +163,7 @@ function displayStats(nodes: Map<string, IPV7Node>) {
  */
 async function main() {
   console.log('╔═══════════════════════════════════════════════════════════════╗');
-  console.log('║           IPV7 Mesh Network Simulation                        ║');
+  console.log('║           MNP Mesh Network Simulation                        ║');
   console.log('║                Chicago Forest Network                         ║');
   console.log('║                                                               ║');
   console.log('║  ⚠️  THEORETICAL FRAMEWORK - Educational Use                  ║');
@@ -188,7 +188,7 @@ async function main() {
   }
 
   console.log('\n✓ Simulation complete!\n');
-  console.log('This demonstrates how IPV7 could enable P2P mesh networking');
+  console.log('This demonstrates how MNP could enable P2P mesh networking');
   console.log('across Chicago neighborhoods using geohash-based routing.\n');
   console.log('⚠️  Remember: This is a THEORETICAL framework.');
   console.log('Real implementations would use Yggdrasil, CJDNS, or B.A.T.M.A.N.\n');

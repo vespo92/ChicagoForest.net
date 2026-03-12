@@ -1,5 +1,5 @@
 /**
- * IPV7 Mesh Router
+ * MNP Mesh Router
  *
  * THEORETICAL FRAMEWORK - Proximity-aware mesh routing
  * combining geohash proximity with XOR-distance metrics.
@@ -12,7 +12,7 @@
 
 import { EventEmitter } from 'events';
 import {
-  IPV7Address,
+  MNPAddress,
   RouteEntry,
   Packet,
   PacketType,
@@ -34,10 +34,10 @@ const MAX_ROUTES_PER_DEST = 3;
 const ROUTE_REFRESH_INTERVAL = 60000;
 
 /**
- * Mesh Router for IPV7
+ * Mesh Router for MNP
  */
 export class Router extends EventEmitter {
-  private readonly localAddress: IPV7Address;
+  private readonly localAddress: MNPAddress;
   private readonly dht: DHT;
   private readonly routes: Map<string, RouteEntry[]>;
   private readonly pendingRequests: Map<string, {
@@ -45,7 +45,7 @@ export class Router extends EventEmitter {
     timeout: NodeJS.Timeout;
   }>;
 
-  constructor(localAddress: IPV7Address, dht: DHT) {
+  constructor(localAddress: MNPAddress, dht: DHT) {
     super();
     this.localAddress = localAddress;
     this.dht = dht;
@@ -59,7 +59,7 @@ export class Router extends EventEmitter {
   /**
    * Get address key for route lookup
    */
-  private getAddressKey(address: IPV7Address): string {
+  private getAddressKey(address: MNPAddress): string {
     return formatAddress(address);
   }
 
@@ -100,7 +100,7 @@ export class Router extends EventEmitter {
   /**
    * Remove routes to a destination
    */
-  removeRoute(destination: IPV7Address, nextHop?: IPV7Address): void {
+  removeRoute(destination: MNPAddress, nextHop?: MNPAddress): void {
     const destKey = this.getAddressKey(destination);
     const routeList = this.routes.get(destKey);
 
@@ -125,7 +125,7 @@ export class Router extends EventEmitter {
   /**
    * Find the best route to a destination
    */
-  findRoute(destination: IPV7Address): RouteEntry | null {
+  findRoute(destination: MNPAddress): RouteEntry | null {
     // Check if destination is local
     if (addressEquals(destination, this.localAddress)) {
       return {
@@ -186,7 +186,7 @@ export class Router extends EventEmitter {
   /**
    * Find multiple routes to a destination (for multipath)
    */
-  findMultipleRoutes(destination: IPV7Address, count: number = 3): RouteEntry[] {
+  findMultipleRoutes(destination: MNPAddress, count: number = 3): RouteEntry[] {
     const routes: RouteEntry[] = [];
 
     // Direct routes
@@ -257,7 +257,7 @@ export class Router extends EventEmitter {
   /**
    * Process a route reply packet
    */
-  processRouteReply(packet: Packet, receivedFrom: IPV7Address): void {
+  processRouteReply(packet: Packet, receivedFrom: MNPAddress): void {
     const { source } = packet.header;
 
     // Add route to the source
@@ -286,7 +286,7 @@ export class Router extends EventEmitter {
   /**
    * Request a route discovery
    */
-  async requestRoute(destination: IPV7Address, timeoutMs: number = 5000): Promise<RouteEntry | null> {
+  async requestRoute(destination: MNPAddress, timeoutMs: number = 5000): Promise<RouteEntry | null> {
     // Check if we already have a route
     const existing = this.findRoute(destination);
     if (existing && existing.interface !== 'dht') {
@@ -310,7 +310,7 @@ export class Router extends EventEmitter {
   /**
    * Handle peer going offline
    */
-  handlePeerDisconnect(peerAddress: IPV7Address): void {
+  handlePeerDisconnect(peerAddress: MNPAddress): void {
     // Remove all routes via this peer
     for (const [destKey, routeList] of this.routes) {
       const filteredRoutes = routeList.filter(
@@ -328,7 +328,7 @@ export class Router extends EventEmitter {
   /**
    * Learn route from received packet
    */
-  learnRoute(packet: Packet, receivedFrom: IPV7Address): void {
+  learnRoute(packet: Packet, receivedFrom: MNPAddress): void {
     const { source } = packet.header;
 
     // Don't learn route to self

@@ -1,8 +1,8 @@
 /**
- * IPV7 Basic Usage Example
+ * MNP Basic Usage Example
  *
  * This example demonstrates how to:
- * 1. Generate IPV7 addresses
+ * 1. Generate MNP addresses
  * 2. Create and start nodes
  * 3. Send messages between nodes
  *
@@ -26,16 +26,16 @@ import {
   PacketType,
 
   // Node
-  IPV7Node,
+  MNPNode,
   createTestNode,
 
   // Types
-  IPV7Address,
+  MNPAddress,
   GeoCoordinates,
 } from '../src/index.js';
 
 // ============================================
-// Example 1: Generate an IPV7 Address
+// Example 1: Generate an MNP Address
 // ============================================
 
 console.log('=== Example 1: Generate Address ===\n');
@@ -53,7 +53,7 @@ const chicagoLocation: GeoCoordinates = {
 
 // Generate address from key pair + location
 const myAddress = generateAddress(keyPair, chicagoLocation);
-console.log('\nGenerated IPV7 address:');
+console.log('\nGenerated MNP address:');
 console.log('  Full:', formatAddress(myAddress));
 console.log('  Geohash:', myAddress.geohash, '(Chicago area)');
 console.log('  Version:', myAddress.version);
@@ -65,7 +65,7 @@ console.log('  Valid:', validateAddress(myAddress));
 
 console.log('\n=== Example 2: Parse Address ===\n');
 
-const addressString = 'ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080';
+const addressString = 'mnp:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080';
 try {
   const parsed = parseAddress(addressString);
   console.log('Parsed:', addressString);
@@ -180,5 +180,5 @@ console.log('Same address?', addressEquals(addr1, addr2));
 console.log('Same geohash?', addr1.geohash === addr2.geohash);
 
 console.log('\n✓ All examples completed!');
-console.log('\n⚠️  Remember: IPV7 is a THEORETICAL FRAMEWORK for educational purposes.');
+console.log('\n⚠️  Remember: MNP is a THEORETICAL FRAMEWORK for educational purposes.');
 console.log('For real mesh networks, see: Yggdrasil, CJDNS, B.A.T.M.A.N.\n');

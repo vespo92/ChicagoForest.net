@@ -1,28 +1,28 @@
 #!/usr/bin/env node
 /**
- * IPV7 CLI - Command-line interface for IPV7 nodes
+ * MNP CLI - Command-line interface for MNP nodes
  *
  * Usage:
- *   npx @chicago-forest/ipv7 start [options]
- *   npx @chicago-forest/ipv7 address --lat <lat> --lon <lon>
- *   npx @chicago-forest/ipv7 info
+ *   npx @chicago-forest/mnp start [options]
+ *   npx @chicago-forest/mnp address --lat <lat> --lon <lon>
+ *   npx @chicago-forest/mnp info
  */
 
-import { IPV7Node } from './node/index.js';
+import { MNPNode } from './node/index.js';
 import { generateAddress, formatAddress, parseAddress } from './address/index.js';
 import { generateKeyPair } from './crypto/index.js';
 import { VERSION } from './index.js';
 
 const HELP = `
-IPV7 Protocol CLI v${VERSION}
+MNP Protocol CLI v${VERSION}
 Chicago Forest Network - Next-Generation P2P Addressing
 
 ⚠️  THEORETICAL FRAMEWORK - For educational/experimental use
 
 COMMANDS:
-  start           Start an IPV7 node
-  address         Generate an IPV7 address
-  parse <addr>    Parse and validate an IPV7 address
+  start           Start an MNP node
+  address         Generate an MNP address
+  parse <addr>    Parse and validate an MNP address
   info            Show protocol information
 
 OPTIONS:
@@ -34,13 +34,13 @@ OPTIONS:
 
 EXAMPLES:
   # Start a node in Chicago
-  ipv7 start --lat 41.8781 --lon -87.6298 --tcp 7777
+  mnp start --lat 41.8781 --lon -87.6298 --tcp 7777
 
   # Generate an address
-  ipv7 address --lat 41.8781 --lon -87.6298
+  mnp address --lat 41.8781 --lon -87.6298
 
   # Parse an address
-  ipv7 parse ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
+  mnp parse mnp:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
 
 LEARN MORE:
   https://chicagoforest.net/mesh
@@ -92,7 +92,7 @@ async function main() {
 async function startNode(options: Record<string, string>) {
   console.log(`
 ╔═══════════════════════════════════════════════════════════════╗
-║                   IPV7 Node Starting...                       ║
+║                   MNP Node Starting...                       ║
 ║               Chicago Forest Network v${VERSION}                  ║
 ║                                                               ║
 ║  ⚠️  THEORETICAL FRAMEWORK - Educational/Experimental Use     ║
@@ -110,7 +110,7 @@ async function startNode(options: Record<string, string>) {
     enableRelay: true,
   };
 
-  const node = new IPV7Node(config);
+  const node = new MNPNode(config);
 
   // Set up event handlers
   node.on('peer:discovered', (peer) => {
@@ -175,7 +175,7 @@ function generateNewAddress(options: Record<string, string>) {
 
   console.log(`
 ╔═══════════════════════════════════════════════════════════════╗
-║              IPV7 Address Generated                           ║
+║              MNP Address Generated                           ║
 ╚═══════════════════════════════════════════════════════════════╝
 
 Address: ${formatAddress(address)}
@@ -207,7 +207,7 @@ function parseAndValidate(addressStr: string) {
 
     console.log(`
 ╔═══════════════════════════════════════════════════════════════╗
-║              IPV7 Address Parsed                              ║
+║              MNP Address Parsed                              ║
 ╚═══════════════════════════════════════════════════════════════╝
 
 Input:    ${addressStr}
@@ -227,8 +227,8 @@ Canonical: ${formatAddress(address)}
     console.error(`
 Invalid address: ${err.message}
 
-Expected format: ipv7:<geohash>:<nodeId>:<port?>
-Example: ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
+Expected format: mnp:<geohash>:<nodeId>:<port?>
+Example: mnp:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
 `);
     process.exit(1);
   }
@@ -237,15 +237,15 @@ Example: ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
 function showInfo() {
   console.log(`
 ╔═══════════════════════════════════════════════════════════════╗
-║                    IPV7 Protocol Info                         ║
+║                    MNP Protocol Info                         ║
 ║               Chicago Forest Network v${VERSION}                  ║
 ╚═══════════════════════════════════════════════════════════════╝
 
 ⚠️  THEORETICAL FRAMEWORK - AI-Generated Conceptual Protocol
 
-WHAT IS IPV7?
+WHAT IS MNP?
 
-  IPV7 is "1 better than IPv6" - a next-generation addressing scheme
+  MNP (Mycelium Network Protocol) is a next-generation addressing scheme
   for peer-to-peer mesh networks, featuring:
 
   • 256-bit addresses (double IPv6's 128-bit)
@@ -256,23 +256,26 @@ WHAT IS IPV7?
 
 ADDRESS FORMAT
 
-  ipv7:<geohash>:<nodeId>:<port>
+  mnp:<geohash>:<nodeId>:<port>
 
-  Example: ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
+  Example: mnp:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e:8080
 
   • geohash: 4-char location prefix (dp3w = Chicago area)
   • nodeId:  24-char hex (128-bit crypto identity)
   • port:    optional service port
 
-WHY "1 BETTER"?
+WHY MYCELIUM?
+
+  Like underground fungal networks that connect forest trees,
+  MNP creates organic, self-healing mesh networks:
 
   IPv4: 32-bit addresses, centralized
   IPv6: 128-bit addresses, still hierarchical
-  IPV7: 256-bit addresses, cryptographic, geographic, decentralized
+  MNP:  256-bit addresses, cryptographic, geographic, decentralized
 
 COMPARISON
 
-  Feature         IPv6          IPV7
+  Feature         IPv6          MNP
   ─────────────────────────────────────────
   Address Size    128-bit       256-bit
   Identity        None          Cryptographic

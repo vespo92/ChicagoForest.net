@@ -1,5 +1,5 @@
 /**
- * IPV7 Routing Module
+ * MNP Routing Module
  *
  * THEORETICAL FRAMEWORK - Mesh routing for P2P networks
  */

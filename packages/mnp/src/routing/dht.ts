@@ -1,5 +1,5 @@
 /**
- * IPV7 Distributed Hash Table (DHT)
+ * MNP Distributed Hash Table (DHT)
  *
  * THEORETICAL FRAMEWORK - Kademlia-inspired DHT for decentralized
  * peer discovery and data storage.
@@ -12,7 +12,7 @@
 
 import { EventEmitter } from 'events';
 import {
-  IPV7Address,
+  MNPAddress,
   PeerInfo,
   DHTEntry,
 } from '../types.js';
@@ -75,7 +75,7 @@ class KBucket {
   /**
    * Remove a peer from the bucket
    */
-  remove(address: IPV7Address): boolean {
+  remove(address: MNPAddress): boolean {
     const index = this.peers.findIndex((p) =>
       addressEquals(p.address, address)
     );
@@ -102,14 +102,14 @@ class KBucket {
 }
 
 /**
- * DHT for IPV7 network
+ * DHT for MNP network
  */
 export class DHT extends EventEmitter {
-  private readonly localAddress: IPV7Address;
+  private readonly localAddress: MNPAddress;
   private readonly buckets: KBucket[];
   private readonly storage: Map<string, DHTEntry>;
 
-  constructor(localAddress: IPV7Address) {
+  constructor(localAddress: MNPAddress) {
     super();
     this.localAddress = localAddress;
     this.buckets = Array.from({ length: ID_BITS }, () => new KBucket());
@@ -122,7 +122,7 @@ export class DHT extends EventEmitter {
   /**
    * Get bucket index for a peer based on XOR distance
    */
-  private getBucketIndex(address: IPV7Address): number {
+  private getBucketIndex(address: MNPAddress): number {
     const distance = xorDistance(this.localAddress.nodeId, address.nodeId);
     const zeros = leadingZeros(distance);
     return Math.min(zeros, ID_BITS - 1);
@@ -149,7 +149,7 @@ export class DHT extends EventEmitter {
   /**
    * Remove a peer from the routing table
    */
-  removePeer(address: IPV7Address): boolean {
+  removePeer(address: MNPAddress): boolean {
     const bucketIndex = this.getBucketIndex(address);
     const removed = this.buckets[bucketIndex].remove(address);
 
@@ -163,7 +163,7 @@ export class DHT extends EventEmitter {
   /**
    * Update peer's last seen time
    */
-  updatePeer(address: IPV7Address): void {
+  updatePeer(address: MNPAddress): void {
     const bucketIndex = this.getBucketIndex(address);
     const peer = this.buckets[bucketIndex].peers.find((p) =>
       addressEquals(p.address, address)
@@ -176,7 +176,7 @@ export class DHT extends EventEmitter {
   /**
    * Find the k closest peers to a target address
    */
-  findClosestPeers(target: IPV7Address, count: number = K): PeerInfo[] {
+  findClosestPeers(target: MNPAddress, count: number = K): PeerInfo[] {
     const allPeers: PeerInfo[] = [];
 
     for (const bucket of this.buckets) {
@@ -212,7 +212,7 @@ export class DHT extends EventEmitter {
   /**
    * Store a value in the DHT
    */
-  store(key: Uint8Array, value: Uint8Array, publisher: IPV7Address): void {
+  store(key: Uint8Array, value: Uint8Array, publisher: MNPAddress): void {
     const keyHex = Buffer.from(key).toString('hex');
 
     const entry: DHTEntry = {
@@ -255,7 +255,7 @@ export class DHT extends EventEmitter {
    */
   getStorageNodes(key: Uint8Array): PeerInfo[] {
     // Create a fake address from the key for distance calculation
-    const targetAddress: IPV7Address = {
+    const targetAddress: MNPAddress = {
       version: 7,
       flags: 0,
       geohash: '0000',

@@ -1,11 +1,11 @@
 /**
- * IPV7 Protocol Types
+ * MNP Protocol Types
  *
  * THEORETICAL FRAMEWORK - This is an AI-generated conceptual protocol
  * that extends beyond IPv6 with mesh-native, cryptographically-secure,
  * geolocation-aware addressing for P2P networks.
  *
- * IPV7 = "1 better than IPv6":
+ * MNP (Mycelium Network Protocol):
  * - 256-bit addresses (vs IPv6's 128-bit)
  * - Built-in cryptographic identity
  * - Native geolocation for proximity routing
@@ -14,14 +14,14 @@
  */
 
 /**
- * IPV7 Address - 256-bit (32 bytes) address structure
+ * MNP Address - 256-bit (32 bytes) address structure
  *
  * Format: [version:4][flags:4][geohash:32][nodeId:128][checksum:16] = 256 bits
  *
- * Human-readable: ipv7:<geohash>:<nodeId>:<port>
- * Example: ipv7:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e5f6a7b8c:8080
+ * Human-readable: mnp:<geohash>:<nodeId>:<port>
+ * Example: mnp:dp3w:7a3f2b1c5d8e9f0a1b2c3d4e5f6a7b8c:8080
  */
-export interface IPV7Address {
+export interface MNPAddress {
   /** Protocol version (4 bits) */
   version: number;
   /** Address flags (4 bits) - multicast, anycast, etc. */
@@ -75,7 +75,7 @@ export interface GeoCoordinates {
 }
 
 /**
- * IPV7 Packet Types
+ * MNP Packet Types
  */
 export enum PacketType {
   /** Standard data packet */
@@ -97,7 +97,7 @@ export enum PacketType {
 }
 
 /**
- * IPV7 Packet Header - Fixed 64-byte header
+ * MNP Packet Header - Fixed 64-byte header
  */
 export interface PacketHeader {
   /** Protocol version (1 byte) */
@@ -113,9 +113,9 @@ export interface PacketHeader {
   /** Payload length in bytes (4 bytes) */
   payloadLength: number;
   /** Source address (32 bytes) */
-  source: IPV7Address;
+  source: MNPAddress;
   /** Destination address (32 bytes) */
-  destination: IPV7Address;
+  destination: MNPAddress;
   /** Sequence number (4 bytes) */
   sequenceNumber: number;
   /** Timestamp - Unix milliseconds (8 bytes) */
@@ -123,7 +123,7 @@ export interface PacketHeader {
 }
 
 /**
- * Complete IPV7 Packet
+ * Complete MNP Packet
  */
 export interface Packet {
   header: PacketHeader;
@@ -159,8 +159,8 @@ export enum ExtensionType {
  * Peer information in the network
  */
 export interface PeerInfo {
-  /** Peer's IPV7 address */
-  address: IPV7Address;
+  /** Peer's MNP address */
+  address: MNPAddress;
   /** Public key for verification */
   publicKey: Uint8Array;
   /** Last seen timestamp */
@@ -223,11 +223,11 @@ export enum TransportType {
  */
 export interface RouteEntry {
   /** Destination address or prefix */
-  destination: IPV7Address;
+  destination: MNPAddress;
   /** Prefix length for CIDR-like routing */
   prefixLength: number;
   /** Next hop peer */
-  nextHop: IPV7Address;
+  nextHop: MNPAddress;
   /** Route metric (lower = better) */
   metric: number;
   /** When this route expires */
@@ -249,7 +249,7 @@ export interface DHTEntry {
   /** Time-to-live in seconds */
   ttl: number;
   /** Publisher's address */
-  publisher: IPV7Address;
+  publisher: MNPAddress;
   /** Signature from publisher */
   signature: Uint8Array;
 }
@@ -277,21 +277,21 @@ export interface NodeStats {
 }
 
 /**
- * Event types emitted by IPV7 node
+ * Event types emitted by MNP node
  */
-export interface IPV7Events {
+export interface MNPEvents {
   'peer:discovered': (peer: PeerInfo) => void;
   'peer:connected': (peer: PeerInfo) => void;
-  'peer:disconnected': (address: IPV7Address) => void;
+  'peer:disconnected': (address: MNPAddress) => void;
   'packet:received': (packet: Packet) => void;
   'packet:sent': (packet: Packet) => void;
   'route:added': (route: RouteEntry) => void;
-  'route:removed': (destination: IPV7Address) => void;
+  'route:removed': (destination: MNPAddress) => void;
   'error': (error: Error) => void;
 }
 
 /**
- * Configuration for IPV7 node
+ * Configuration for MNP node
  */
 export interface NodeConfig {
   /** Node's key pair (generated if not provided) */
