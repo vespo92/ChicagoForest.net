@@ -1,0 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: forest-control-plane
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`forest-cp.espoautos.com`)
+      kind: Rule
+      services:
+        - name: forest-control-plane
+          port: 8090
+  tls:
+    certResolver: letsencrypt

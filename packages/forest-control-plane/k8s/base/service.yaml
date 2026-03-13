@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: forest-control-plane
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8090
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: forest-control-plane

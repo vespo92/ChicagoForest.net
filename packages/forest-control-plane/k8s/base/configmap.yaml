@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forest-cp-config
+data:
+  FOREST_CP_PORT: "8090"
+  FOREST_CP_HOST: "0.0.0.0"
+  FOREST_CP_DB_PATH: "/data/forest-cp.db"
+  FOREST_CP_PUBLIC_URL: "https://forest-cp.espoautos.com"
+  HEADSCALE_URL: "https://headscale.espoautos.com"
+  HEADSCALE_USER: "forest"
+  FOREST_CP_ENROLLMENT_HOURS: "24"
+  FOREST_CP_HEARTBEAT_TIMEOUT: "120"
+  FOREST_CP_BOOTSTRAP_CHECK_INTERVAL: "60"
+  FOREST_MESH_PROTOCOL: "batman-adv"
+  FOREST_MESH_INTERFACE: "wlan0"
+  FOREST_MESH_CHANNEL: "6"
+  FOREST_MESH_ESSID: "chicago-forest"
+  FOREST_MESH_BAND: "2.4ghz"
+  FOREST_MESH_MTU: "1500"
