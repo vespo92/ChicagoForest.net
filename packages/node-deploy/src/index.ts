@@ -2,7 +2,7 @@
  * @chicago-forest/node-deploy
  *
  * Deployment configurations for Chicago Forest Network nodes.
- * Supports Docker, Kubernetes (with NIC passthrough), and VMs.
+ * Supports Docker, Kubernetes (with NIC passthrough), OpenWrt, and VMs.
  *
  * Key features:
  * - NIC passthrough for direct hardware access
@@ -1323,6 +1323,25 @@ logging:
   output: "/var/log/symbiont/symbiont.log"
 `;
 }
+
+// =============================================================================
+// OPENWRT DEPLOYMENT
+// =============================================================================
+
+export {
+  type ForestRouterConfig,
+  type WireGuardPeer,
+  type OpenWrtDeployOutput,
+  generateOpenWrtDeploy,
+  type OpenWrtTarget,
+  type ImageBuilderConfig,
+  OpenWrtImageBuilder,
+  type OpenWrtVersion,
+  OPENWRT_23_05_5_PACKAGES,
+  OPENWRT_24_10_5_PACKAGES,
+  OPENWRT_BASE_PACKAGES,
+  getPackagesForVersion,
+} from './openwrt';
 
 // =============================================================================
 // EXPORTS

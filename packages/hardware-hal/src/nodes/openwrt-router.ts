@@ -378,6 +378,252 @@ export const DYNALINK_WRX36: OpenWRTRouterSpec = {
 };
 
 // =============================================================================
+// SBC / BOARD-LEVEL ROUTERS
+// =============================================================================
+
+/**
+ * BananaPi BPI-R3 - MediaTek Filogic SBC router
+ * https://openwrt.org/toh/sinovoip/bananapi_bpi-r3
+ */
+export const BANANAPI_BPI_R3: OpenWRTRouterSpec = {
+  name: 'BPI-R3',
+  manufacturer: 'BananaPi',
+  model: 'BPI-R3',
+  openwrtUrl: 'https://openwrt.org/toh/sinovoip/bananapi_bpi-r3',
+  productUrl: 'https://www.banana-pi.org/en/banana-pi-sbcs/93.html',
+  price: 80,
+  supportStatus: 'current',
+  openwrtVersion: '23.05.5',
+  hardware: {
+    soc: 'MediaTek MT7986A',
+    cpu: { cores: 4, speed: 2000 },
+    ram: 2048,
+    flash: 8192, // 8GB eMMC + 128MB SPI-NAND
+  },
+  networking: {
+    wifiChips: [
+      { chip: 'MT7986A', bands: ['2.4GHz'], standard: '802.11ax', streams: '4x4', driver: 'mt76' },
+      { chip: 'MT7986A', bands: ['5GHz'], standard: '802.11ax', streams: '4x4', driver: 'mt76' },
+    ],
+    ethernet: { ports: 5, speed: '1G + 2x SFP 2.5G' },
+  },
+  power: {
+    input: '12V/2A DC',
+    consumption: 12,
+  },
+  formFactor: 'desktop',
+  meshCapability: {
+    rating: 'excellent',
+    supports802_11s: true,
+    supportsBatman: true,
+    maxMeshPeers: 32,
+    notes: 'High-performance SBC router with SFP cages for fiber uplinks',
+  },
+  useCases: ['Community mesh gateway', 'Fiber-connected mesh node', 'DIY router platform'],
+  notes: [
+    'OpenWrt target: mediatek/filogic, profile: bananapi_bpi-r3',
+    'Dual SFP 2.5G cages for fiber connections',
+    'Built-in WiFi 6 via MT7986A SoC',
+    '2GB RAM supports heavy routing workloads',
+    '128MB SPI-NAND for boot, 8GB eMMC for storage',
+  ],
+};
+
+/**
+ * BananaPi BPI-R4 - Next-gen MediaTek Filogic SBC router with WiFi 7
+ * https://openwrt.org/toh/sinovoip/bananapi_bpi-r4
+ */
+export const BANANAPI_BPI_R4: OpenWRTRouterSpec = {
+  name: 'BPI-R4',
+  manufacturer: 'BananaPi',
+  model: 'BPI-R4',
+  openwrtUrl: 'https://openwrt.org/toh/sinovoip/bananapi_bpi-r4',
+  productUrl: 'https://www.banana-pi.org/en/banana-pi-sbcs/230.html',
+  price: 120,
+  supportStatus: 'current',
+  openwrtVersion: '24.10.5',
+  hardware: {
+    soc: 'MediaTek MT7988A',
+    cpu: { cores: 4, speed: 1800 },
+    ram: 4096,
+    flash: 8192, // 8GB eMMC + 128MB SPI-NAND
+  },
+  networking: {
+    wifiChips: [
+      { chip: 'MT7996AN', bands: ['2.4GHz'], standard: '802.11be', streams: '4x4', driver: 'mt76' },
+      { chip: 'MT7996AN', bands: ['5GHz'], standard: '802.11be', streams: '4x4', driver: 'mt76' },
+      { chip: 'MT7996AN', bands: ['6GHz'], standard: '802.11be', streams: '4x4', driver: 'mt76' },
+    ],
+    ethernet: { ports: 4, speed: '2.5G + 2x SFP+ 10G' },
+  },
+  power: {
+    input: '12V/3A DC',
+    consumption: 15,
+  },
+  formFactor: 'desktop',
+  meshCapability: {
+    rating: 'excellent',
+    supports802_11s: true,
+    supportsBatman: true,
+    maxMeshPeers: 64,
+    notes: 'WiFi 7 tri-band with 10G SFP+ for backbone links',
+  },
+  useCases: ['High-capacity mesh gateway', '10G fiber backbone node', 'WiFi 7 mesh testbed'],
+  notes: [
+    'OpenWrt target: mediatek/filogic, profile: bananapi_bpi-r4',
+    'WiFi 7 (802.11be) via MT7996AN module',
+    'Dual SFP+ 10G cages for high-speed backbone',
+    '4GB RAM handles large routing tables and many clients',
+    '128MB SPI-NAND for boot, 8GB eMMC for storage',
+  ],
+};
+
+/**
+ * GL.iNet Flint 2 (GL-MT6000) - High-performance WiFi 6 router
+ * https://openwrt.org/toh/gl.inet/gl-mt6000
+ */
+export const GLINET_MT6000: OpenWRTRouterSpec = {
+  name: 'Flint 2 (GL-MT6000)',
+  manufacturer: 'GL.iNet',
+  model: 'GL-MT6000',
+  openwrtUrl: 'https://openwrt.org/toh/gl.inet/gl-mt6000',
+  productUrl: 'https://www.gl-inet.com/products/gl-mt6000/',
+  price: 90,
+  supportStatus: 'current',
+  openwrtVersion: '23.05.5',
+  hardware: {
+    soc: 'MediaTek MT7986A',
+    cpu: { cores: 4, speed: 2000 },
+    ram: 1024,
+    flash: 8192, // 8GB eMMC
+  },
+  networking: {
+    wifiChips: [
+      { chip: 'MT7986A', bands: ['2.4GHz'], standard: '802.11ax', streams: '4x4', driver: 'mt76' },
+      { chip: 'MT7986A', bands: ['5GHz-1'], standard: '802.11ax', streams: '4x4', driver: 'mt76' },
+      { chip: 'MT7986A', bands: ['5GHz-2'], standard: '802.11ax', streams: '4x4', driver: 'mt76' },
+    ],
+    ethernet: { ports: 2, speed: '2.5G' },
+    usb: { version: '3.0', ports: 1 },
+  },
+  power: {
+    input: '12V/2.5A DC',
+    consumption: 14,
+  },
+  formFactor: 'desktop',
+  meshCapability: {
+    rating: 'excellent',
+    supports802_11s: true,
+    supportsBatman: true,
+    maxMeshPeers: 16,
+    notes: 'Tri-band WiFi 6 with dedicated mesh backhaul radio',
+  },
+  useCases: ['Tri-band mesh node', 'High-performance home router', 'Mesh backhaul node'],
+  notes: [
+    'OpenWrt target: mediatek/filogic, profile: glinet_gl-mt6000',
+    'Ships with GL.iNet firmware (OpenWRT-based), pure OpenWRT available',
+    'Tri-band WiFi 6 allows dedicated mesh backhaul',
+    'Dual 2.5G Ethernet ports',
+    '8GB eMMC provides ample storage for packages',
+  ],
+};
+
+/**
+ * FriendlyElec NanoPi R5S - Compact wired router/gateway
+ * https://openwrt.org/toh/friendlyarm/nanopi_r5s
+ */
+export const FRIENDLYELEC_NANOPI_R5S: OpenWRTRouterSpec = {
+  name: 'NanoPi R5S',
+  manufacturer: 'FriendlyElec',
+  model: 'NanoPi R5S',
+  openwrtUrl: 'https://openwrt.org/toh/friendlyarm/nanopi_r5s',
+  productUrl: 'https://www.friendlyelec.com/index.php?route=product/product&product_id=287',
+  price: 60,
+  supportStatus: 'current',
+  openwrtVersion: '24.10.5',
+  hardware: {
+    soc: 'Rockchip RK3568',
+    cpu: { cores: 4, speed: 2000 },
+    ram: 4096,
+    flash: 32768, // 32GB eMMC
+  },
+  networking: {
+    wifiChips: [],
+    ethernet: { ports: 3, speed: '2x 2.5G + 1G' },
+  },
+  power: {
+    input: '5V/3A USB-C',
+    consumption: 5,
+  },
+  formFactor: 'desktop',
+  meshCapability: {
+    rating: 'good',
+    supports802_11s: false,
+    supportsBatman: true,
+    maxMeshPeers: 8,
+    notes: 'Wired mesh only - no WiFi. Excellent as wired batman-adv node or VPN gateway',
+  },
+  useCases: ['Wired mesh gateway', 'VPN concentrator', 'Firewall appliance', 'Docker host'],
+  notes: [
+    'OpenWrt target: rockchip/armv8, profile: friendlyarm_nanopi-r5s',
+    'No WiFi - pair with external AP for wireless mesh',
+    '4GB RAM and 32GB eMMC support heavy workloads',
+    'Dual 2.5G ports ideal for wired backbone links',
+    'Very low power consumption (~5W)',
+    'Metal case acts as heatsink',
+  ],
+};
+
+/**
+ * OpenWrt One - Official OpenWrt community hardware
+ * https://openwrt.org/toh/openwrt/one
+ */
+export const OPENWRT_ONE: OpenWRTRouterSpec = {
+  name: 'OpenWrt One',
+  manufacturer: 'OpenWrt',
+  model: 'OpenWrt One',
+  openwrtUrl: 'https://openwrt.org/toh/openwrt/one',
+  productUrl: 'https://openwrt.org/toh/openwrt/one',
+  price: 89,
+  supportStatus: 'current',
+  openwrtVersion: '24.10.5',
+  hardware: {
+    soc: 'MediaTek MT7981B',
+    cpu: { cores: 2, speed: 1300 },
+    ram: 1024,
+    flash: 256, // 256MB NAND + 4MB NOR
+  },
+  networking: {
+    wifiChips: [
+      { chip: 'MT7976C', bands: ['2.4GHz'], standard: '802.11ax', streams: '2x2', driver: 'mt76' },
+      { chip: 'MT7976C', bands: ['5GHz'], standard: '802.11ax', streams: '2x2', driver: 'mt76' },
+    ],
+    ethernet: { ports: 2, speed: '2.5G' },
+  },
+  power: {
+    input: '12V/1.5A DC or USB-C',
+    consumption: 8,
+  },
+  formFactor: 'desktop',
+  meshCapability: {
+    rating: 'excellent',
+    supports802_11s: true,
+    supportsBatman: true,
+    maxMeshPeers: 16,
+    notes: 'Official OpenWrt hardware - guaranteed first-class support',
+  },
+  useCases: ['Community mesh node', 'Reference OpenWrt platform', 'Mesh AP'],
+  notes: [
+    'OpenWrt target: mediatek/filogic, profile: openwrt_one',
+    'Official OpenWrt community-designed hardware',
+    'Guaranteed long-term OpenWrt support',
+    '4MB NOR flash for failsafe recovery, 256MB NAND for main OS',
+    'Dual 2.5G Ethernet ports',
+    'Designed specifically for open-source networking',
+  ],
+};
+
+// =============================================================================
 // OUTDOOR/INDUSTRIAL ROUTERS
 // =============================================================================
 
@@ -594,6 +840,24 @@ export function assessMeshSuitability(
     score -= 10;
   }
 
+  // WiFi standard check
+  if (requirements.wifiStandard) {
+    if (router.networking.wifiChips.length === 0) {
+      issues.push('WiFi required but device has no WiFi radios');
+      recommendations.push('Pair with external WiFi AP or USB adapter');
+      score -= 30;
+    } else {
+      const hasRequiredStandard = router.networking.wifiChips.some(
+        (chip) => chip.standard === requirements.wifiStandard
+      );
+      if (!hasRequiredStandard) {
+        const available = Array.from(new Set(router.networking.wifiChips.map((c) => c.standard))).join(', ');
+        issues.push(`Requires ${requirements.wifiStandard} but device supports: ${available}`);
+        score -= 15;
+      }
+    }
+  }
+
   // Mesh capability check
   if (router.meshCapability.rating === 'limited') {
     issues.push('Limited mesh capability');
@@ -627,6 +891,13 @@ export const OPENWRT_ROUTERS = {
   highPerformance: {
     LINKSYS_WRT3200ACM,
     DYNALINK_WRX36,
+    GLINET_MT6000,
+  },
+  sbcRouters: {
+    BANANAPI_BPI_R3,
+    BANANAPI_BPI_R4,
+    FRIENDLYELEC_NANOPI_R5S,
+    OPENWRT_ONE,
   },
   outdoor: {
     MIKROTIK_HAP_AC3,
