@@ -365,6 +365,19 @@ to interact with the forest network.
 ║  └─────────────────────────────────────────────────────────────────────┘ ║
 ║                                    │                                      ║
 ║  ┌─────────────────────────────────┴───────────────────────────────────┐ ║
+║  │ ★ CILIUM eBPF LAYER (NEW)                   @chicago-forest/        │ ║
+║  │ Kernel-level networking, security,           cilium-mesh            │ ║
+║  │ and observability via eBPF                                          │ ║
+║  │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐   │ ║
+║  │ │ Network  │ │  Hubble  │ │ Tetragon │ │  Custom  │ │ Cluster  │   │ ║
+║  │ │ Policies │ │  Flows   │ │ Runtime  │ │  eBPF    │ │  Mesh    │   │ ║
+║  │ │ L3/L4/L7 │ │ Observe  │ │ Security │ │ MNP/XDP  │ │ Multi-   │   │ ║
+║  │ │ Zero-    │ │ Every    │ │ Syscall  │ │ Gossip   │ │ Forest   │   │ ║
+║  │ │ Trust    │ │ Packet   │ │ Enforce  │ │ Dedup    │ │ Bridge   │   │ ║
+║  │ └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘   │ ║
+║  └─────────────────────────────────────────────────────────────────────┘ ║
+║                                    │                                      ║
+║  ┌─────────────────────────────────┴───────────────────────────────────┐ ║
 ║  │ EXISTING FOUNDATION                                                  │ ║
 ║  │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐   │ ║
 ║  │ │ p2p-core │ │ routing  │ │  mesh    │ │ firewall │ │ sd-wan   │   │ ║
@@ -505,6 +518,7 @@ becomes part of the hive mind:
 - [ ] @chicago-forest/canopy-api
 
 ### Near Term
+- [x] @chicago-forest/cilium-mesh (Cilium eBPF integration)
 - [ ] Integration tests for ecosystem
 - [ ] Docker compose for full stack
 - [ ] Web dashboard for network visualization

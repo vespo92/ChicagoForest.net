@@ -1,0 +1,254 @@
+# =============================================================================
+# Chicago Forest Network - Tetragon Runtime Security Policies
+# =============================================================================
+#
+# Tetragon hooks into the Linux kernel via eBPF to monitor and enforce
+# runtime security at the syscall level. These policies protect forest
+# nodes from container escapes, privilege escalation, and unauthorized
+# process execution.
+#
+# APPLY: kubectl apply -f tetragon-forest-policies.yaml
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. Not operational infrastructure.
+# =============================================================================
+
+---
+# =============================================================================
+# TracingPolicy: Process Execution Allowlist
+# Only allow known forest binaries to execute inside node containers
+# =============================================================================
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicyNamespaced
+metadata:
+  name: forest-process-execution
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+    chicago-forest.net/security-layer: tetragon
+spec:
+  kprobes:
+    - call: __x64_sys_execve
+      syscall: true
+      args:
+        - index: 0
+          type: string
+      selectors:
+        - matchNamespaces:
+            - namespace: Mnt
+              operator: In
+              values:
+                - chicago-forest
+          matchBinaries:
+            - operator: NotIn
+              values:
+                - /usr/local/bin/forest-node
+                - /usr/local/bin/forest-cli
+                - /usr/bin/node
+                - /usr/bin/bun
+                - /bin/sh
+                - /bin/bash
+                - /usr/bin/curl
+                - /usr/bin/wget
+                - /usr/sbin/ip
+                - /usr/sbin/wg
+                - /usr/sbin/batctl
+          matchActions:
+            - action: Sigkill
+
+---
+# =============================================================================
+# TracingPolicy: Privilege Escalation Detection
+# Detect and block attempts to escalate privileges
+# =============================================================================
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicyNamespaced
+metadata:
+  name: forest-privilege-escalation
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+    chicago-forest.net/security-layer: tetragon
+spec:
+  kprobes:
+    # Block setuid(0) - prevent becoming root
+    - call: __x64_sys_setuid
+      syscall: true
+      args:
+        - index: 0
+          type: int
+      selectors:
+        - matchNamespaces:
+            - namespace: Mnt
+              operator: In
+              values:
+                - chicago-forest
+          matchArgs:
+            - index: 0
+              operator: Equal
+              values:
+                - "0"
+          matchActions:
+            - action: Sigkill
+    # Monitor dangerous capability usage
+    - call: cap_capable
+      syscall: false
+      args:
+        - index: 0
+          type: nop
+        - index: 1
+          type: int
+      selectors:
+        - matchNamespaces:
+            - namespace: Mnt
+              operator: In
+              values:
+                - chicago-forest
+          matchCapabilities:
+            - type: Effective
+              operator: In
+              values:
+                - CAP_SYS_ADMIN
+                - CAP_SYS_PTRACE
+                - CAP_DAC_OVERRIDE
+          matchActions:
+            - action: Post
+
+---
+# =============================================================================
+# TracingPolicy: Sensitive File Access Monitoring
+# Alert on access to cryptographic keys, credentials, and system files
+# =============================================================================
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicyNamespaced
+metadata:
+  name: forest-sensitive-file-access
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+    chicago-forest.net/security-layer: tetragon
+spec:
+  kprobes:
+    - call: fd_install
+      syscall: false
+      args:
+        - index: 0
+          type: int
+        - index: 1
+          type: file
+      selectors:
+        - matchNamespaces:
+            - namespace: Mnt
+              operator: In
+              values:
+                - chicago-forest
+          matchArgs:
+            - index: 1
+              operator: Prefix
+              values:
+                - /etc/forest/keys/
+                - /var/lib/forest/identity/
+                - /etc/wireguard/
+                - /etc/shadow
+                - /etc/passwd
+                - /proc/kcore
+                - /proc/kallsyms
+          matchActions:
+            - action: Post
+
+---
+# =============================================================================
+# TracingPolicy: Container Escape Prevention
+# Block namespace manipulation, mount syscalls, and container breakouts
+# =============================================================================
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicy
+metadata:
+  name: forest-container-escape
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+    chicago-forest.net/security-layer: tetragon
+spec:
+  kprobes:
+    # Block unshare (namespace creation)
+    - call: __x64_sys_unshare
+      syscall: true
+      args:
+        - index: 0
+          type: int
+      selectors:
+        - matchActions:
+            - action: Sigkill
+    # Block setns (namespace switching)
+    - call: __x64_sys_setns
+      syscall: true
+      args:
+        - index: 0
+          type: fd
+        - index: 1
+          type: int
+      selectors:
+        - matchActions:
+            - action: Sigkill
+    # Block mount inside containers
+    - call: __x64_sys_mount
+      syscall: true
+      args:
+        - index: 0
+          type: string
+        - index: 1
+          type: string
+        - index: 2
+          type: string
+      selectors:
+        - matchNamespaces:
+            - namespace: Mnt
+              operator: In
+              values:
+                - chicago-forest
+          matchActions:
+            - action: Sigkill
+
+---
+# =============================================================================
+# TracingPolicy: Network Connection Monitoring
+# Log all outbound TCP/UDP connections from forest nodes
+# =============================================================================
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicyNamespaced
+metadata:
+  name: forest-network-connections
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+    chicago-forest.net/security-layer: tetragon
+spec:
+  kprobes:
+    - call: tcp_connect
+      syscall: false
+      args:
+        - index: 0
+          type: sock
+      selectors:
+        - matchNamespaces:
+            - namespace: Mnt
+              operator: In
+              values:
+                - chicago-forest
+          matchActions:
+            - action: Post
+    - call: udp_sendmsg
+      syscall: false
+      args:
+        - index: 0
+          type: sock
+        - index: 2
+          type: int
+      selectors:
+        - matchNamespaces:
+            - namespace: Mnt
+              operator: In
+              values:
+                - chicago-forest
+          matchActions:
+            - action: Post

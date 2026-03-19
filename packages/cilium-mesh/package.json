@@ -1,0 +1,41 @@
+{
+  "name": "@chicago-forest/cilium-mesh",
+  "version": "0.1.0",
+  "description": "Cilium eBPF integration layer - kernel-level networking, security, and observability for the Chicago Forest Network",
+  "type": "module",
+  "exports": {
+    ".": "dist/index.mjs",
+    "./policies": "dist/policies/index.mjs",
+    "./hubble": "dist/hubble/index.mjs",
+    "./tetragon": "dist/tetragon/index.mjs",
+    "./ebpf": "dist/ebpf/index.mjs"
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --format esm --target node",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@chicago-forest/shared-types": "workspace:*",
+    "@chicago-forest/firewall": "workspace:*",
+    "@chicago-forest/mycelium-core": "workspace:*",
+    "eventemitter3": "^5.0.1",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "typescript": "^5.4.5",
+    "vitest": "^4.0.13"
+  },
+  "keywords": [
+    "cilium",
+    "ebpf",
+    "kubernetes",
+    "networking",
+    "security",
+    "observability",
+    "mesh-network",
+    "chicago-forest"
+  ]
+}
