@@ -54,6 +54,12 @@ export default function RootLayout({
                   Solar Tower
                 </Link>
                 <Link
+                  href="/tower-research"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Tower Research
+                </Link>
+                <Link
                   href="/privacy"
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
