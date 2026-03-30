@@ -1,0 +1,442 @@
+# =============================================================================
+# Chicago Forest Network - Cilium Installation & Configuration
+# =============================================================================
+#
+# This manifest installs and configures Cilium as the CNI for the
+# Chicago Forest Network Kubernetes cluster. It replaces kube-proxy
+# with eBPF-based packet processing and enables:
+#   - Zero-trust network policies (L3/L4/L7)
+#   - Hubble observability (flow visibility, service map)
+#   - Tetragon runtime security (syscall enforcement)
+#   - Custom eBPF programs (MNP parsing, zone classification)
+#
+# PREREQUISITES:
+#   - Kubernetes 1.25+
+#   - Helm 3.x installed
+#   - No existing CNI installed (or migration plan)
+#
+# INSTALL:
+#   helm repo add cilium https://helm.cilium.io/
+#   helm repo update
+#   helm install cilium cilium/cilium \
+#     --namespace kube-system \
+#     --values cilium-forest-install.yaml
+#
+# DISCLAIMER: This is part of an AI-generated theoretical framework
+# for educational and research purposes. Not operational infrastructure.
+# =============================================================================
+
+---
+# =============================================================================
+# Cilium Helm Values for Chicago Forest Network
+# =============================================================================
+# Save this section as cilium-values.yaml for helm install
+# helm install cilium cilium/cilium -n kube-system -f cilium-values.yaml
+
+# Cluster identity
+# cluster:
+#   name: chicago-forest
+#   id: 1
+
+# IPAM - IP Address Management
+# ipam:
+#   mode: kubernetes
+#   operator:
+#     clusterPoolIPv4PodCIDRList:
+#       - "10.42.0.0/16"
+
+# Replace kube-proxy with eBPF
+# kubeProxyReplacement: true
+# k8sServiceHost: kubernetes.default.svc.cluster.local
+# k8sServicePort: 443
+
+# Tunnel mode
+# tunnel: vxlan
+# tunnelPort: 8472
+
+# Policy enforcement - ALWAYS for zero-trust
+# policyEnforcementMode: "always"
+
+# eBPF settings tuned for forest workloads
+# bpf:
+#   masquerade: true
+#   tproxy: true
+#   hostRouting: true
+#   lbExternalClusterIP: true
+#   ctTcpMax: 524288
+#   ctAnyMax: 524288
+#   natMax: 524288
+#   policyMapMax: 16384
+#   neighMax: 32768
+
+# Hubble observability
+# hubble:
+#   enabled: true
+#   relay:
+#     enabled: true
+#     replicas: 1
+#   ui:
+#     enabled: true
+#     replicas: 1
+#   metrics:
+#     enabled:
+#       - dns
+#       - drop
+#       - flow
+#       - httpV2
+#       - tcp
+#       - port-distribution
+#       - policy
+#     serviceMonitor:
+#       enabled: true
+#   export:
+#     static:
+#       enabled: true
+#       filePath: /var/run/cilium/hubble/events.log
+
+# Tetragon runtime security
+# tetragon:
+#   enabled: true
+
+# ClusterMesh (for multi-forest, enable when ready)
+# clustermesh:
+#   useAPIServer: false
+
+---
+# =============================================================================
+# Namespace labels for Cilium policy enforcement
+# =============================================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chicago-forest
+  labels:
+    name: chicago-forest
+    app.kubernetes.io/name: chicago-forest
+    app.kubernetes.io/component: mesh-network
+    # Cilium-specific labels
+    io.cilium.k8s.policy.serviceaccount: forest-node
+    io.cilium.k8s.policy.cluster: chicago-forest
+
+---
+# =============================================================================
+# CiliumNetworkPolicy: Default Deny (Zero-Trust Baseline)
+# =============================================================================
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: forest-default-deny
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+    chicago-forest.net/policy-generator: cilium-mesh
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: chicago-forest
+
+---
+# =============================================================================
+# CiliumNetworkPolicy: P2P Mesh Traffic
+# =============================================================================
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: forest-p2p-mesh
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+    chicago-forest.net/policy-generator: cilium-mesh
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: forest-node
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/part-of: chicago-forest
+            app.kubernetes.io/component: forest-node
+      toPorts:
+        - ports:
+            - port: "42000"
+              protocol: UDP
+            - port: "42001"
+              protocol: UDP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/part-of: chicago-forest
+            app.kubernetes.io/component: forest-node
+      toPorts:
+        - ports:
+            - port: "42000"
+              protocol: UDP
+            - port: "42001"
+              protocol: UDP
+
+---
+# =============================================================================
+# CiliumNetworkPolicy: WireGuard Tunnels
+# =============================================================================
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: forest-wireguard
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: forest-node
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/part-of: chicago-forest
+      toPorts:
+        - ports:
+            - port: "51820"
+              protocol: UDP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/part-of: chicago-forest
+      toPorts:
+        - ports:
+            - port: "51820"
+              protocol: UDP
+
+---
+# =============================================================================
+# CiliumNetworkPolicy: Canopy API (L7 HTTP-aware)
+# =============================================================================
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: forest-canopy-api
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: canopy-api
+  ingress:
+    # Public read-only access
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+          rules:
+            http:
+              - method: GET
+                path: "/api/v1/status"
+              - method: GET
+                path: "/api/v1/network/topology"
+              - method: GET
+                path: "/api/v1/network/health"
+              - method: GET
+                path: "/api/v1/registry/.*"
+              - method: GET
+                path: "/health"
+              - method: GET
+                path: "/ready"
+    # Full access from forest nodes
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/part-of: chicago-forest
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+          rules:
+            http:
+              - method: GET
+                path: "/api/v1/.*"
+              - method: POST
+                path: "/api/v1/.*"
+              - method: PUT
+                path: "/api/v1/.*"
+              - method: DELETE
+                path: "/api/v1/.*"
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/part-of: chicago-forest
+            app.kubernetes.io/component: forest-node
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+            - port: "9090"
+              protocol: TCP
+
+---
+# =============================================================================
+# CiliumNetworkPolicy: Control Plane Access
+# =============================================================================
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: forest-control-plane
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: control-plane
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            chicago-forest.net/trust-level: privileged
+      toPorts:
+        - ports:
+            - port: "8090"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/part-of: chicago-forest
+            app.kubernetes.io/component: monitoring
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/part-of: chicago-forest
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+
+---
+# =============================================================================
+# CiliumNetworkPolicy: Metrics Scraping
+# =============================================================================
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: forest-metrics-scrape
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: chicago-forest
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/component: monitoring
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+
+---
+# =============================================================================
+# CiliumNetworkPolicy: DNS Resolution
+# =============================================================================
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: forest-dns-egress
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: chicago-forest
+  egress:
+    - toEntities:
+        - cluster
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*.chicago-forest.svc.cluster.local"
+              - matchPattern: "*.forest.net"
+              - matchName: "kubernetes.default.svc.cluster.local"
+
+---
+# =============================================================================
+# CiliumNetworkPolicy: Nutrient Exchange (L7 HTTP)
+# =============================================================================
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: forest-nutrient-exchange
+  namespace: chicago-forest
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: forest-node
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            chicago-forest.net/trust-level: verified
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+          rules:
+            http:
+              - method: POST
+                path: "/api/v1/exchange/negotiate"
+              - method: POST
+                path: "/api/v1/exchange/commit"
+              - method: GET
+                path: "/api/v1/exchange/status/.*"
+              - method: POST
+                path: "/api/v1/exchange/proof"
+
+---
+# =============================================================================
+# CiliumClusterwideNetworkPolicy: Inter-Forest (ClusterMesh)
+# =============================================================================
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: forest-clustermesh
+  labels:
+    app.kubernetes.io/part-of: chicago-forest
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: chicago-forest
+      app.kubernetes.io/component: forest-gateway
+  ingress:
+    - fromEntities:
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "42000"
+              protocol: UDP
+            - port: "2379"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "42000"
+              protocol: UDP
+            - port: "2379"
+              protocol: TCP
