@@ -62,6 +62,18 @@ export default function SolarTowerPage() {
               >
                 Cost Proposal
               </a>
+              <a
+                href="/solar-tower/WISP"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition"
+              >
+                WISP Launch Plan
+              </a>
+              <a
+                href="/solar-tower/network"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-semibold transition"
+              >
+                Network Growth
+              </a>
             </div>
           </div>
 
