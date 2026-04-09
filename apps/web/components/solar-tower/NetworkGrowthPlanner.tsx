@@ -743,26 +743,29 @@ export default function NetworkGrowthPlanner() {
           <div className="grid md:grid-cols-3 gap-4">
             <div className="bg-slate-900/50 rounded-lg p-4">
               <div className="text-xs text-gray-400 mb-1">Total CapEx (Mendota only)</div>
-              <div className="text-xl font-bold text-white">~$450K</div>
+              <div className="text-xl font-bold text-white">~$750K – $1.1M</div>
               <div className="text-xs text-gray-500 mt-1 space-y-0.5">
-                <div>Tower: $250-400K</div>
-                <div>Fiber bore: $15K</div>
+                <div>Tower (build): $250-400K</div>
+                <div>Fiber construction: $150-300K</div>
+                <div>Engineering & permits: $15-25K</div>
+                <div>Tower crew (rigging): $15-35K</div>
                 <div>Radio equipment: $25K</div>
-                <div>Router/switching: $5K</div>
+                <div>Optical transport: $8-25K</div>
+                <div>CPE (504 subs): $131K</div>
               </div>
             </div>
             <div className="bg-slate-900/50 rounded-lg p-4">
-              <div className="text-xs text-gray-400 mb-1">Monthly cash flow at 300 subs</div>
-              <div className="text-xl font-bold text-green-400">+$21K/mo</div>
+              <div className="text-xs text-gray-400 mb-1">Monthly cash flow at 500 subs</div>
+              <div className="text-xl font-bold text-green-400">+$36K/mo</div>
               <div className="text-xs text-gray-500 mt-1">
-                Revenue ~$30.5K - OpEx ~$9.5K
+                ISP $37.5K + carrier leases $8K - OpEx $9.5K
               </div>
             </div>
             <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
               <div className="text-xs text-gray-400 mb-1">Break-even (CapEx recovery)</div>
-              <div className="text-xl font-bold text-green-400">~22 months</div>
+              <div className="text-xl font-bold text-green-400">~24-30 months</div>
               <div className="text-xs text-gray-500 mt-1">
-                $450K / $21K = 21.4 months. Under 2 years.
+                $850K midpoint / $36K = ~24 months. Carrier leases cover OpEx so ISP revenue goes straight to payback.
               </div>
             </div>
           </div>

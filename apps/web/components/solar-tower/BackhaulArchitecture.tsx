@@ -20,18 +20,18 @@ const fiberOptions: FiberOption[] = [
     capacity: "10G-100G (your optics)",
     capacityGbps: 100,
     monthlyCost: 2500,
-    setupCost: 5000,
-    notes: "Lease raw fiber strands. Start 10G, upgrade to 100G by swapping optics. Best long-term value.",
+    setupCost: 150000,
+    notes: "Lease raw fiber strands with new construction. Start 10G, upgrade to 100G by swapping optics. Best long-term value. Setup includes bore/construction + engineering.",
     recommended: true,
   },
   {
-    id: "lit-40g",
-    name: "40G Lit Service",
-    capacity: "40 Gbps",
-    capacityGbps: 40,
-    monthlyCost: 4500,
-    setupCost: 2000,
-    notes: "Provider-managed wavelength. Overkill now but future-proof. Ask Zayo about I-80 corridor pricing.",
+    id: "dark-fiber-existing",
+    name: "Dark Fiber (existing conduit)",
+    capacity: "10G-100G (your optics)",
+    capacityGbps: 100,
+    monthlyCost: 2500,
+    setupCost: 60000,
+    notes: "If existing conduit is available near I-39/I-80 corridor, construction cost drops significantly. Still need engineering, permits, and lateral bore to tower site.",
   },
   {
     id: "lit-10g",
@@ -39,8 +39,8 @@ const fiberOptions: FiberOption[] = [
     capacity: "10 Gbps",
     capacityGbps: 10,
     monthlyCost: 2000,
-    setupCost: 1500,
-    notes: "Sweet spot for initial deployment. i3 Broadband or Lumen in LaSalle County.",
+    setupCost: 25000,
+    notes: "Provider-managed. Lower upfront but you're locked to their capacity tiers. i3 Broadband or Lumen in LaSalle County. Provider handles construction to your demarc.",
   },
   {
     id: "lit-1g",
@@ -48,8 +48,111 @@ const fiberOptions: FiberOption[] = [
     capacity: "1 Gbps",
     capacityGbps: 1,
     monthlyCost: 600,
-    setupCost: 500,
-    notes: "Not sufficient as primary. Use as emergency backup only.",
+    setupCost: 5000,
+    notes: "Not sufficient as primary. Use as emergency backup only. May already exist in town.",
+  },
+];
+
+interface FiberConstructionItem {
+  id: string;
+  category: string;
+  item: string;
+  lowCost: number;
+  highCost: number;
+  unit: string;
+  notes: string;
+}
+
+const fiberConstructionBreakdown: FiberConstructionItem[] = [
+  {
+    id: "engineering",
+    category: "Engineering & Design",
+    item: "Permit drawings & engineering",
+    lowCost: 10000,
+    highCost: 25000,
+    unit: "fixed",
+    notes: "Route survey, bore plan, utility locates, permit submittal drawings. Cost scales with run distance and jurisdiction complexity.",
+  },
+  {
+    id: "permits",
+    category: "Engineering & Design",
+    item: "Permitting & ROW fees",
+    lowCost: 2000,
+    highCost: 8000,
+    unit: "fixed",
+    notes: "County/township road bore permits, railroad crossing permits (if applicable), IDOT permits for state road crossings.",
+  },
+  {
+    id: "boring",
+    category: "Construction",
+    item: "Directional boring",
+    lowCost: 15,
+    highCost: 35,
+    unit: "per linear ft",
+    notes: "Horizontal directional drilling. $15/ft in open farmland, $25-35/ft for road crossings, rock, or congested utility corridors. 3-mile run = 15,840 ft.",
+  },
+  {
+    id: "fiber-cable",
+    category: "Construction",
+    item: "Fiber optic cable (12-strand SM)",
+    lowCost: 1,
+    highCost: 3,
+    unit: "per linear ft",
+    notes: "Single-mode 12-strand in duct. Pre-connectorized ends add cost. Armored cable for direct burial adds ~$0.50/ft.",
+  },
+  {
+    id: "splicing",
+    category: "Construction",
+    item: "Splicing & termination",
+    lowCost: 5000,
+    highCost: 12000,
+    unit: "fixed",
+    notes: "Fusion splicing at each end + splice enclosures. Mid-span splice points add $2-4K each.",
+  },
+  {
+    id: "testing",
+    category: "Construction",
+    item: "OTDR testing & certification",
+    lowCost: 2000,
+    highCost: 5000,
+    unit: "fixed",
+    notes: "Bi-directional OTDR testing on every strand. Required for acceptance. Includes as-built documentation.",
+  },
+  {
+    id: "tower-fiber",
+    category: "Tower & Site",
+    item: "Fiber run up tower + ice bridge",
+    lowCost: 3000,
+    highCost: 8000,
+    unit: "fixed",
+    notes: "Armored fiber riser cable from ground vault to equipment shelter to tower top. Includes ice bridge, cable tray, weatherproofing.",
+  },
+  {
+    id: "tower-climbers",
+    category: "Tower & Site",
+    item: "Tower crew (rigging & install)",
+    lowCost: 15000,
+    highCost: 35000,
+    unit: "fixed",
+    notes: "Certified tower climbers to mount all radio equipment (4 tiers × 4 sectors + antennas), run cables, ground, align. 3-5 day crew depending on tier count.",
+  },
+  {
+    id: "optical-transport",
+    category: "Optical Equipment",
+    item: "Ciena/ADVA optical transport",
+    lowCost: 8000,
+    highCost: 25000,
+    unit: "per end (×2)",
+    notes: "Optical mux/demux at each end of fiber. Ciena 6500 or ADVA FSP 150 for managed wavelength services. Simpler: skip this and use direct SFP+ optics for 10G ($600/pair).",
+  },
+  {
+    id: "optics",
+    category: "Optical Equipment",
+    item: "SFP+/QSFP28 optics",
+    lowCost: 300,
+    highCost: 3000,
+    unit: "per pair",
+    notes: "10G SFP+ LR: $300/pair. 100G QSFP28 coherent: $3,000/pair. Start with 10G, upgrade optics as needed.",
   },
 ];
 
@@ -331,6 +434,98 @@ export default function BackhaulArchitecture() {
               <p className="text-xs text-gray-500 mt-2">{opt.notes}</p>
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Fiber Construction Cost Breakdown */}
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+        <h3 className="text-lg font-bold text-white mb-2">
+          Fiber Construction Cost Breakdown
+        </h3>
+        <p className="text-sm text-gray-400 mb-4">
+          The real cost of getting fiber to a tower site. Engineering, permits, boring,
+          optical equipment, and tower installation are the bulk of the CapEx — not the
+          monthly lease. This is what people underestimate.
+        </p>
+
+        {/* Construction items by category */}
+        {["Engineering & Design", "Construction", "Tower & Site", "Optical Equipment"].map((category) => (
+          <div key={category} className="mb-4">
+            <div className={`text-xs font-bold uppercase tracking-wider mb-2 ${
+              category === "Engineering & Design" ? "text-blue-400" :
+              category === "Construction" ? "text-amber-400" :
+              category === "Tower & Site" ? "text-green-400" :
+              "text-purple-400"
+            }`}>
+              {category}
+            </div>
+            <div className="space-y-2">
+              {fiberConstructionBreakdown.filter((item) => item.category === category).map((item) => (
+                <div key={item.id} className="bg-slate-900/50 rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-white font-semibold text-sm">{item.item}</span>
+                    <span className="text-white font-mono text-sm">
+                      ${item.lowCost.toLocaleString()} – ${item.highCost.toLocaleString()}
+                      {item.unit !== "fixed" && (
+                        <span className="text-gray-500 text-xs ml-1">{item.unit}</span>
+                      )}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500">{item.notes}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {/* Example total for 3-mile run */}
+        <div className="mt-4 p-4 bg-amber-500/5 border border-amber-500/20 rounded-lg">
+          <h4 className="text-sm font-bold text-amber-400 mb-2">
+            Example: 3-Mile Fiber Run to Nearest POP
+          </h4>
+          <div className="grid md:grid-cols-2 gap-3 text-xs">
+            <div className="space-y-1">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Engineering & permits:</span>
+                <span className="text-white font-mono">$15,000 – $33,000</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Boring (15,840 ft × $15-35):</span>
+                <span className="text-white font-mono">$237,600 – $554,400</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Fiber cable:</span>
+                <span className="text-white font-mono">$15,840 – $47,520</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Splicing & testing:</span>
+                <span className="text-white font-mono">$7,000 – $17,000</span>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Tower fiber & ice bridge:</span>
+                <span className="text-white font-mono">$3,000 – $8,000</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Tower crew (rigging all tiers):</span>
+                <span className="text-white font-mono">$15,000 – $35,000</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Optical transport (Ciena/direct):</span>
+                <span className="text-white font-mono">$600 – $50,000</span>
+              </div>
+              <div className="flex justify-between pt-2 border-t border-slate-700">
+                <span className="text-white font-bold">Total fiber + site construction:</span>
+                <span className="text-amber-400 font-mono font-bold">$294K – $745K</span>
+              </div>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 mt-2">
+            Range is wide because boring cost dominates and varies by terrain. Open farmland
+            with no road crossings = low end. Multiple road/rail crossings, rock, or congested
+            utility corridors = high end. Existing conduit availability can cut boring costs 60-80%.
+          </p>
         </div>
       </div>
 
